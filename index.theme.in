@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=X-GNOME-Metatheme
+_Name=Nimbus
+_Comment=Sun Microsystems, Inc. default theme
+Encoding=UTF-8
+
+[X-GNOME-Metatheme]
+GtkTheme=Nimbus
+IconTheme=Nimbus
+MetacityTheme=Nimbus

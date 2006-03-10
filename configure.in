@@ -1,0 +1,39 @@
+# Honor aclocal flags
+ACLOCAL="$ACLOCAL $ACLOCAL_FLAGS"
+
+AC_INIT(metacity)
+AM_INIT_AUTOMAKE(nimbus, 0.0.1)
+DISTDIR=${PACKAGE}-${VERSION}
+AM_MAINTAINER_MODE
+
+AC_PROG_INTLTOOL([0.23])
+
+# Checks for programs.
+AC_PROG_CC
+AC_PROG_INSTALL
+AC_PROG_LN_S
+AM_PROG_LIBTOOL
+
+
+# Checks for header files.
+AC_HEADER_STDC
+AM_CONFIG_HEADER([config.h])
+
+PKG_CHECK_MODULES(GTK2, gtk+-2.0 >= 2.0.0)
+AC_SUBST(GTK2_CFLAGS)
+AC_SUBST(GTK2_LIBS)
+
+GTK2_VERSION=`$PKG_CONFIG --variable=gtk_binary_version gtk+-2.0`
+AC_SUBST(GTK2_VERSION)
+
+GETTEXT_PACKAGE=nimbus
+AC_SUBST(GETTEXT_PACKAGE)
+AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE,"$GETTEXT_PACKAGE", [Gettext package.])
+AM_GLIB_GNU_GETTEXT
+
+
+AC_OUTPUT([
+Makefile
+metacity/Makefile
+po/Makefile.in
+])
