@@ -1,0 +1,22 @@
+style "default"
+{
+
+#  bg[NORMAL]      = "red"
+#  bg[PRELIGHT]    = "yellow"
+#  bg[ACTIVE]      = "blue"
+#  bg[SELECTED]    = "orange"
+#  bg[INSENSITIVE] = "black"
+
+  bg[NORMAL]        = "#d6d9df"
+  bg[PRELIGHT]      = "#e9ecf2" 
+  bg[SELECTED]	    = "#a6adba" 
+  bg[INSENSITIVE]   = "#efebe5" 
+  bg[ACTIVE]        = "#d6d9df" 
+
+  text[INSENSITIVE] = "#acaeb3"
+
+  engine "nimbus" 
+    {
+    }
+}
+class "GtkWidget" style "default"

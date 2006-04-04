@@ -1,0 +1,76 @@
+Where is the /usr/share/themes/*/gtkrc parsed :
+gtk_rc_context_parse_file
+gtk_rc_context_parse_one_file
+
+=-=-==-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+Where are the widget's style gets really assigned :
+bug in gtk_rc_init_style ?
+  check if is gtk_rc_style_to_style correct 
+    - in nimbus style is messed up style->rc_style colors 
+      are correct not the other
+
+- solution nimbus_style_init_from_rc was an empty call 
+  it should duplicate the data if needed. and call the parent_classe fct
+=-=-==-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+Which theme does gradient and is the most efficient
+look at : 
+	 - clearlooks
+	 - Crux		gradient with gdk_draw_line 
+	 - smooth engine (Glider)
+	 - Industrial
+	 - cairo-gtk-theme
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+2006-03-16 Erwann Chenede - <erwann.chenede@sun.com>
+todo : 
+  - struct for the button to hold for each state :
+    - gradient colors
+    - pix corners (fix them for big size)
+
+  - get inline pixbufs in Makefile.am
+
+  done 
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+2006-03-30 Erwann Chenede - <erwann.chenede@sun.com>
+todo :
+  - disabled buttons - done
+  - Default Buttons to fix :
+    done - images corners (maybe try grey scale only to be able to change color
+    easily) 
+    - NORMAL state 
+      done - bottom inner gradiant is white, it should be blueish
+    - ACTIVE state
+      done - top and bottom inner gradient is white, it should be blueish
+    - PRELIGHT state
+      done - inner gradient color should be blueish with bottom blueish too
+    - INSENSITIVE state
+      done - should be the same as normal insensitive
+    - text should be white
+
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+2006-03-31 Erwann Chenede - <erwann.chenede@sun.com>
+
+  finding the opacity from colors 
+
+ start.red = (gradient->gradient_color->red * seg->start_opacity + ( 100 - seg->start_opacity ) * gradient->bkg_color->red) / 100;
+  c	    =    a				x		  + (100  - x)	b
+
+
+  c = resultant color 
+  a = gradient color 
+  b = the bkg color 
+  x = the opacity
+  
+  c = ax + (100-x)b
+
+  x = (c-100b)/(a-b)
+
+2006-04-03 Erwann Chenede - <erwann.chenede@sun.com>
+
+default button additional gradient points
+
+ % 
+27  c0cedb  cddbe8  51789c
+
+86  b0c5d8  c3d8ec  4978a3
+
+

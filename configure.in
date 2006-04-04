@@ -13,7 +13,7 @@ AC_PROG_CC
 AC_PROG_INSTALL
 AC_PROG_LN_S
 AM_PROG_LIBTOOL
-
+AC_PATH_PROG(GDK_PIXBUF_CSOURCE, gdk-pixbuf-csource, no)
 
 # Checks for header files.
 AC_HEADER_STDC
@@ -34,6 +34,9 @@ AM_GLIB_GNU_GETTEXT
 
 AC_OUTPUT([
 Makefile
+gtk-engine/Makefile
+gtk-engine/gtk-2.0/Makefile
+gtk-engine/images/Makefile
 metacity/Makefile
 po/Makefile.in
 ])
