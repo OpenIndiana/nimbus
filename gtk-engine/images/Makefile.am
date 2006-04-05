@@ -27,7 +27,12 @@ IMAGES = \
 	button-default-corner-prelight-bottom-left.png	\
 	button-default-corner-prelight-bottom-right.png	\
 	button-default-corner-prelight-top-left.png	\
-	button-default-corner-prelight-top-right.png		
+	button-default-corner-prelight-top-right.png	\
+	combo-caret-active.png				\
+	combo-caret-disable.png				\
+	combo-caret-normal.png				\
+	combo-caret-prelight.png
+
 
 
 noinst_DATA = images.h

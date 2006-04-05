@@ -50,7 +50,9 @@ struct _NimbusRcStyle
 
   NimbusButton* button[5]; 
   NimbusButton* button_default[5]; 
+  NimbusButton* arrow_button[5]; 
   GdkPixbuf*	drop_shadow[5];
+  GdkPixbuf*	combo_arrow[5];
 };
 
 

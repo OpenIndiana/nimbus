@@ -60,17 +60,19 @@ static void draw_box               (GtkStyle       *style,
 				    gint            y,
 				    gint            width,
 				    gint            height);
-static void nimbus_button      (GtkStyle       *style,
-				    GdkWindow      *window,
-				    GtkStateType    state_type,
-				    GtkShadowType   shadow_type,
-				    GdkRectangle   *area,
-				    GtkWidget      *widget,
-				    const gchar    *detail,
-				    gint            x,
-				    gint            y,
-				    gint            width,
-				    gint            height);
+
+static void draw_horizontal_box	   (GtkStyle      *style,
+				    GdkWindow     *window,
+				    GtkStateType   state_type,
+				    GtkShadowType  shadow_type,
+				    GdkRectangle  *area,
+				    GtkWidget     *widget,
+				    const gchar   *detail,
+				    NimbusButton  *button,
+				    gint           x,
+				    gint           y,
+				    gint           width,
+				    gint           height);
 
 static GtkStyleClass *parent_class;
 
@@ -84,12 +86,15 @@ GtkWidget *get_ancestor_of_type (GtkWidget *widget,
 
   tmp = widget;
   ancestor_type = g_type_from_name (ancestor_type_s);
+  /* printf ("looking for %s\n", ancestor_type_s); */
   
   while (tmp)
     {
       if (G_OBJECT_TYPE (tmp) == ancestor_type)
 	  return tmp;
       tmp = tmp->parent;
+   /*   if (tmp)
+	printf ("get_ancestor_of_type %s\n", g_type_name (G_OBJECT_TYPE (tmp))); */
     }
   return NULL;
 }
@@ -130,8 +135,68 @@ draw_arrow (GtkStyle      *style,
                  gint           height)
 {
   gint i, j;
+  NimbusRcStyle *rc; 
   
-  parent_class->draw_arrow (style, window, state_type, shadow_type, area, widget, detail, arrow_type, fill, x, y, width, height);
+  g_return_if_fail (GTK_IS_STYLE (style));
+
+  rc = NIMBUS_RC_STYLE (style->rc_style);
+
+  if (get_ancestor_of_type (widget, "GtkComboBox"))
+    {
+      GList *tmp_list;
+      int vsep_offset = 0;
+      GType researched_type = g_type_from_name ("GtkVSeparator");
+      GdkGC *gc = gdk_gc_new (window);
+      
+      /* get the vseparator offset if it exists */
+
+      tmp_list = gtk_container_get_children (GTK_CONTAINER (widget->parent));
+      while (tmp_list)
+	{
+	  GType w_type = G_TYPE_INVALID;
+	  GtkWidget *w = (GtkWidget *)tmp_list->data;
+	  if (G_OBJECT_TYPE (w) == researched_type)
+	    {
+	      vsep_offset = w->allocation.width + w->style->xthickness;
+	    }
+	  tmp_list = tmp_list->next;
+	}
+      if (tmp_list)
+	 g_list_free(tmp_list);
+
+      draw_horizontal_box (style, window, state_type, shadow_type, area, widget, "combobox_arrow",
+			   rc->arrow_button[state_type],
+			   x - vsep_offset,
+			   widget->parent->parent->allocation.y,
+			   widget->parent->parent->allocation.x + widget->parent->parent->allocation.width - x + vsep_offset,
+			   widget->parent->parent->allocation.height);
+
+      if (rc->combo_arrow[state_type])
+	gdk_draw_pixbuf (window,
+			 gc,
+			 rc->combo_arrow[state_type],
+			 0,0,
+			 (x - vsep_offset) + (widget->parent->parent->allocation.x + widget->parent->parent->allocation.width - x + vsep_offset - gdk_pixbuf_get_width (rc->combo_arrow[state_type])) / 2,
+			 (widget->parent->parent->allocation.height - gdk_pixbuf_get_height (rc->combo_arrow[state_type])) / 2 ,
+			 gdk_pixbuf_get_width (rc->combo_arrow[state_type]),
+			 gdk_pixbuf_get_height (rc->combo_arrow[state_type]),
+			 GDK_RGB_DITHER_NONE,0,0);
+
+      printf ("combo arrow (%d,%d)  (%d,%d)\n",
+	      x - vsep_offset,
+	      widget->parent->parent->allocation.y,
+	      (x - vsep_offset) + (widget->parent->parent->allocation.x + widget->parent->parent->allocation.width - x + vsep_offset - gdk_pixbuf_get_width (rc->combo_arrow[state_type])) / 2,
+	      (widget->parent->parent->allocation.height - gdk_pixbuf_get_height (rc->combo_arrow[state_type])) / 2);
+	    
+      /*gdk_draw_rectangle (window, style->white_gc, TRUE, 
+			  x - vsep_offset,
+			  widget->parent->parent->allocation.y,
+			  widget->parent->parent->allocation.x + widget->parent->parent->allocation.width - x + vsep_offset,
+			  widget->parent->parent->allocation.height);*/
+    }
+  else
+    parent_class->draw_arrow (style, window, state_type, shadow_type, area, widget, detail, arrow_type, fill, x, y, width, height);
+
   verbose ("draw\t arrow\n");
 
 }
@@ -270,8 +335,120 @@ draw_flat_box (GtkStyle      *style,
 			  widget, detail, x, y, width, height);
   verbose ("draw\t flat box \t-%s-\n", detail ? detail : "no detail");
 }
+/**************************************************************************/
+static void
+draw_horizontal_box (GtkStyle      *style,
+		     GdkWindow     *window,
+		     GtkStateType   state_type,
+		     GtkShadowType  shadow_type,
+		     GdkRectangle  *area,
+		     GtkWidget     *widget,
+		     const gchar   *detail,
+		     NimbusButton  *button,
+		     gint           x,
+		     gint           y,
+		     gint           width,
+		     gint           height)
+{
+  NimbusRcStyle *rc; 
+  
+  g_return_if_fail (GTK_IS_STYLE (style));
+
+  rc = NIMBUS_RC_STYLE (style->rc_style);
+    
+  if (button)
+    {
+      GSList *tmp;
+      int drop_shadow_offset = (state_type == GTK_STATE_INSENSITIVE) ? 0 : 1;
+      GdkGC *gc = gdk_gc_new (window);
+      int bottom_left_c_w = 0, bottom_right_c_w = 0;
+      
+      tmp = button->gradients;
+      while (tmp)
+	{
+	  nimbus_draw_gradient (window, gc, (NimbusGradient*)tmp->data,
+				x, y, width, height - drop_shadow_offset);
+	  tmp = tmp->next;
+	}
+	 
+      if (button->corner_top_left)
+	gdk_draw_pixbuf (window,
+			 gc,
+			 button->corner_top_left,
+			 0,0,
+			 x,y,
+			 gdk_pixbuf_get_width (button->corner_top_left),
+			 gdk_pixbuf_get_height (button->corner_top_left),
+			 GDK_RGB_DITHER_NONE,0,0);
+      
+      if (button->corner_top_right)
+	gdk_draw_pixbuf (window,
+			 gc,
+			 button->corner_top_right,
+			 0,0,
+			 x+ width - gdk_pixbuf_get_width (button->corner_top_right),
+			 y,
+			 gdk_pixbuf_get_width (button->corner_top_right),
+			 gdk_pixbuf_get_height (button->corner_top_right),
+			 GDK_RGB_DITHER_NONE,0,0);
+
+      if (button->corner_bottom_left)
+	{
+	  bottom_left_c_w = gdk_pixbuf_get_width (button->corner_bottom_left);
+	  gdk_draw_pixbuf (window,
+			 gc,
+			 button->corner_bottom_left,
+			 0,0,
+			 x, 
+			 y + height - gdk_pixbuf_get_height (button->corner_bottom_left),
+			 bottom_left_c_w,
+			 gdk_pixbuf_get_height (button->corner_bottom_left),
+			 GDK_RGB_DITHER_NONE,0,0);
+	}
+      if (button->corner_bottom_right)
+	{
+	  bottom_right_c_w = gdk_pixbuf_get_width (button->corner_bottom_right);
+	  gdk_draw_pixbuf (window,
+			   gc,
+			   button->corner_bottom_right,
+			   0,0,
+			   x+ width - bottom_right_c_w, 
+			   y + height - gdk_pixbuf_get_height (button->corner_bottom_right),			 
+			   bottom_right_c_w,
+			   gdk_pixbuf_get_height (button->corner_bottom_right),
+			   GDK_RGB_DITHER_NONE,0,0);
+	}
+      
+      if (drop_shadow_offset)
+	gdk_draw_pixbuf (window,
+			 gc,
+			 rc->drop_shadow[state_type],
+			 0,0,
+			 x + bottom_left_c_w, 
+			 y + height-1,
+			 width - (bottom_left_c_w + bottom_right_c_w),
+			 gdk_pixbuf_get_height (rc->drop_shadow[state_type]),
+			 GDK_RGB_DITHER_NONE,0,0);
+    }
+}
+
 
 /**************************************************************************/
+
+static void 
+debug_print_corners (NimbusButtonCorner corners)
+{
+  printf ("corner present : ");
+  if (corners & CORNER_TOP_LEFT)
+    printf (" TOP_LEFT ");
+  if (corners & CORNER_TOP_RIGHT)
+    printf (" TOP_RIGHT ");
+  if (corners & CORNER_BOTTOM_LEFT)
+    printf (" BOTTOM_LEFT ");
+  if (corners & CORNER_BOTTOM_RIGHT)
+    printf (" BOTTOM_RIGHT ");
+  printf ("\n");
+}
 
 static void
 draw_box (GtkStyle      *style,
@@ -286,97 +463,35 @@ draw_box (GtkStyle      *style,
 	  gint           width,
 	  gint           height)
 {
-  g_return_if_fail (GTK_IS_STYLE (style));
-  
+  NimbusRcStyle *rc;
   static gboolean should_draw_defaultbutton = FALSE;
+  
+  g_return_if_fail (GTK_IS_STYLE (style));
+
+  rc = NIMBUS_RC_STYLE (style->rc_style);
+  
   if (DETAIL ("buttondefault")) /* needed as buttondefault is just an addon in gtkbutton.c */
     {
       should_draw_defaultbutton = TRUE;
       return;
     }
       
-
   if (DETAIL ("button"))
     {
-      NimbusRcStyle *rc = NIMBUS_RC_STYLE (style->rc_style);
-      /* printf ("button state %s\n", state_names [state_type]);  */
-      if (rc->button[state_type])
-	{
-	  GSList *tmp;
-	  NimbusButton * button;
-	  GdkGC *gc = gdk_gc_new (window);
-	  
-	  if (should_draw_defaultbutton)
-	    button = rc->button_default[state_type];
-	  else
-	    button = rc->button[state_type];
-
-	  should_draw_defaultbutton = FALSE;
-	  
-	  tmp = button->gradients;
-	  while (tmp)
-	    {
-	      nimbus_draw_gradient (window, gc, (NimbusGradient*)tmp->data,
-				    x, y, width, height-1);
-	      tmp = tmp->next;
-	    }
-	  
-	  gdk_draw_pixbuf (window,
-			   gc,
-			   button->corner_top_left,
-			   0,0,
-			   x,y,
-			   gdk_pixbuf_get_width (button->corner_top_left),
-			   gdk_pixbuf_get_height (button->corner_top_left),
-			   GDK_RGB_DITHER_NONE,0,0);
-	  
-	  gdk_draw_pixbuf (window,
-			   gc,
-			   button->corner_top_right,
-			   0,0,
-			   x+ width - gdk_pixbuf_get_width (button->corner_top_right),
-			   y,
-			   gdk_pixbuf_get_width (button->corner_top_right),
-			   gdk_pixbuf_get_height (button->corner_top_right),
-			   GDK_RGB_DITHER_NONE,0,0);
- 
-	  gdk_draw_pixbuf (window,
-			   gc,
-			   button->corner_bottom_left,
-			   0,0,
-			   x, 
-			   y + height - gdk_pixbuf_get_height (button->corner_bottom_left),
-			   gdk_pixbuf_get_width (button->corner_bottom_left),
-			   gdk_pixbuf_get_height (button->corner_bottom_left),
-			   GDK_RGB_DITHER_NONE,0,0);
-
-	  gdk_draw_pixbuf (window,
-			   gc,
-			   button->corner_bottom_right,
-			   0,0,
-			   x+ width - gdk_pixbuf_get_width (button->corner_bottom_right), 
-			   y + height - gdk_pixbuf_get_height (button->corner_bottom_right),
-			   gdk_pixbuf_get_width (button->corner_bottom_right),
-			   gdk_pixbuf_get_height (button->corner_bottom_right),
-			   GDK_RGB_DITHER_NONE,0,0);
-	  
-	  gdk_draw_pixbuf (window,
-			   gc,
-			   rc->drop_shadow[state_type],
-			   0,0,
-			   x + gdk_pixbuf_get_width (button->corner_bottom_left), 
-			   y + height-1,
-			   width - ( gdk_pixbuf_get_width (button->corner_bottom_left) + gdk_pixbuf_get_width (button->corner_bottom_right)),
-			   gdk_pixbuf_get_height (rc->drop_shadow[state_type]),
-			   GDK_RGB_DITHER_NONE,0,0);
-	}
+      if (should_draw_defaultbutton)
+	draw_horizontal_box (style, window, state_type, shadow_type, area,
+			     widget, detail, rc->button_default[state_type],
+			     x, y, width, height);
       else
-	parent_class->draw_box (style, window, state_type, shadow_type, area, widget, detail, x, y, width, height);
-
-    
+	draw_horizontal_box (style, window, state_type, shadow_type, area,
+			     widget, detail, rc->button[state_type],
+			     x, y, width, height);
+      
+      should_draw_defaultbutton = FALSE;
     }
   else
     parent_class->draw_box (style, window, state_type, shadow_type, area, widget, detail, x, y, width, height);
+    
   verbose ("draw\t box \t-%s-\n", detail ? detail : "no detail");
 }
 
@@ -510,7 +625,11 @@ draw_vline (GtkStyle     *style,
   g_return_if_fail (GTK_IS_STYLE (style));
   g_return_if_fail (window != NULL);
   
-  parent_class->draw_vline (style, window, state_type, area, widget, detail, y1, y2, x);
+  if (!get_ancestor_of_type (widget, "GtkComboBox"))
+    {
+      parent_class->draw_vline (style, window, state_type, area, widget, detail, y1, y2, x);
+    }
+  verbose ("draw\t vline \t-%s-\n", detail ? detail : "no detail");
 }
 
 /**************************************************************************/

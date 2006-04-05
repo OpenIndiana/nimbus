@@ -4,14 +4,13 @@
 
 
 NimbusGradient* 
-nimbus_gradient_new (int       w_start_offset,
-		     int       h_start_offset,
-		     int       w_end_offset,
-		     int       h_end_offset,
-		     gboolean  start_corner,
-		     gboolean  end_corner,
-		     int       corner_width,
-		     int       corner_height)
+nimbus_gradient_new (int		w_start_offset,
+		     int		h_start_offset,
+		     int		w_end_offset,
+		     int		h_end_offset,
+		     NimbusButtonCorner corners,
+		     int		corner_width,
+		     int		corner_height)
 {
   NimbusGradient* gradient = g_new0 (NimbusGradient, 1);
   gradient->segments = NULL;
@@ -19,8 +18,7 @@ nimbus_gradient_new (int       w_start_offset,
   gradient->w_end_offset = w_end_offset;
   gradient->h_start_offset = h_start_offset;
   gradient->h_end_offset = h_end_offset;
-  gradient->start_corner = start_corner;
-  gradient->end_corner = end_corner;
+  gradient->corners = corners;
   gradient->corner_width = corner_width;
   gradient->corner_height = corner_height;
   return gradient;
@@ -107,12 +105,17 @@ draw_gradient_segment (GdkWindow	     *window,
    length = end_length - start_length;
 
    /* determine how many lines should be truncated for this segment */
-   if (gradient->start_corner && (start_length < gradient->corner_height))
+   if ((((gradient->corners & CORNER_TOP_RIGHT) != 0 ) ||
+       ((gradient->corners & CORNER_TOP_LEFT) != 0 )) && 
+       (start_length < gradient->corner_height))
      {
        segment_corner_height = gradient->corner_height - start_length;
        start_corner = TRUE;
      }
-   if (gradient->end_corner && ((height - end_length) < gradient->corner_height))
+   
+   if ((((gradient->corners & CORNER_BOTTOM_RIGHT) != 0 ) ||
+       ((gradient->corners & CORNER_BOTTOM_LEFT) != 0 )) && 
+       ((height - end_length) < gradient->corner_height))
      {
        segment_corner_height = gradient->corner_height - (height - end_length);
        end_corner = TRUE;
@@ -123,6 +126,7 @@ draw_gradient_segment (GdkWindow	     *window,
 				    y + start_length, 
 				    width,
 				    length,
+				    gradient->corners,
 				    start_corner,
 				    end_corner,
 				    gradient->corner_width,
@@ -161,6 +165,7 @@ nimbus_draw_horizontal_gradient (GdkWindow *window,
 				 int	    y,
 				 int	    width,
 				 int	    height,
+				 NimbusButtonCorner corners,
 				 gboolean   start_corner,
 				 gboolean   end_corner,
 				 int	    corner_width,
@@ -189,7 +194,8 @@ nimbus_draw_horizontal_gradient (GdkWindow *window,
 
   for (i=0; i<height; i++)
     {
-     GdkColor color = { 0, 
+      int offset_x = 0, offset_w = 0;
+      GdkColor color = { 0, 
 			from->red + (delta_r * i) / height,
 			from->green + (delta_g * i) / height,
 			from->blue + (delta_b * i) / height};
@@ -199,12 +205,23 @@ nimbus_draw_horizontal_gradient (GdkWindow *window,
       gdk_colormap_alloc_color (sys_lut, &color, FALSE, TRUE); 
       gdk_gc_set_foreground (gc, &color);
 
-      if (i < corner_height && start_corner)
-	gdk_draw_line (window, gc, x + corner_width, y+i, x + width - corner_width, y+i);
-      else if (((height - (i+1)) < corner_height) && end_corner)
-	gdk_draw_line (window, gc, x + corner_width, y+i, x + width - corner_width, y+i);
-      else
-	gdk_draw_line (window, gc, x, y+i, x+width, y+i);
+      if (i < corner_height && start_corner) /* troncate start of this gradient */
+	{
+	  if (corners & CORNER_TOP_LEFT)
+	    offset_x = corner_width;
+	  if (corners & CORNER_TOP_RIGHT)
+	    offset_w = corner_width;
+	}
+      else if (((height - (i+1)) < corner_height) && end_corner) /* troncate end of this gradient */
+	{
+	  if (corners & CORNER_BOTTOM_LEFT) 
+	    offset_x = corner_width;
+	  if (corners & CORNER_BOTTOM_RIGHT) 
+	    offset_w = corner_width;
+	}
+      else {/* don't troncate this gradient */}
+      
+      gdk_draw_line (window, gc, x + offset_x, y+i, x + width - offset_w, y+i);
       
       /* printf ("color is (%d,%d,%d) x, y, x_end, y_end  = (%d,%d,%d,%d) \n", 
 	      color.red >> 8, color.green >> 8 , color.blue >> 8,

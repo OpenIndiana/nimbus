@@ -64,6 +64,7 @@ todo :
 
   x = (c-100b)/(a-b)
 
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 2006-04-03 Erwann Chenede - <erwann.chenede@sun.com>
 
 default button additional gradient points
@@ -72,5 +73,18 @@ default button additional gradient points
 27  c0cedb  cddbe8  51789c
 
 86  b0c5d8  c3d8ec  4978a3
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+2006-04-04 Erwann Chenede - <erwann.chenede@sun.com>
+
+- Combobox
+  done - Determine the blueish part location from the arrow 
+	 in the button bin (included in a  hbox)
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+2006-04-05 Erwann Chenede - <erwann.chenede@sun.com>
+- arrow button :
+  - done - write comboxbox definition in rc_style
+  - done - write custom routine in style
+  - integrate arrow 
+
 
 

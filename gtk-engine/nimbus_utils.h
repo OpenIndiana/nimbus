@@ -16,6 +16,16 @@ struct _NimbusGradientSegment
   int end_location;
 };
 
+typedef enum
+{
+  CORNER_NO_CORNER = 1 << 0,
+  CORNER_TOP_LEFT= 1 << 1,
+  CORNER_BOTTOM_LEFT = 1 << 2,
+  CORNER_TOP_RIGHT = 1 << 3,
+  CORNER_BOTTOM_RIGHT= 1 << 4,
+} NimbusButtonCorner;
+
+
 struct _NimbusGradient 
 {
   GSList   *segments;
@@ -25,22 +35,20 @@ struct _NimbusGradient
   int	   w_end_offset;
   int	   h_end_offset;
   /* corner info */
-  gboolean start_corner;
-  gboolean end_corner;
+  NimbusButtonCorner corners;
   int	   corner_width; /* in pixels */  
   int	   corner_height; /* in pixels */  
 };
 
 
 NimbusGradient* 
-nimbus_gradient_new (int       w_start_offset,
-		     int       h_start_offset,
-		     int       w_end_offset,
-		     int       h_end_offset,
-		     gboolean  start_corner,
-		     gboolean  end_corner,
-		     int       corner_width,
-		     int       corner_height);
+nimbus_gradient_new (int		w_start_offset,
+		     int		h_start_offset,
+		     int		w_end_offset,
+		     int		h_end_offset,
+		     NimbusButtonCorner corners,
+		     int		corner_width,
+		     int		corner_height);
 
 void nimbus_gradient_add_segment (NimbusGradient *gradient,
 				  char *start_color,
@@ -65,6 +73,7 @@ nimbus_draw_horizontal_gradient (GdkWindow *window,
 				 int	    y,
 				 int	    width,
 				 int	    height,
+				 NimbusButtonCorner corners,
 				 gboolean   start_corner,
 				 gboolean   end_corner,
 				 int	    corner_width,
