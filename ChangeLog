@@ -1,5 +1,9 @@
 2006-04-20 Erwann Chenede - <erwann.chenede@sun.com>
 
+  * make it compatible with JDS 3 (no cairo, hardcode Minor version)
+
+2006-04-20 Erwann Chenede - <erwann.chenede@sun.com>
+
   * initial complete gtk engine commit (I said initial !)
   
 2006-04-06 Erwann Chenede - <erwann.chenede@sun.com>

@@ -31,6 +31,6 @@ const gchar*
 g_module_check_init (GModule *module)
 {
   return gtk_check_version (GTK_MAJOR_VERSION,
-			    GTK_MINOR_VERSION,
+			    4,
 			    GTK_MICRO_VERSION - GTK_INTERFACE_AGE);
 }

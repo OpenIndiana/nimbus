@@ -21,7 +21,11 @@ AM_CONFIG_HEADER([config.h])
 
 PKG_CHECK_MODULES(GTK2, gtk+-2.0 >= 2.0.0)
 AC_SUBST(GTK2_CFLAGS)
+# remove cairo dependency hack
+GTK2_LIBS=`echo $GTK2_LIBS | sed -e "s/-lpangocairo-1.0//g" | sed -e "s/-lcairo//g"`
 AC_SUBST(GTK2_LIBS)
+
+echo $GTK2_LIBS
 
 GTK2_VERSION=`$PKG_CONFIG --variable=gtk_binary_version gtk+-2.0`
 AC_SUBST(GTK2_VERSION)
