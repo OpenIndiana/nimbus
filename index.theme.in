@@ -5,6 +5,6 @@ _Comment=Sun Microsystems, Inc. default theme
 Encoding=UTF-8
 
 [X-GNOME-Metatheme]
-GtkTheme=Nimbus
-IconTheme=Nimbus
-MetacityTheme=Nimbus
+GtkTheme=nimbus
+IconTheme=blueprint
+MetacityTheme=nimbus
