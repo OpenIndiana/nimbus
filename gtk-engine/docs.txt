@@ -84,7 +84,63 @@ default button additional gradient points
 - arrow button :
   - done - write comboxbox definition in rc_style
   - done - write custom routine in style
-  - integrate arrow 
+  - done - integrate arrow 
+  - done - check why defaultbutton are 2 pix smaller. 
+    (defaultbutton removes 1 pix on each side for the focus)
+
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+2006-04-06 Erwann Chenede - <erwann.chenede@sun.com>
+- get gradient for the textfield 
+
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+2006-04-07 Erwann Chenede - <erwann.chenede@sun.com>
+- draw_flat_box base is used by GtkWindow and inheritated 
+
+- implementation of the textfield :
+  - draw the outline and the two gradient lines in the 
+    draw_shadow routine
+  - check if the white outline is needed (left vertical line)
+  - in draw_flat_box draw it in white and the top line with the 
+    color of the bottom line of the gradient.
+- figure out why there is a base color line at the bottom of the 
+  draw_flat_box when the draw_shadow doesn't draw the rectangle 
+  as filled. (Because of offset)
+- done - spend time to understand how to efficiently manage the number 
+  of colors and if they should be associated with a gc in NimbusStyle 
+  or in the RcStyle.
+
+- done - use the realize_color function from industrial theme to get GdkGC for the 
+  gradient.
+
+- use nimbus_style_init_from_rc to "realize" the color specified in the rc_style
+  - This is not needed with realize_color !
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+scrollbar :
+
+  trough box represent the background of the scroll bar
+  hscrollbar box represent the button
+
+  avoid nimbus_rc_style_init being called more than one
+  - done fix arrow button partial redraw.
+  - done implement slider.
+  
+  - optimization : remove active state for scrollbar
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+Pane :
+  done - fix background color for text
+  done - implement pane properly 
+
+  - done implement scales
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+  fix combo box in gimp
+  check handlebar case
+  "lazy load" the replicated images
 
 
+  tabs :
+   draw     box gap        -notebook-  :- surrounding box
+   draw     extension      -tab-       :- tab itself
+   draw     focus  -tab
+
+   fix spinner 
 

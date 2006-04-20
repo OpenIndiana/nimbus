@@ -21,10 +21,20 @@
  */
 
 #include <gtk/gtkrc.h>
+#include "nimbus_utils.h"
 
-typedef struct _NimbusRcStyle NimbusRcStyle;
-typedef struct _NimbusRcStyleClass NimbusRcStyleClass;
-typedef struct _NimbusButton NimbusButton;
+typedef struct _NimbusData	    NimbusData;
+typedef struct _NimbusRcStyle	    NimbusRcStyle;
+typedef struct _NimbusRcStyleClass  NimbusRcStyleClass;
+typedef struct _NimbusButton	    NimbusButton;
+typedef struct _NimbusTextfield	    NimbusTextfield;
+typedef struct _NimbusSpinSeparator NimbusSpinSeparator;
+typedef struct _NimbusScrollbar	    NimbusScrollbar;
+typedef struct _NimbusPane	    NimbusPane;
+typedef struct _NimbusScale	    NimbusScale;
+typedef struct _NimbusProgress	    NimbusProgress;
+typedef struct _NimbusTab	    NimbusTab;
+typedef struct _NimbusMenu	    NimbusMenu;
 
 extern GType nimbus_type_rc_style;
 
@@ -44,15 +54,121 @@ struct _NimbusButton
   GSList    *gradients;
 };
 
+struct _NimbusTextfield 
+{
+  GdkColor *gradient_line1;
+  GdkColor *gradient_line2;
+  GdkColor *gradient_line3;
+  GdkColor *vertical_line_gradient1;
+  GdkColor *vertical_line_gradient2;
+  GdkColor *bottom_line;
+  GdkColor *vertical_line;
+};
+
+struct _NimbusSpinSeparator
+{
+  GdkColor *top;
+  GdkColor *bottom;
+};
+
+struct _NimbusScrollbar
+{
+  GdkPixbuf *button_start;
+  GdkPixbuf *button_end;
+  GdkPixbuf *bkg;
+  GdkPixbuf *slider_start;
+  GdkPixbuf *slider_mid;
+  GdkPixbuf *slider_end;
+};
+
+struct _NimbusPane
+{
+  GdkPixbuf*		pane_h;
+  GdkPixbuf*		pane_v;
+  GdkColor*		innerline;
+  GdkColor*		outline;
+
+};
+  
+struct _NimbusScale
+{
+  GdkPixbuf *button;
+  GdkPixbuf *bkg_start;
+  GdkPixbuf *bkg_mid;
+  GdkPixbuf *bkg_end;
+};
+
+struct _NimbusProgress
+{
+  NimbusButton*	bar;
+  NimbusButton*	bkg;
+  GdkPixbuf*	corner_top_left;
+  GdkPixbuf*	corner_top_right;
+  GdkPixbuf*	corner_bottom_left;
+  GdkPixbuf*	corner_bottom_right;  
+  GdkPixbuf*	border_top;
+  GdkPixbuf*	border_right;
+  GdkPixbuf*	border_left;
+  GdkPixbuf*	border_bottom;
+};
+
+struct _NimbusTab
+{
+  GdkColor*	start;
+  GdkColor*	mid;
+  GdkColor*	end;
+  GdkColor*	junction;
+  NimbusButton  *tab;
+};
+
+struct _NimbusMenu
+{
+  GdkColor*	border;
+  GdkColor*	shadow;
+  /* mini gradient */
+  GdkColor*	start;
+  GdkColor*	mid_start;
+  GdkColor*	mid_end;
+  GdkColor*	end;
+};
+
+struct _NimbusData
+{
+  NimbusButton*		button[5]; 
+  NimbusButton*		button_default[5]; 
+  NimbusButton*		arrow_button[5]; 
+  NimbusButton*		combo_entry_button[5]; 
+  GdkPixbuf*		drop_shadow[5];
+  GdkPixbuf*		combo_arrow[5];
+  NimbusTextfield*	textfield_color[5];
+  NimbusSpinSeparator*	spin_color[5];
+  GdkPixbuf*		arrow_up[5];
+  GdkPixbuf*		arrow_down[5];
+  GdkPixbuf*		check_not_set[5];
+  GdkPixbuf*		check_set[5];
+  GdkPixbuf*		radio_not_set[5];
+  GdkPixbuf*		radio_set[5];
+  NimbusScrollbar*	scroll_h[5];
+  NimbusScrollbar*	scroll_v[5];
+  NimbusPane*		pane;
+  NimbusScale*		scale_h[5];
+  NimbusScale*		scale_v[5];
+  NimbusProgress*	progress;
+  NimbusTab*		tab[5];
+  GdkColor*		menubar_border;
+  NimbusGradient*	menubar;
+  NimbusButton*		handlebar;
+  NimbusMenu*		menu;
+  GdkColor*		hline;
+  GdkColor*		vline;
+};
+
+
 struct _NimbusRcStyle
 {
   GtkRcStyle parent_instance; /* must be first */
 
-  NimbusButton* button[5]; 
-  NimbusButton* button_default[5]; 
-  NimbusButton* arrow_button[5]; 
-  GdkPixbuf*	drop_shadow[5];
-  GdkPixbuf*	combo_arrow[5];
+  NimbusData  *data;
 };
 
 

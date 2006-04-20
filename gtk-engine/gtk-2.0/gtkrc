@@ -1,22 +1,54 @@
 style "default"
 {
-
-#  bg[NORMAL]      = "red"
-#  bg[PRELIGHT]    = "yellow"
-#  bg[ACTIVE]      = "blue"
-#  bg[SELECTED]    = "orange"
-#  bg[INSENSITIVE] = "black"
-
   bg[NORMAL]        = "#d6d9df"
   bg[PRELIGHT]      = "#e9ecf2" 
-  bg[SELECTED]	    = "#a6adba" 
+  bg[SELECTED]	    = "#39698a" 
   bg[INSENSITIVE]   = "#efebe5" 
   bg[ACTIVE]        = "#d6d9df" 
 
-  text[INSENSITIVE] = "#acaeb3"
+  PanelMenu::stripe-enabled = FALSE
 
   engine "nimbus" 
     {
     }
 }
+
+
+style "entry"  = "default"
+{
+  bg[NORMAL] = "white"
+  bg[INSENSITIVE] = "#dee0e5"
+  base[INSENSITIVE] = "#dee0e5"
+  engine "nimbus"
+  {
+  }
+}
+
+style "scrollbar" = "default"
+{
+  GtkRange::slider_width = 13
+  GtkRange::stepper_size = 17
+  GtkScrollbar::min_slider_length = 31
+  GtkScale::slider-length= 14
+}
+
+style "pane" = "default"
+{
+  GtkPaned::handle_size = 10
+}
+
+style "menu" = "default"
+{
+  bg[NORMAL]        = "#edeff2"
+  bg[PRELIGHT]      = "#39698a"
+  PanelMenu::stripe-enabled = FALSE
+}
+
+  
+class "GtkMenu*" style "menu"
+class "GtkScale" style "scrollbar"
+class "GtkTreeView" style "entry"
 class "GtkWidget" style "default"
+class "GtkEntry" style "entry"
+class "GtkScrollbar" style "scrollbar"
+class "GtkPaned" style "pane"

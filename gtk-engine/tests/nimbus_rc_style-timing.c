@@ -61,6 +61,26 @@ nimbus_rc_style_register_type (GTypeModule *module)
 						     "NimbusRcStyle",
 						     &object_info, 0);
 }
+
+static void print_time (GTimer *timer,gboolean total ,char *string)
+{
+  static double total_time = 0.0;
+  double elapsed;
+
+  if (!total)
+    {
+      g_timer_stop (timer);
+      elapsed = g_timer_elapsed (timer, NULL);
+      /* result in millisecond instead of microseconds */
+      elapsed *= 1000;
+      
+      total_time += elapsed;
+      printf ("%s lasted \t\t%8g\n", string, elapsed);
+    }
+  else
+    printf ("\ntotal time spent in timed sections %8g milliseconds \n", total_time);
+}
+
 static GdkPixbuf *
 replicate_rows (GdkPixbuf    *src,
 		gint          src_x,
@@ -394,19 +414,33 @@ static void define_progressbar (NimbusData *rc, int scr_w, int scr_h)
   rc->progress->corner_bottom_right = gdk_pixbuf_new_from_inline (-1, progress_shadow_corner_bottom_right, FALSE, error);
 
   tmp_pb = gdk_pixbuf_new_from_inline (-1, progress_shadow_top, FALSE, error);
+  
+    { GTimer *timer = g_timer_new ();
   rc->progress->border_top = replicate_cols (tmp_pb, 0,0, scr_w, gdk_pixbuf_get_height (tmp_pb));
+          print_time (timer, FALSE, "  rc->progress->border_top = replicate_cols (tmp_pb, 0,0, scr_w, gdk_pixbuf_get_height (tmp_pb));");
+    }
   gdk_pixbuf_unref (tmp_pb);
   
   tmp_pb = gdk_pixbuf_new_from_inline (-1, progress_shadow_bottom, FALSE, error);
+    { GTimer *timer = g_timer_new ();
   rc->progress->border_bottom = replicate_cols (tmp_pb, 0,0, scr_w, gdk_pixbuf_get_height (tmp_pb));
+          print_time (timer, FALSE, "rc->progress->border_bottom = replicate_cols (tmp_pb, 0,0, scr_w, gdk_pixbuf_get_height (tmp_pb));");
+    }
   gdk_pixbuf_unref (tmp_pb);
 
   tmp_pb = gdk_pixbuf_new_from_inline (-1, progress_shadow_left, FALSE, error);
+    { GTimer *timer = g_timer_new ();
   rc->progress->border_left = replicate_rows (tmp_pb, 0,0, gdk_pixbuf_get_width (tmp_pb), scr_h);
+          print_time (timer, FALSE, "rc->progress->border_left = replicate_rows (tmp_pb, 0,0, gdk_pixbuf_get_width (tmp_pb), scr_h);");
+    }
   gdk_pixbuf_unref (tmp_pb);
 
   tmp_pb = gdk_pixbuf_new_from_inline (-1, progress_shadow_right, FALSE, error);
+    { GTimer *timer = g_timer_new ();
   rc->progress->border_right = replicate_rows (tmp_pb, 0,0, gdk_pixbuf_get_width (tmp_pb), scr_h);
+          print_time (timer, FALSE, "rc->progress->border_right = replicate_rows (tmp_pb, 0,0, gdk_pixbuf_get_width (tmp_pb), scr_h);");
+    }
+  
   gdk_pixbuf_unref (tmp_pb);
 }
 
@@ -656,6 +690,8 @@ static void debug_gradients (NimbusRcStyle *nimbus_rc)
 
 }
 
+
+
 static void nimbus_data_rc_style_init (NimbusRcStyle* nimbus_rc)
 {
   GdkPixbuf *black_drop_shadow, *white_drop_shadow, *tmp_pb, *tmp_pb_bis;
@@ -682,9 +718,15 @@ static void nimbus_data_rc_style_init (NimbusRcStyle* nimbus_rc)
 
   /* button shadow */
   /* black, opacity 20% */
+    { GTimer *timer = g_timer_new ();
   gdk_pixbuf_fill (black_drop_shadow, 0x00000033);
+      print_time (timer, FALSE, "gdk_pixbuf_fill (black_drop_shadow, 0x00000033);");
+    }
   /* white, opacity 60% */
+    { GTimer *timer = g_timer_new ();
   gdk_pixbuf_fill (white_drop_shadow, 0xffffff99);
+      print_time (timer, FALSE, "gdk_pixbuf_fill (white_drop_shadow, 0xffffff99);");
+    }
 
   rc->drop_shadow[GTK_STATE_NORMAL] = black_drop_shadow;
   rc->drop_shadow[GTK_STATE_PRELIGHT] = black_drop_shadow;
@@ -788,14 +830,20 @@ static void nimbus_data_rc_style_init (NimbusRcStyle* nimbus_rc)
   rc->scroll_h[GTK_STATE_NORMAL]->button_end = gdk_pixbuf_new_from_inline (-1, scroll_button_h_right_normal, FALSE, error);
   
   tmp_pb = gdk_pixbuf_new_from_inline (-1, scroll_bar_h_bkg_normal, FALSE, error);
+    { GTimer *timer = g_timer_new ();
   rc->scroll_h[GTK_STATE_NORMAL]->bkg = replicate_cols (tmp_pb, 0,0, screen_w, gdk_pixbuf_get_height (tmp_pb));
+        print_time (timer, FALSE, "rc->scroll_h[GTK_STATE_NORMAL]->bkg = replicate_cols (tmp_pb, 0,0, screen_w, gdk_pixbuf_get_height (tmp_pb));");
+    }
   gdk_pixbuf_unref (tmp_pb);
 
   rc->scroll_h[GTK_STATE_NORMAL]->slider_start = gdk_pixbuf_new_from_inline (-1, scroll_bar_h_left_normal, FALSE, error);
   rc->scroll_h[GTK_STATE_NORMAL]->slider_end = gdk_pixbuf_new_from_inline (-1, scroll_bar_h_right_normal, FALSE, error);
   
   tmp_pb = gdk_pixbuf_new_from_inline (-1, scroll_bar_h_mid_normal, FALSE, error);
+    { GTimer *timer = g_timer_new ();
   rc->scroll_h[GTK_STATE_NORMAL]->slider_mid = replicate_cols (tmp_pb, 0,0, screen_w, gdk_pixbuf_get_height (tmp_pb));
+        print_time (timer, FALSE, "rc->scroll_h[GTK_STATE_NORMAL]->slider_mid = replicate_cols (tmp_pb, 0,0, screen_w, gdk_pixbuf_get_height (tmp_pb));");
+    }
   gdk_pixbuf_unref (tmp_pb);
 
 
@@ -806,7 +854,10 @@ static void nimbus_data_rc_style_init (NimbusRcStyle* nimbus_rc)
   rc->scroll_h[GTK_STATE_PRELIGHT]->slider_start = gdk_pixbuf_new_from_inline (-1, scroll_bar_h_left_prelight, FALSE, error);
   rc->scroll_h[GTK_STATE_PRELIGHT]->slider_end = gdk_pixbuf_new_from_inline (-1, scroll_bar_h_right_prelight, FALSE, error);
   tmp_pb = gdk_pixbuf_new_from_inline (-1, scroll_bar_h_mid_prelight, FALSE, error);
+    { GTimer *timer = g_timer_new ();
   rc->scroll_h[GTK_STATE_PRELIGHT]->slider_mid = replicate_cols (tmp_pb, 0,0, screen_w, gdk_pixbuf_get_height (tmp_pb));
+        print_time (timer, FALSE, "rc->scroll_h[GTK_STATE_PRELIGHT]->slider_mid = replicate_cols (tmp_pb, 0,0, screen_w, gdk_pixbuf_get_height (tmp_pb));");
+    }
   gdk_pixbuf_unref (tmp_pb);
   
   rc->scroll_h[GTK_STATE_ACTIVE] = g_new0 (NimbusScrollbar, 1);
@@ -816,7 +867,10 @@ static void nimbus_data_rc_style_init (NimbusRcStyle* nimbus_rc)
   rc->scroll_h[GTK_STATE_ACTIVE]->slider_start = gdk_pixbuf_new_from_inline (-1, scroll_bar_h_left_active, FALSE, error);
   rc->scroll_h[GTK_STATE_ACTIVE]->slider_end = gdk_pixbuf_new_from_inline (-1, scroll_bar_h_right_active, FALSE, error);
   tmp_pb = gdk_pixbuf_new_from_inline (-1, scroll_bar_h_mid_active, FALSE, error);
+    { GTimer *timer = g_timer_new ();
   rc->scroll_h[GTK_STATE_ACTIVE]->slider_mid = replicate_cols (tmp_pb, 0,0, screen_w, gdk_pixbuf_get_height (tmp_pb));
+        print_time (timer, FALSE, "rc->scroll_h[GTK_STATE_ACTIVE]->slider_mid = replicate_cols (tmp_pb, 0,0, screen_w, gdk_pixbuf_get_height (tmp_pb));");
+    }
   gdk_pixbuf_unref (tmp_pb);  
   
   rc->scroll_h[GTK_STATE_SELECTED] = rc->scroll_h[GTK_STATE_ACTIVE];
@@ -826,7 +880,10 @@ static void nimbus_data_rc_style_init (NimbusRcStyle* nimbus_rc)
   rc->scroll_h[GTK_STATE_INSENSITIVE]->button_end =  rc->scroll_h[GTK_STATE_NORMAL]->button_end;
   
   tmp_pb = gdk_pixbuf_new_from_inline (-1, scroll_bar_h_bkg_disable, FALSE, error);
+    { GTimer *timer = g_timer_new ();
   rc->scroll_h[GTK_STATE_INSENSITIVE]->bkg = replicate_cols (tmp_pb, 0,0, screen_w, gdk_pixbuf_get_height (tmp_pb));
+        print_time (timer, FALSE, "rc->scroll_h[GTK_STATE_INSENSITIVE]->bkg = replicate_cols (tmp_pb, 0,0, screen_w, gdk_pixbuf_get_height (tmp_pb));");
+    }
   gdk_pixbuf_unref (tmp_pb);
 
   rc->scroll_h[GTK_STATE_INSENSITIVE]->slider_start = rc->scroll_h[GTK_STATE_NORMAL]->slider_end;
@@ -841,7 +898,10 @@ static void nimbus_data_rc_style_init (NimbusRcStyle* nimbus_rc)
 									 GDK_PIXBUF_ROTATE_COUNTERCLOCKWISE);
   tmp_pb = gdk_pixbuf_new_from_inline (-1, scroll_bar_h_bkg_normal, FALSE, error);
   tmp_pb_bis = gdk_pixbuf_rotate_simple (tmp_pb, GDK_PIXBUF_ROTATE_COUNTERCLOCKWISE);
+    { GTimer *timer = g_timer_new ();
   rc->scroll_v[GTK_STATE_NORMAL]->bkg = replicate_rows (tmp_pb_bis, 0, 0, gdk_pixbuf_get_width (tmp_pb_bis), screen_h);
+        print_time (timer, FALSE, " rc->scroll_v[GTK_STATE_NORMAL]->bkg = replicate_rows (tmp_pb_bis, 0, 0, gdk_pixbuf_get_width (tmp_pb_bis), screen_h);");
+    }
   gdk_pixbuf_unref (tmp_pb);  
   gdk_pixbuf_unref (tmp_pb_bis);  
 						
@@ -889,7 +949,10 @@ static void nimbus_data_rc_style_init (NimbusRcStyle* nimbus_rc)
   
   tmp_pb = gdk_pixbuf_new_from_inline (-1, scroll_bar_h_bkg_disable, FALSE, error);
   tmp_pb_bis = gdk_pixbuf_rotate_simple (tmp_pb, GDK_PIXBUF_ROTATE_COUNTERCLOCKWISE);
+    { GTimer *timer = g_timer_new ();
   rc->scroll_v[GTK_STATE_INSENSITIVE]->bkg = replicate_rows (tmp_pb_bis, 0, 0, gdk_pixbuf_get_width (tmp_pb_bis), screen_h);
+          print_time (timer, FALSE, "rc->scroll_v[GTK_STATE_INSENSITIVE]->bkg = replicate_rows (tmp_pb_bis, 0, 0, gdk_pixbuf_get_width (tmp_pb_bis), screen_h);");
+    }
   gdk_pixbuf_unref (tmp_pb);  
   gdk_pixbuf_unref (tmp_pb_bis);  
 
@@ -911,7 +974,11 @@ static void nimbus_data_rc_style_init (NimbusRcStyle* nimbus_rc)
   rc->scale_h[GTK_STATE_NORMAL]->bkg_start = gdk_pixbuf_new_from_inline (-1, scale_corner_left_normal, FALSE, error);
   rc->scale_h[GTK_STATE_NORMAL]->bkg_end = gdk_pixbuf_new_from_inline (-1, scale_corner_right_normal, FALSE, error);
   tmp_pb = gdk_pixbuf_new_from_inline (-1, scale_corner_mid_normal, FALSE, error);
+    { GTimer *timer = g_timer_new ();
   rc->scale_h[GTK_STATE_NORMAL]->bkg_mid = replicate_cols (tmp_pb, 0,0, screen_w, gdk_pixbuf_get_height (tmp_pb));
+          print_time (timer, FALSE, "rc->scale_h[GTK_STATE_NORMAL]->bkg_mid = replicate_cols (tmp_pb, 0,0, screen_w, gdk_pixbuf_get_height (tmp_pb));");
+    }
+
   gdk_pixbuf_unref (tmp_pb);
 
   rc->scale_h[GTK_STATE_PRELIGHT] = g_new0 (NimbusScale, 1);
@@ -933,7 +1000,10 @@ static void nimbus_data_rc_style_init (NimbusRcStyle* nimbus_rc)
   rc->scale_h[GTK_STATE_INSENSITIVE]->bkg_start = gdk_pixbuf_new_from_inline (-1, scale_corner_left_disable, FALSE, error);
   rc->scale_h[GTK_STATE_INSENSITIVE]->bkg_end = gdk_pixbuf_new_from_inline (-1, scale_corner_right_disable, FALSE, error);
   tmp_pb = gdk_pixbuf_new_from_inline (-1, scale_corner_mid_disable, FALSE, error);
+    { GTimer *timer = g_timer_new ();
   rc->scale_h[GTK_STATE_INSENSITIVE]->bkg_mid = replicate_cols (tmp_pb, 0,0, screen_w, gdk_pixbuf_get_height (tmp_pb));
+          print_time (timer, FALSE, "rc->scale_h[GTK_STATE_INSENSITIVE]->bkg_mid = replicate_cols (tmp_pb, 0,0, screen_w, gdk_pixbuf_get_height (tmp_pb));");
+    }
   gdk_pixbuf_unref (tmp_pb);
 
   /* scale vertical */
@@ -946,7 +1016,10 @@ static void nimbus_data_rc_style_init (NimbusRcStyle* nimbus_rc)
 								       GDK_PIXBUF_ROTATE_COUNTERCLOCKWISE);
   tmp_pb = gdk_pixbuf_new_from_inline (-1, scale_corner_mid_normal, FALSE, error);
   tmp_pb_bis = gdk_pixbuf_rotate_simple (tmp_pb, GDK_PIXBUF_ROTATE_COUNTERCLOCKWISE);
+    { GTimer *timer = g_timer_new ();
   rc->scale_v[GTK_STATE_NORMAL]->bkg_mid = replicate_rows (tmp_pb_bis, 0,0, gdk_pixbuf_get_width (tmp_pb_bis), screen_h);
+          print_time (timer, FALSE, "rc->scale_v[GTK_STATE_NORMAL]->bkg_mid = replicate_rows (tmp_pb_bis, 0,0, gdk_pixbuf_get_width (tmp_pb_bis), screen_h);");
+    }
   gdk_pixbuf_unref (tmp_pb);
   gdk_pixbuf_unref (tmp_pb_bis);
  
@@ -973,7 +1046,10 @@ static void nimbus_data_rc_style_init (NimbusRcStyle* nimbus_rc)
   
   tmp_pb = gdk_pixbuf_new_from_inline (-1, scale_corner_mid_disable, FALSE, error);
   tmp_pb_bis = gdk_pixbuf_rotate_simple (tmp_pb, GDK_PIXBUF_ROTATE_COUNTERCLOCKWISE);  
+    { GTimer *timer = g_timer_new ();
   rc->scale_v[GTK_STATE_INSENSITIVE]->bkg_mid = replicate_rows (tmp_pb_bis, 0,0, gdk_pixbuf_get_width (tmp_pb_bis), screen_h);
+          print_time (timer, FALSE, "rc->scale_v[GTK_STATE_INSENSITIVE]->bkg_mid = replicate_rows (tmp_pb_bis, 0,0, gdk_pixbuf_get_width (tmp_pb_bis), screen_h);");
+    }
   gdk_pixbuf_unref (tmp_pb);
   gdk_pixbuf_unref (tmp_pb_bis);
 
@@ -1022,6 +1098,8 @@ static void nimbus_data_rc_style_init (NimbusRcStyle* nimbus_rc)
   rc->vline = color_cache_get_color ("#46494f");
 
   nimbus_rc->data = rc;
+
+  print_time (NULL, TRUE, NULL);
 }
 
 static void

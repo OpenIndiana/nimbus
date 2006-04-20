@@ -1,5 +1,5 @@
-/* Nimbus Theme Engine
- */
+#ifndef __NIMBUS_UTILS_H__
+#define __NIMBUS_UTILS_H__
 
 #include <gtk/gtk.h>
 #include <glib.h>
@@ -24,6 +24,16 @@ typedef enum
   CORNER_TOP_RIGHT = 1 << 3,
   CORNER_BOTTOM_RIGHT= 1 << 4,
 } NimbusButtonCorner;
+
+typedef enum
+{
+  TAB_POS_LEFT,
+  TAB_POS_RIGHT,
+  TAB_POS_TOP,
+  TAB_POS_BOTTOM,
+  NO_TAB,
+} NimbusTabPosition;
+
 
 
 struct _NimbusGradient 
@@ -56,17 +66,22 @@ void nimbus_gradient_add_segment (NimbusGradient *gradient,
 				  int start_location,
 				  int end_location);
 void 
-nimbus_draw_gradient (GdkWindow *window,
-		      GdkGC	   *gc,
-		      NimbusGradient *gradient,
-		      int	    x,
-		      int	    y,
-		      int	    width,
-		      int	    height);
+nimbus_draw_gradient (GdkWindow	       *window,
+		      GtkStyle	       *style,
+		      NimbusGradient   *gradient,
+		      int		x,
+		      int		y,
+		      int		width,
+		      int		height,
+		      int		partial_height,
+		      gboolean		draw_partial_from_start,
+		      GtkOrientation	orientation,
+		      NimbusTabPosition	tab_position);
+
 
 void 
 nimbus_draw_horizontal_gradient (GdkWindow *window,
-				 GdkGC	   *gc,
+				 GtkStyle  *style,
 				 GdkColor  *from,
 				 GdkColor  *to,
 				 int	    x,
@@ -77,5 +92,34 @@ nimbus_draw_horizontal_gradient (GdkWindow *window,
 				 gboolean   start_corner,
 				 gboolean   end_corner,
 				 int	    corner_width,
-				 int	    corner_height);
+				 int	    corner_height,
+				 int	    partial_height,
+				 gboolean   draw_partial_from_start);
 
+void 
+nimbus_draw_vertical_gradient (GdkWindow *window,
+			       GtkStyle  *style,
+			       GdkColor  *from,
+			       GdkColor  *to,
+			       int	    x,
+			       int	    y,
+			       int	    width,
+			       int	    height,
+			       NimbusButtonCorner corners,
+			       gboolean   start_corner,
+			       gboolean   end_corner,
+			       int	    corner_width,
+			       int	    corner_height,
+			       int	    partial_height,
+			       gboolean   draw_partial_from_start);
+
+
+GdkColor *
+color_cache_get_color (char *color_name);
+
+GdkGC * 
+realize_color (GtkStyle * style,
+	       GdkColor * color);
+
+
+#endif /* __NIMBUS_UTILS_H__ */

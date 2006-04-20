@@ -1,3 +1,7 @@
+2006-04-20 Erwann Chenede - <erwann.chenede@sun.com>
+
+  * initial complete gtk engine commit (I said initial !)
+  
 2006-04-06 Erwann Chenede - <erwann.chenede@sun.com>
 
   * implemented combo box and a more modular custom button rendering 
