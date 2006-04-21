@@ -288,7 +288,9 @@ draw_arrow (GtkStyle      *style,
 			 gdk_pixbuf_get_height (rc->combo_arrow[state_type]),
 			 GDK_RGB_DITHER_NONE,0,0);
     }
-  else if (get_ancestor_of_type (widget, "GtkCombo") || get_ancestor_of_type (widget, "GtkComboBoxEntry"))
+  else if (get_ancestor_of_type (widget, "GtkCombo") || 
+	   get_ancestor_of_type (widget, "GtkComboBoxEntry") ||
+	   get_ancestor_of_type (widget, "GnomeFileEntry"))
     {
       if (rc->combo_arrow[state_type])
 	gdk_draw_pixbuf (window,
@@ -443,7 +445,10 @@ draw_shadow (GtkStyle        *style,
   if (DETAIL ("entry"))
     {
       gboolean general_case = TRUE;
-      if (get_ancestor_of_type (widget, "GtkCombo") || get_ancestor_of_type (widget, "GtkComboBoxEntry") || get_ancestor_of_type (widget, "GtkSpinButton"))
+      if (get_ancestor_of_type (widget, "GtkCombo") || 
+	  get_ancestor_of_type (widget, "GtkComboBoxEntry") || 
+	  get_ancestor_of_type (widget, "GtkSpinButton") ||
+	  get_ancestor_of_type (widget, "GnomeFileEntry"))
 	general_case = FALSE; /*combo case */
       
       /* work around for a bug in gtkentry were the state isn't set */
@@ -1155,7 +1160,9 @@ draw_box (GtkStyle      *style,
   if (DETAIL ("button") || DETAIL ("optionmenu"))
     {
       
-      if (get_ancestor_of_type (widget, "GtkCombo") || get_ancestor_of_type (widget, "GtkComboBoxEntry"))
+      if (get_ancestor_of_type (widget, "GtkCombo") || 
+	  get_ancestor_of_type (widget, "GtkComboBoxEntry") ||
+	  get_ancestor_of_type (widget, "GnomeFileEntry"))
 	{
 	  draw_nimbus_box (style, window, state_type, shadow_type, area,
 			   widget, detail, rc->combo_entry_button[state_type], TRUE,

@@ -1,4 +1,8 @@
 2006-04-21 Erwann Chenede - <erwann.chenede@sun.com>
+ 
+  * gtk-engine/nimbus_style.c : fixed GnomeFileEntry theming
+
+2006-04-21 Erwann Chenede - <erwann.chenede@sun.com>
 
   * gtk-engine/nimbus_rc_style.c
     gtk-engine/nimbus_utils.c
