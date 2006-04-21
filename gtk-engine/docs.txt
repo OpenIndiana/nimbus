@@ -142,5 +142,9 @@ Pane :
    draw     extension      -tab-       :- tab itself
    draw     focus  -tab
 
-   fix spinner 
+  -done fix spinner 
+
+  - fix bonoboo toolbar
+  - implement handle for toolbar
+  - list bugs in firefox, thunderbird, soffice
 

@@ -835,51 +835,51 @@ static void nimbus_data_rc_style_init (NimbusRcStyle* nimbus_rc)
  /* vertical scrollbar */
 
   rc->scroll_v[GTK_STATE_NORMAL] = g_new0 (NimbusScrollbar, 1);
-  rc->scroll_v[GTK_STATE_NORMAL]->button_start = gdk_pixbuf_rotate_simple (rc->scroll_h[GTK_STATE_NORMAL]->button_end, 
-									   GDK_PIXBUF_ROTATE_COUNTERCLOCKWISE);
-  rc->scroll_v[GTK_STATE_NORMAL]->button_end = gdk_pixbuf_rotate_simple (rc->scroll_h[GTK_STATE_NORMAL]->button_start, 
-									 GDK_PIXBUF_ROTATE_COUNTERCLOCKWISE);
+  rc->scroll_v[GTK_STATE_NORMAL]->button_start = rotate_simple (rc->scroll_h[GTK_STATE_NORMAL]->button_end, 
+									   ROTATE_COUNTERCLOCKWISE);
+  rc->scroll_v[GTK_STATE_NORMAL]->button_end = rotate_simple (rc->scroll_h[GTK_STATE_NORMAL]->button_start, 
+									 ROTATE_COUNTERCLOCKWISE);
   tmp_pb = gdk_pixbuf_new_from_inline (-1, scroll_bar_h_bkg_normal, FALSE, error);
-  tmp_pb_bis = gdk_pixbuf_rotate_simple (tmp_pb, GDK_PIXBUF_ROTATE_COUNTERCLOCKWISE);
+  tmp_pb_bis = rotate_simple (tmp_pb, ROTATE_COUNTERCLOCKWISE);
   rc->scroll_v[GTK_STATE_NORMAL]->bkg = replicate_rows (tmp_pb_bis, 0, 0, gdk_pixbuf_get_width (tmp_pb_bis), screen_h);
   gdk_pixbuf_unref (tmp_pb);  
   gdk_pixbuf_unref (tmp_pb_bis);  
 						
-  rc->scroll_v[GTK_STATE_NORMAL]->slider_start = gdk_pixbuf_rotate_simple (rc->scroll_h[GTK_STATE_NORMAL]->slider_end,
-									 GDK_PIXBUF_ROTATE_COUNTERCLOCKWISE);
-  rc->scroll_v[GTK_STATE_NORMAL]->slider_end = gdk_pixbuf_rotate_simple (rc->scroll_h[GTK_STATE_NORMAL]->slider_start,
-									 GDK_PIXBUF_ROTATE_COUNTERCLOCKWISE);
-  rc->scroll_v[GTK_STATE_NORMAL]->slider_mid = gdk_pixbuf_rotate_simple (rc->scroll_h[GTK_STATE_NORMAL]->slider_mid,
-									 GDK_PIXBUF_ROTATE_COUNTERCLOCKWISE);
+  rc->scroll_v[GTK_STATE_NORMAL]->slider_start = rotate_simple (rc->scroll_h[GTK_STATE_NORMAL]->slider_end,
+									 ROTATE_COUNTERCLOCKWISE);
+  rc->scroll_v[GTK_STATE_NORMAL]->slider_end = rotate_simple (rc->scroll_h[GTK_STATE_NORMAL]->slider_start,
+									 ROTATE_COUNTERCLOCKWISE);
+  rc->scroll_v[GTK_STATE_NORMAL]->slider_mid = rotate_simple (rc->scroll_h[GTK_STATE_NORMAL]->slider_mid,
+									 ROTATE_COUNTERCLOCKWISE);
 
 
 
   rc->scroll_v[GTK_STATE_PRELIGHT] = g_new0 (NimbusScrollbar, 1);
-  rc->scroll_v[GTK_STATE_PRELIGHT]->button_start = gdk_pixbuf_rotate_simple (rc->scroll_h[GTK_STATE_PRELIGHT]->button_end,
-									 GDK_PIXBUF_ROTATE_COUNTERCLOCKWISE);
-  rc->scroll_v[GTK_STATE_PRELIGHT]->button_end = gdk_pixbuf_rotate_simple (rc->scroll_h[GTK_STATE_PRELIGHT]->button_start,
-									 GDK_PIXBUF_ROTATE_COUNTERCLOCKWISE);
+  rc->scroll_v[GTK_STATE_PRELIGHT]->button_start = rotate_simple (rc->scroll_h[GTK_STATE_PRELIGHT]->button_end,
+									 ROTATE_COUNTERCLOCKWISE);
+  rc->scroll_v[GTK_STATE_PRELIGHT]->button_end = rotate_simple (rc->scroll_h[GTK_STATE_PRELIGHT]->button_start,
+									 ROTATE_COUNTERCLOCKWISE);
   rc->scroll_v[GTK_STATE_PRELIGHT]->bkg = rc->scroll_v[GTK_STATE_NORMAL]->bkg;
-  rc->scroll_v[GTK_STATE_PRELIGHT]->slider_start = gdk_pixbuf_rotate_simple (rc->scroll_h[GTK_STATE_PRELIGHT]->slider_end,
-									 GDK_PIXBUF_ROTATE_COUNTERCLOCKWISE);
-  rc->scroll_v[GTK_STATE_PRELIGHT]->slider_end = gdk_pixbuf_rotate_simple (rc->scroll_h[GTK_STATE_PRELIGHT]->slider_start,
-									 GDK_PIXBUF_ROTATE_COUNTERCLOCKWISE);
-  rc->scroll_v[GTK_STATE_PRELIGHT]->slider_mid = gdk_pixbuf_rotate_simple (rc->scroll_h[GTK_STATE_PRELIGHT]->slider_mid,
-									 GDK_PIXBUF_ROTATE_COUNTERCLOCKWISE);
+  rc->scroll_v[GTK_STATE_PRELIGHT]->slider_start = rotate_simple (rc->scroll_h[GTK_STATE_PRELIGHT]->slider_end,
+									 ROTATE_COUNTERCLOCKWISE);
+  rc->scroll_v[GTK_STATE_PRELIGHT]->slider_end = rotate_simple (rc->scroll_h[GTK_STATE_PRELIGHT]->slider_start,
+									 ROTATE_COUNTERCLOCKWISE);
+  rc->scroll_v[GTK_STATE_PRELIGHT]->slider_mid = rotate_simple (rc->scroll_h[GTK_STATE_PRELIGHT]->slider_mid,
+									 ROTATE_COUNTERCLOCKWISE);
 
   
   rc->scroll_v[GTK_STATE_ACTIVE] = g_new0 (NimbusScrollbar, 1);
-  rc->scroll_v[GTK_STATE_ACTIVE]->button_start = gdk_pixbuf_rotate_simple (rc->scroll_h[GTK_STATE_ACTIVE]->button_end,
-									 GDK_PIXBUF_ROTATE_COUNTERCLOCKWISE);
-  rc->scroll_v[GTK_STATE_ACTIVE]->button_end = gdk_pixbuf_rotate_simple (rc->scroll_h[GTK_STATE_ACTIVE]->button_start,
-									 GDK_PIXBUF_ROTATE_COUNTERCLOCKWISE);
+  rc->scroll_v[GTK_STATE_ACTIVE]->button_start = rotate_simple (rc->scroll_h[GTK_STATE_ACTIVE]->button_end,
+									 ROTATE_COUNTERCLOCKWISE);
+  rc->scroll_v[GTK_STATE_ACTIVE]->button_end = rotate_simple (rc->scroll_h[GTK_STATE_ACTIVE]->button_start,
+									 ROTATE_COUNTERCLOCKWISE);
   rc->scroll_v[GTK_STATE_ACTIVE]->bkg = rc->scroll_v[GTK_STATE_NORMAL]->bkg;
-  rc->scroll_v[GTK_STATE_ACTIVE]->slider_start = gdk_pixbuf_rotate_simple (rc->scroll_h[GTK_STATE_ACTIVE]->slider_end,
-									 GDK_PIXBUF_ROTATE_COUNTERCLOCKWISE);
-  rc->scroll_v[GTK_STATE_ACTIVE]->slider_end = gdk_pixbuf_rotate_simple (rc->scroll_h[GTK_STATE_ACTIVE]->slider_start,
-									 GDK_PIXBUF_ROTATE_COUNTERCLOCKWISE);
-  rc->scroll_v[GTK_STATE_ACTIVE]->slider_mid = gdk_pixbuf_rotate_simple (rc->scroll_h[GTK_STATE_ACTIVE]->slider_mid,
-									 GDK_PIXBUF_ROTATE_COUNTERCLOCKWISE);
+  rc->scroll_v[GTK_STATE_ACTIVE]->slider_start = rotate_simple (rc->scroll_h[GTK_STATE_ACTIVE]->slider_end,
+									 ROTATE_COUNTERCLOCKWISE);
+  rc->scroll_v[GTK_STATE_ACTIVE]->slider_end = rotate_simple (rc->scroll_h[GTK_STATE_ACTIVE]->slider_start,
+									 ROTATE_COUNTERCLOCKWISE);
+  rc->scroll_v[GTK_STATE_ACTIVE]->slider_mid = rotate_simple (rc->scroll_h[GTK_STATE_ACTIVE]->slider_mid,
+									 ROTATE_COUNTERCLOCKWISE);
   
   rc->scroll_v[GTK_STATE_SELECTED] = rc->scroll_v[GTK_STATE_ACTIVE];
 
@@ -888,7 +888,7 @@ static void nimbus_data_rc_style_init (NimbusRcStyle* nimbus_rc)
   rc->scroll_v[GTK_STATE_INSENSITIVE]->button_end =  rc->scroll_v[GTK_STATE_NORMAL]->button_end;
   
   tmp_pb = gdk_pixbuf_new_from_inline (-1, scroll_bar_h_bkg_disable, FALSE, error);
-  tmp_pb_bis = gdk_pixbuf_rotate_simple (tmp_pb, GDK_PIXBUF_ROTATE_COUNTERCLOCKWISE);
+  tmp_pb_bis = rotate_simple (tmp_pb, ROTATE_COUNTERCLOCKWISE);
   rc->scroll_v[GTK_STATE_INSENSITIVE]->bkg = replicate_rows (tmp_pb_bis, 0, 0, gdk_pixbuf_get_width (tmp_pb_bis), screen_h);
   gdk_pixbuf_unref (tmp_pb);  
   gdk_pixbuf_unref (tmp_pb_bis);  
@@ -940,12 +940,12 @@ static void nimbus_data_rc_style_init (NimbusRcStyle* nimbus_rc)
 
   rc->scale_v[GTK_STATE_NORMAL] = g_new0 (NimbusScale, 1);
   rc->scale_v[GTK_STATE_NORMAL]->button = rc->scale_h[GTK_STATE_NORMAL]->button;
-  rc->scale_v[GTK_STATE_NORMAL]->bkg_start = gdk_pixbuf_rotate_simple (rc->scale_h[GTK_STATE_NORMAL]->bkg_end,
-								       GDK_PIXBUF_ROTATE_COUNTERCLOCKWISE);
-  rc->scale_v[GTK_STATE_NORMAL]->bkg_end = gdk_pixbuf_rotate_simple (rc->scale_h[GTK_STATE_NORMAL]->bkg_start,
-								       GDK_PIXBUF_ROTATE_COUNTERCLOCKWISE);
+  rc->scale_v[GTK_STATE_NORMAL]->bkg_start = rotate_simple (rc->scale_h[GTK_STATE_NORMAL]->bkg_end,
+								       ROTATE_COUNTERCLOCKWISE);
+  rc->scale_v[GTK_STATE_NORMAL]->bkg_end = rotate_simple (rc->scale_h[GTK_STATE_NORMAL]->bkg_start,
+								       ROTATE_COUNTERCLOCKWISE);
   tmp_pb = gdk_pixbuf_new_from_inline (-1, scale_corner_mid_normal, FALSE, error);
-  tmp_pb_bis = gdk_pixbuf_rotate_simple (tmp_pb, GDK_PIXBUF_ROTATE_COUNTERCLOCKWISE);
+  tmp_pb_bis = rotate_simple (tmp_pb, ROTATE_COUNTERCLOCKWISE);
   rc->scale_v[GTK_STATE_NORMAL]->bkg_mid = replicate_rows (tmp_pb_bis, 0,0, gdk_pixbuf_get_width (tmp_pb_bis), screen_h);
   gdk_pixbuf_unref (tmp_pb);
   gdk_pixbuf_unref (tmp_pb_bis);
@@ -966,13 +966,13 @@ static void nimbus_data_rc_style_init (NimbusRcStyle* nimbus_rc)
  
   rc->scale_v[GTK_STATE_INSENSITIVE] = g_new0 (NimbusScale, 1);
   rc->scale_v[GTK_STATE_INSENSITIVE]->button = rc->scale_h[GTK_STATE_INSENSITIVE]->button;
-  rc->scale_v[GTK_STATE_INSENSITIVE]->bkg_start = gdk_pixbuf_rotate_simple (rc->scale_h[GTK_STATE_INSENSITIVE]->bkg_end,
-									    GDK_PIXBUF_ROTATE_COUNTERCLOCKWISE);
-  rc->scale_v[GTK_STATE_INSENSITIVE]->bkg_end = gdk_pixbuf_rotate_simple (rc->scale_h[GTK_STATE_INSENSITIVE]->bkg_start,
-									  GDK_PIXBUF_ROTATE_COUNTERCLOCKWISE);
+  rc->scale_v[GTK_STATE_INSENSITIVE]->bkg_start = rotate_simple (rc->scale_h[GTK_STATE_INSENSITIVE]->bkg_end,
+									    ROTATE_COUNTERCLOCKWISE);
+  rc->scale_v[GTK_STATE_INSENSITIVE]->bkg_end = rotate_simple (rc->scale_h[GTK_STATE_INSENSITIVE]->bkg_start,
+									  ROTATE_COUNTERCLOCKWISE);
   
   tmp_pb = gdk_pixbuf_new_from_inline (-1, scale_corner_mid_disable, FALSE, error);
-  tmp_pb_bis = gdk_pixbuf_rotate_simple (tmp_pb, GDK_PIXBUF_ROTATE_COUNTERCLOCKWISE);  
+  tmp_pb_bis = rotate_simple (tmp_pb, ROTATE_COUNTERCLOCKWISE);  
   rc->scale_v[GTK_STATE_INSENSITIVE]->bkg_mid = replicate_rows (tmp_pb_bis, 0,0, gdk_pixbuf_get_width (tmp_pb_bis), screen_h);
   gdk_pixbuf_unref (tmp_pb);
   gdk_pixbuf_unref (tmp_pb_bis);

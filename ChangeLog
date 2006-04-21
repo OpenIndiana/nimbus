@@ -1,3 +1,10 @@
+2006-04-21 Erwann Chenede - <erwann.chenede@sun.com>
+
+  * gtk-engine/nimbus_rc_style.c
+    gtk-engine/nimbus_utils.c
+    gtk-engine/nimbus_utils.h : ported gdk_pixbuf_rotate_simple
+    to avoid dependency on gtk+ 2.6
+
 2006-04-20 Erwann Chenede - <erwann.chenede@sun.com>
 
   * make index.theme work

@@ -34,7 +34,16 @@ typedef enum
   NO_TAB,
 } NimbusTabPosition;
 
+typedef enum {
+        ROTATE_NONE             =   0,
+        ROTATE_COUNTERCLOCKWISE =  90,
+        ROTATE_UPSIDEDOWN       = 180,
+        ROTATE_CLOCKWISE        = 270
+} NimbusRotation;
 
+GdkPixbuf *
+rotate_simple (const GdkPixbuf   *src,
+	       NimbusRotation     angle);
 
 struct _NimbusGradient 
 {

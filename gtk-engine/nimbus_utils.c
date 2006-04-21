@@ -425,3 +425,124 @@ realize_color (GtkStyle * style,
   return gtk_gc_get (style->depth, style->colormap,
 		     &gc_values, GDK_GC_FOREGROUND);
 }
+
+/* modified copy of gdk_pixbuf_rotate_simple for compatibility with gtk 2.4
+ */
+
+#define OFFSET(pb, x, y, n_channel, rowstride) ((x) * (n_channel) + (y) * (rowstride))
+
+GdkPixbuf *
+rotate_simple (const GdkPixbuf   *src,
+	       NimbusRotation     angle)
+{
+  GdkPixbuf *dest;
+  guchar *p, *q;
+  gint x, y;
+  gint src_height, src_width;
+  gint n_channels_src, n_channels_dest;
+  gint rowstride_src, rowstride_dest;
+  guchar* pixels_dest, *pixels_src;
+
+  src_height = gdk_pixbuf_get_height (src);
+  src_width = gdk_pixbuf_get_width (src);
+  
+
+  switch (angle % 360)
+    {
+    case 0:
+      dest = gdk_pixbuf_copy (src);
+      break;
+    case 90:
+      dest = gdk_pixbuf_new (gdk_pixbuf_get_colorspace (src), 
+			     gdk_pixbuf_get_has_alpha (src), 
+			     gdk_pixbuf_get_bits_per_sample (src), 
+			     src_height, 
+			     src_width);
+      if (!dest)
+	return NULL;
+
+      n_channels_dest = gdk_pixbuf_get_n_channels (dest);
+      n_channels_src = gdk_pixbuf_get_n_channels (src);
+
+      rowstride_src = gdk_pixbuf_get_rowstride (src);
+      rowstride_dest = gdk_pixbuf_get_rowstride (dest);
+
+      pixels_dest = gdk_pixbuf_get_pixels (dest);
+      pixels_src = gdk_pixbuf_get_pixels (src);
+
+      for (y = 0; y < src_height; y++) 
+	{ 
+	  for (x = 0; x < src_width; x++) 
+	    { 
+	      p = pixels_src + OFFSET (src, x, y, n_channels_src, rowstride_src); 
+	      q = pixels_dest + OFFSET (dest, y, src_width- x - 1, n_channels_dest, rowstride_dest); 
+	      memcpy (q, p, n_channels_dest);
+	    }
+	} 
+      break;
+    case 180:
+      dest = gdk_pixbuf_new (gdk_pixbuf_get_colorspace (src), 
+			     gdk_pixbuf_get_has_alpha (src), 
+			     gdk_pixbuf_get_bits_per_sample (src),
+			     src_width, 
+			     src_height);
+      if (!dest)
+	return NULL;
+
+      n_channels_dest = gdk_pixbuf_get_n_channels (dest);
+      n_channels_src = gdk_pixbuf_get_n_channels (src);
+
+      rowstride_src = gdk_pixbuf_get_rowstride (src);
+      rowstride_dest = gdk_pixbuf_get_rowstride (dest);
+
+      pixels_dest = gdk_pixbuf_get_pixels (dest);
+      pixels_src = gdk_pixbuf_get_pixels (src);
+      
+      for (y = 0; y < src_height; y++) 
+	{ 
+	  for (x = 0; x < src_width; x++) 
+	    { 
+	      p = pixels_src + OFFSET (src, x, y, n_channels_src, rowstride_src); 
+	      q = pixels_dest + OFFSET (dest, src_width- x - 1, src_height- y - 1, n_channels_dest, rowstride_dest); 
+	      memcpy (q, p, n_channels_dest);
+	    }
+	} 
+      break;
+    case 270:
+      dest = gdk_pixbuf_new (gdk_pixbuf_get_colorspace (src), 
+			     gdk_pixbuf_get_has_alpha (src), 
+			     gdk_pixbuf_get_bits_per_sample (src),
+			     src_height, 
+			     src_width);
+      if (!dest)
+	return NULL;
+
+      n_channels_dest = gdk_pixbuf_get_n_channels (dest);
+      n_channels_src = gdk_pixbuf_get_n_channels (src);
+
+      rowstride_src = gdk_pixbuf_get_rowstride (src);
+      rowstride_dest = gdk_pixbuf_get_rowstride (dest);
+
+      pixels_dest = gdk_pixbuf_get_pixels (dest);
+      pixels_src = gdk_pixbuf_get_pixels (src);
+
+      for (y = 0; y < src_height; y++) 
+	{ 
+	  for (x = 0; x < src_width; x++) 
+	    { 
+	      p = pixels_src + OFFSET (src, x, y, n_channels_src, rowstride_src); 
+	      q = pixels_dest + OFFSET (dest, src_height- y - 1, x, n_channels_dest, rowstride_dest); 
+	      memcpy (q, p, n_channels_dest);
+	    }
+	} 
+      break;
+    default:
+      dest = NULL;
+      g_warning ("rotate_simple() can only rotate "
+		 "by multiples of 90 degrees");
+      g_assert_not_reached ();
+  } 
+
+  return dest;
+}
+
