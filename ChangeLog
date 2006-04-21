@@ -1,4 +1,10 @@
 2006-04-21 Erwann Chenede - <erwann.chenede@sun.com>
+
+  * gtk-engine/nimbus_style.c  : fixed GnomeEntry and not GnomeFileEntry
+				 fixed Gimp Combox
+				 fixed arrow centering problem is combobox
+
+2006-04-21 Erwann Chenede - <erwann.chenede@sun.com>
  
   * gtk-engine/nimbus_style.c : fixed GnomeFileEntry theming
 

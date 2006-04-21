@@ -92,6 +92,23 @@ static void draw_nimbus_box	   (GtkStyle      *style,
 
 static GtkStyleClass *parent_class;
 
+GtkWidget *print_ancestors (GtkWidget *widget)
+{
+  GtkWidget *tmp;
+
+  tmp = widget;
+  printf ("widget type %s\n", g_type_name (G_OBJECT_TYPE (widget)));
+
+  tmp = tmp->parent;
+  
+  while (tmp)
+    {
+      printf ("parent type %s\n", g_type_name (G_OBJECT_TYPE (tmp)));
+      tmp = tmp->parent;
+    }
+  printf ("\n");
+}
+
 GtkWidget *get_ancestor_of_type (GtkWidget *widget,
 				 gchar	 *ancestor_type_s)
 {
@@ -151,7 +168,7 @@ draw_arrow (GtkStyle      *style,
   g_return_if_fail (GTK_IS_STYLE (style));
 
   rc = NIMBUS_RC_STYLE (style->rc_style)->data;
-
+      
   if (DETAIL ("hscrollbar") || DETAIL ("vscrollbar"))
     {
       int offset_x = 0; int offset_y = 0;
@@ -246,12 +263,13 @@ draw_arrow (GtkStyle      *style,
 			   GDK_RGB_DITHER_NONE,0,0);
       
     }
-  else if (get_ancestor_of_type (widget, "GtkComboBox"))
+  else if (get_ancestor_of_type (widget, "GtkComboBox") || 
+	   get_ancestor_of_type (widget, "GimpEnumComboBox"))
     {
       GList *tmp_list;
       int vsep_offset = 0;
       GType researched_type = g_type_from_name ("GtkVSeparator");
-      
+
       /* get the vseparator offset if it exists */
 
       tmp_list = gtk_container_get_children (GTK_CONTAINER (widget->parent));
@@ -290,7 +308,7 @@ draw_arrow (GtkStyle      *style,
     }
   else if (get_ancestor_of_type (widget, "GtkCombo") || 
 	   get_ancestor_of_type (widget, "GtkComboBoxEntry") ||
-	   get_ancestor_of_type (widget, "GnomeFileEntry"))
+	   get_ancestor_of_type (widget, "GnomeEntry"))
     {
       if (rc->combo_arrow[state_type])
 	gdk_draw_pixbuf (window,
@@ -306,17 +324,23 @@ draw_arrow (GtkStyle      *style,
   else 
     {
       GdkPixbuf *arrow = NULL;
+      int x_center_offset, y_center_offset;
+
+
       if (arrow_type == GTK_ARROW_UP)
 	arrow = rc->arrow_up[state_type];
       if (arrow_type == GTK_ARROW_DOWN)
 	arrow = rc->arrow_down[state_type];
+      
+      x_center_offset = (width - gdk_pixbuf_get_width (arrow)) / 2;
+      y_center_offset = (height - gdk_pixbuf_get_height (arrow)) / 2;
 
       if (arrow)
 	gdk_draw_pixbuf (window,
 			 NULL,
 			 arrow,
 			 0,0,
-			 x, y,
+			 x + x_center_offset, y + y_center_offset,
 			 gdk_pixbuf_get_width (arrow),
 			 gdk_pixbuf_get_height (arrow),
 			 GDK_RGB_DITHER_NONE,0,0);
@@ -377,7 +401,7 @@ draw_tab (GtkStyle      *style,
 	  gint           width,
 	  gint           height)
 {
-  if (DETAIL ("optionmenutab"))
+ if (DETAIL ("optionmenutab"))
   {
     GdkRectangle button_area; 
     GtkRequisition indicator_size;
@@ -399,7 +423,7 @@ draw_tab (GtkStyle      *style,
 	    indicator_size.width - indicator_spacing.right - indicator_spacing.left - widget->style->xthickness;
 
     draw_nimbus_box (style, window, state_type, shadow_type, area, widget, "option_arrow",
-		     rc->arrow_button[state_type],
+		     rc->combo_entry_button[state_type],
 		     FALSE,
 		     tab_x, button_area.y,
 		     indicator_size.width + indicator_spacing.right + indicator_spacing.left + widget->style->xthickness,
@@ -448,7 +472,7 @@ draw_shadow (GtkStyle        *style,
       if (get_ancestor_of_type (widget, "GtkCombo") || 
 	  get_ancestor_of_type (widget, "GtkComboBoxEntry") || 
 	  get_ancestor_of_type (widget, "GtkSpinButton") ||
-	  get_ancestor_of_type (widget, "GnomeFileEntry"))
+	  get_ancestor_of_type (widget, "GnomeEntry"))
 	general_case = FALSE; /*combo case */
       
       /* work around for a bug in gtkentry were the state isn't set */
@@ -1162,7 +1186,7 @@ draw_box (GtkStyle      *style,
       
       if (get_ancestor_of_type (widget, "GtkCombo") || 
 	  get_ancestor_of_type (widget, "GtkComboBoxEntry") ||
-	  get_ancestor_of_type (widget, "GnomeFileEntry"))
+	  get_ancestor_of_type (widget, "GnomeEntry"))
 	{
 	  draw_nimbus_box (style, window, state_type, shadow_type, area,
 			   widget, detail, rc->combo_entry_button[state_type], TRUE,
