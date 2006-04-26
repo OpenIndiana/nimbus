@@ -1026,15 +1026,18 @@ draw_nimbus_box (GtkStyle      *style,
     }
   
   if ((state_type != GTK_STATE_INSENSITIVE) && drop_shadow && draw_bottom)
-    gdk_draw_pixbuf (window,
-		     NULL,
-		     rc->drop_shadow[state_type],
-		     0,0,
-		     x + bottom_left_c_w, 
-		     y + height-1,
-		     width - (bottom_left_c_w + bottom_right_c_w),
-		     gdk_pixbuf_get_height (rc->drop_shadow[state_type]),
-		     GDK_RGB_DITHER_NONE,0,0);
+    {
+      nimbus_init_button_drop_shadow (rc, state_type, width);
+      gdk_draw_pixbuf (window,
+		       NULL,
+		       rc->drop_shadow[state_type],
+		       0,0,
+		       x + bottom_left_c_w, 
+		       y + height-1,
+		       width - (bottom_left_c_w + bottom_right_c_w),
+		       gdk_pixbuf_get_height (rc->drop_shadow[state_type]),
+		       GDK_RGB_DITHER_NONE,0,0);
+    }
 }
 
 
@@ -1055,6 +1058,8 @@ draw_progress (GtkStyle      *style,
 {	  
   GtkOrientation orientation = GTK_ORIENTATION_HORIZONTAL;
   GtkProgressBarOrientation p_orientation = gtk_progress_bar_get_orientation (GTK_PROGRESS_BAR (widget));
+
+  nimbus_init_progress (NIMBUS_RC_STYLE (style->rc_style)->data, height, width + 1);
   
   if (p_orientation == GTK_PROGRESS_BOTTOM_TO_TOP ||
       p_orientation == GTK_PROGRESS_TOP_TO_BOTTOM)
@@ -1066,6 +1071,10 @@ draw_progress (GtkStyle      *style,
 		       widget, detail, progress->bar, FALSE,
 		       x, y, width, height, NIMBUS_SPIN_NONE,
 		       orientation);
+
+  if (orientation == GTK_ORIENTATION_VERTICAL)
+    width--;
+
   /* corners */
   gdk_draw_pixbuf (window,			 
 		   NULL,
@@ -1113,7 +1122,7 @@ draw_progress (GtkStyle      *style,
 		   x - gdk_pixbuf_get_width (progress->border_left), 
 		   y,
 		   gdk_pixbuf_get_width (progress->border_left),
-		   height,
+		   height - 1,
 		   GDK_RGB_DITHER_NONE,0,0);
 
   gdk_draw_pixbuf (window,			 
@@ -1123,7 +1132,7 @@ draw_progress (GtkStyle      *style,
 		   x + width + 1,
 		   y,
 		   gdk_pixbuf_get_width (progress->border_right),
-		   height,
+		   height - 1,
 		   GDK_RGB_DITHER_NONE,0,0);
  
   gdk_draw_pixbuf (window,			 
@@ -1264,6 +1273,7 @@ draw_box (GtkStyle      *style,
 	  NimbusScale* sc;
 	  if (width > height)
 	    {
+	      nimbus_init_scale (rc, state_type, width, TRUE);
 	      sc = rc->scale_h [state_type];
 	      int center_offset = (height - gdk_pixbuf_get_height (sc->bkg_mid)) / 2 + 1;
 	      gdk_draw_pixbuf (window,			 
@@ -1294,6 +1304,7 @@ draw_box (GtkStyle      *style,
 	    }
 	  else
 	    {
+	      nimbus_init_scale (rc, state_type, height, FALSE);
 	      sc = rc->scale_v [state_type];
 	      int center_offset = (width - gdk_pixbuf_get_width (sc->bkg_mid)) / 2 + 1;
 	      gdk_draw_pixbuf (window,			 
@@ -1341,6 +1352,7 @@ draw_box (GtkStyle      *style,
 	}
       else
 	{
+	  nimbus_init_scrollbar (rc, state_type, (width > height) ? width : height, (width > height) ? TRUE : FALSE);
 	  tmp_pb = (width > height) ? rc->scroll_h[state_type]->bkg : rc->scroll_v[state_type]->bkg;
 	  
 	  gdk_draw_pixbuf (window,
@@ -1470,6 +1482,7 @@ draw_slider (GtkStyle      *style,
 
       if (orientation == GTK_ORIENTATION_HORIZONTAL)
 	{
+	  nimbus_init_scrollbar (rc, state_type, width, TRUE);
 	  sb = rc->scroll_h[state_type];
 	  gdk_draw_pixbuf (window,			 
 			   NULL,
@@ -1499,6 +1512,7 @@ draw_slider (GtkStyle      *style,
 	}
       else
 	{
+	  nimbus_init_scrollbar (rc, state_type, height, FALSE);
 	  sb = rc->scroll_v[state_type];
 	  gdk_draw_pixbuf (window,			 
 			   NULL,

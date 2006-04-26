@@ -63,6 +63,12 @@ create_menu (GdkScreen *screen, gint depth, gint length, gboolean tearoff)
   return menu;
 }
 
+void blah ()
+{
+  printf ("blah");
+}
+  
+
 void main (int argc, char **argv)
 {
   GtkWidget *window, *option_menu, *hbox, *vbox, *top, *bottom, *left, *right;
@@ -84,7 +90,12 @@ void main (int argc, char **argv)
 
   option_menu = gtk_option_menu_new ();
 
-  /* gtk_widget_set_sensitive (option_menu, FALSE); */
+  g_signal_connect (G_OBJECT (gtkbutton), "clicked",
+		    G_CALLBACK (blah),
+		    NULL);
+
+
+  /* gtk_widget_set_sensitive (option_menu, FALSE);  */
 
   gtk_option_menu_set_menu (GTK_OPTION_MENU (option_menu), menu);
   

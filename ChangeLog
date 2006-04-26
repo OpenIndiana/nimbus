@@ -1,3 +1,11 @@
+2006-04-26 Erwann Chenede - <erwann.chenede@sun.com>
+
+  * gtk-engine/nimbus_rc_style.c
+    gtk-engine/nimbus_rc_style.h
+    gtk-engine/nimbus_style.c : better memory management 
+    only allocate replicated images if needed.
+    fixed vertical progress bar glow offset.
+
 2006-04-21 Erwann Chenede - <erwann.chenede@sun.com>
 
   * gtk-engine/nimbus_style.c  : fixed GnomeEntry and not GnomeFileEntry

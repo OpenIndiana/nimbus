@@ -163,7 +163,20 @@ struct _NimbusData
   GdkColor*		vline;
 };
 
+void nimbus_init_button_drop_shadow (NimbusData* rc, 
+				     GtkStateType state, 
+				     int size);
 
+void nimbus_init_scrollbar (NimbusData* rc,
+			    GtkStateType state, 
+			    int size,
+			    gboolean horizontal);
+
+void nimbus_init_scale (NimbusData* rc,
+			GtkStateType state, 
+			int size,
+			gboolean horizontal);
+	
 struct _NimbusRcStyle
 {
   GtkRcStyle parent_instance; /* must be first */

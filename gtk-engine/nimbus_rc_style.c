@@ -339,6 +339,46 @@ static void define_default_button_states (NimbusData *nimbus_rc)
   
   nimbus_rc->button_default[GTK_STATE_INSENSITIVE] = nimbus_rc->button[GTK_STATE_INSENSITIVE];
 }
+void nimbus_init_progress (NimbusData* rc,
+			   int height,
+			   int width)
+{
+  GError **error = NULL;
+  GdkPixbuf* tmp_pb;
+  
+  if (rc->progress->border_top == NULL || gdk_pixbuf_get_width (rc->progress->border_top) < width)
+    {
+      if (rc->progress->border_top)
+	gdk_pixbuf_unref (rc->progress->border_top);
+      tmp_pb = gdk_pixbuf_new_from_inline (-1, progress_shadow_top, FALSE, error);
+      rc->progress->border_top = replicate_cols (tmp_pb, 0,0, width, gdk_pixbuf_get_height (tmp_pb));
+      gdk_pixbuf_unref (tmp_pb);     
+    }
+  if (rc->progress->border_bottom == NULL || gdk_pixbuf_get_width (rc->progress->border_bottom) < width)
+    {
+      if (rc->progress->border_bottom)
+	gdk_pixbuf_unref (rc->progress->border_bottom);
+      tmp_pb = gdk_pixbuf_new_from_inline (-1, progress_shadow_bottom, FALSE, error);
+      rc->progress->border_bottom  = replicate_cols (tmp_pb, 0,0, width, gdk_pixbuf_get_height (tmp_pb));
+      gdk_pixbuf_unref (tmp_pb);     
+    }
+  if (rc->progress->border_left == NULL || gdk_pixbuf_get_width (rc->progress->border_left) < width)
+    {
+      if (rc->progress->border_left)
+	gdk_pixbuf_unref (rc->progress->border_left);
+      tmp_pb = gdk_pixbuf_new_from_inline (-1, progress_shadow_left, FALSE, error);
+      rc->progress->border_left = replicate_rows (tmp_pb, 0,0, gdk_pixbuf_get_width (tmp_pb), height);
+      gdk_pixbuf_unref (tmp_pb);
+    }
+  if (rc->progress->border_right == NULL || gdk_pixbuf_get_width (rc->progress->border_right) < width)
+    {
+      if (rc->progress->border_right)
+	gdk_pixbuf_unref (rc->progress->border_right);
+      tmp_pb = gdk_pixbuf_new_from_inline (-1, progress_shadow_right, FALSE, error);
+      rc->progress->border_right= replicate_rows (tmp_pb, 0,0, gdk_pixbuf_get_width (tmp_pb), height);
+      gdk_pixbuf_unref (tmp_pb);
+    }
+}
 
 static void define_progressbar (NimbusData *rc, int scr_w, int scr_h)
 {
@@ -392,22 +432,6 @@ static void define_progressbar (NimbusData *rc, int scr_w, int scr_h)
   rc->progress->corner_top_right = gdk_pixbuf_new_from_inline (-1, progress_shadow_corner_top_right, FALSE, error);
   rc->progress->corner_bottom_left = gdk_pixbuf_new_from_inline (-1, progress_shadow_corner_bottom_left, FALSE, error);
   rc->progress->corner_bottom_right = gdk_pixbuf_new_from_inline (-1, progress_shadow_corner_bottom_right, FALSE, error);
-
-  tmp_pb = gdk_pixbuf_new_from_inline (-1, progress_shadow_top, FALSE, error);
-  rc->progress->border_top = replicate_cols (tmp_pb, 0,0, scr_w, gdk_pixbuf_get_height (tmp_pb));
-  gdk_pixbuf_unref (tmp_pb);
-  
-  tmp_pb = gdk_pixbuf_new_from_inline (-1, progress_shadow_bottom, FALSE, error);
-  rc->progress->border_bottom = replicate_cols (tmp_pb, 0,0, scr_w, gdk_pixbuf_get_height (tmp_pb));
-  gdk_pixbuf_unref (tmp_pb);
-
-  tmp_pb = gdk_pixbuf_new_from_inline (-1, progress_shadow_left, FALSE, error);
-  rc->progress->border_left = replicate_rows (tmp_pb, 0,0, gdk_pixbuf_get_width (tmp_pb), scr_h);
-  gdk_pixbuf_unref (tmp_pb);
-
-  tmp_pb = gdk_pixbuf_new_from_inline (-1, progress_shadow_right, FALSE, error);
-  rc->progress->border_right = replicate_rows (tmp_pb, 0,0, gdk_pixbuf_get_width (tmp_pb), scr_h);
-  gdk_pixbuf_unref (tmp_pb);
 }
 
 static void define_arrow_button_states (NimbusData *nimbus_rc, gboolean combo_entry)
@@ -655,10 +679,245 @@ static void debug_gradients (NimbusRcStyle *nimbus_rc)
 
 
 }
+void nimbus_init_scrollbar (NimbusData* rc,
+			    GtkStateType state, 
+			    int size,
+			    gboolean horizontal)
+{
+  GdkPixbuf* tmp_pb , *tmp_pb_bis;
+  GError **error = NULL;
+
+  if (horizontal)
+    {
+      gboolean init_bkg = FALSE;
+      gboolean init_slider = FALSE;
+
+      if (rc->scroll_h[state]->bkg == NULL)
+	init_bkg = TRUE;
+      else if (gdk_pixbuf_get_height (rc->scroll_h[state]->bkg) < size)
+	{
+	  init_bkg = TRUE;
+	  gdk_pixbuf_unref (rc->scroll_h[state]->bkg);
+	}
+      
+      if (rc->scroll_h[state]->slider_mid == NULL)
+	init_slider = TRUE;
+      else if (gdk_pixbuf_get_height (rc->scroll_h[state]->slider_mid) < size)
+	{
+	  init_slider = TRUE;
+	  gdk_pixbuf_unref (rc->scroll_h[state]->slider_mid);
+	}
+      
+      if (init_bkg)
+	switch (state) {
+	case GTK_STATE_NORMAL:
+	case GTK_STATE_PRELIGHT:
+	case GTK_STATE_ACTIVE:
+	case GTK_STATE_SELECTED:
+	  tmp_pb = gdk_pixbuf_new_from_inline (-1, scroll_bar_h_bkg_normal, FALSE, error);
+	  rc->scroll_h[GTK_STATE_NORMAL]->bkg = replicate_cols (tmp_pb, 0,0, size, gdk_pixbuf_get_height (tmp_pb));
+	  gdk_pixbuf_unref (tmp_pb);
+	  rc->scroll_h[GTK_STATE_PRELIGHT]->bkg = rc->scroll_h[GTK_STATE_NORMAL]->bkg;
+	  rc->scroll_h[GTK_STATE_ACTIVE]->bkg = rc->scroll_h[GTK_STATE_NORMAL]->bkg;
+	break;
+	case GTK_STATE_INSENSITIVE:
+	  tmp_pb = gdk_pixbuf_new_from_inline (-1, scroll_bar_h_bkg_disable, FALSE, error);
+	  rc->scroll_h[GTK_STATE_INSENSITIVE]->bkg = replicate_cols (tmp_pb, 0,0, size, gdk_pixbuf_get_height (tmp_pb));
+	  gdk_pixbuf_unref (tmp_pb);
+	break;
+	}
+      if (init_slider)
+	switch (state) {
+	case GTK_STATE_NORMAL:
+	case GTK_STATE_INSENSITIVE:
+	  tmp_pb = gdk_pixbuf_new_from_inline (-1, scroll_bar_h_mid_normal, FALSE, error);
+	  rc->scroll_h[GTK_STATE_NORMAL]->slider_mid = replicate_cols (tmp_pb, 0,0, size, gdk_pixbuf_get_height (tmp_pb));
+	  gdk_pixbuf_unref (tmp_pb);
+	  rc->scroll_h[GTK_STATE_INSENSITIVE]->slider_mid = rc->scroll_h[GTK_STATE_NORMAL]->slider_mid;
+	  break;
+	case GTK_STATE_PRELIGHT:
+	case GTK_STATE_ACTIVE:
+	case GTK_STATE_SELECTED:
+	  tmp_pb = gdk_pixbuf_new_from_inline (-1, scroll_bar_h_mid_prelight, FALSE, error);
+	  rc->scroll_h[GTK_STATE_PRELIGHT]->slider_mid = replicate_cols (tmp_pb, 0,0, size, gdk_pixbuf_get_height (tmp_pb));
+	  gdk_pixbuf_unref (tmp_pb);
+	  rc->scroll_h[GTK_STATE_ACTIVE]->slider_mid = rc->scroll_h[GTK_STATE_PRELIGHT]->slider_mid;
+	  break;
+	}
+    }
+  else
+    {
+     gboolean init_bkg = FALSE;
+     gboolean init_slider = FALSE;
+
+      if (rc->scroll_v[state]->bkg == NULL)
+	init_bkg = TRUE;
+      else if (gdk_pixbuf_get_width (rc->scroll_v[state]->bkg) < size)
+	{
+	  init_bkg = TRUE;
+	  gdk_pixbuf_unref (rc->scroll_v[state]->bkg);
+	}
+      
+      if (rc->scroll_v[state]->slider_mid == NULL)
+	init_slider = TRUE;
+      else if (gdk_pixbuf_get_width (rc->scroll_v[state]->slider_mid) < size)
+	{
+	  init_slider = TRUE;
+	  gdk_pixbuf_unref (rc->scroll_v[state]->slider_mid);
+	}
+      
+      if (init_bkg)
+	switch (state) {
+	case GTK_STATE_NORMAL:
+	case GTK_STATE_PRELIGHT:
+	case GTK_STATE_ACTIVE:
+	case GTK_STATE_SELECTED:
+	  tmp_pb = gdk_pixbuf_new_from_inline (-1, scroll_bar_h_bkg_normal, FALSE, error);
+	  tmp_pb_bis = rotate_simple (tmp_pb, ROTATE_COUNTERCLOCKWISE);
+	  rc->scroll_v[GTK_STATE_NORMAL]->bkg = replicate_rows (tmp_pb_bis, 0, 0, gdk_pixbuf_get_width (tmp_pb_bis), size);
+	  gdk_pixbuf_unref (tmp_pb);  
+	  gdk_pixbuf_unref (tmp_pb_bis); 
+	  
+	  rc->scroll_v[GTK_STATE_PRELIGHT]->bkg = rc->scroll_v[GTK_STATE_NORMAL]->bkg;
+	  rc->scroll_v[GTK_STATE_ACTIVE]->bkg = rc->scroll_v[GTK_STATE_NORMAL]->bkg;
+	break;
+	case GTK_STATE_INSENSITIVE:
+	  tmp_pb = gdk_pixbuf_new_from_inline (-1, scroll_bar_h_bkg_disable, FALSE, error);
+	  tmp_pb_bis = rotate_simple (tmp_pb, ROTATE_COUNTERCLOCKWISE);
+	  rc->scroll_v[GTK_STATE_INSENSITIVE]->bkg = replicate_rows (tmp_pb_bis, 0, 0, gdk_pixbuf_get_width (tmp_pb_bis), size);
+	  gdk_pixbuf_unref (tmp_pb);  
+	  gdk_pixbuf_unref (tmp_pb_bis); 
+	break;
+	}
+      
+      if (init_slider)
+	switch (state) {
+	case GTK_STATE_NORMAL:
+	case GTK_STATE_INSENSITIVE:
+	  tmp_pb = gdk_pixbuf_new_from_inline (-1, scroll_bar_h_mid_normal, FALSE, error);
+	  tmp_pb_bis = rotate_simple (tmp_pb, ROTATE_COUNTERCLOCKWISE);
+	  rc->scroll_v[GTK_STATE_NORMAL]->slider_mid = replicate_rows (tmp_pb_bis, 0, 0, gdk_pixbuf_get_width (tmp_pb_bis), size);
+	  gdk_pixbuf_unref (tmp_pb);  
+	  gdk_pixbuf_unref (tmp_pb_bis); 
+	  rc->scroll_v[GTK_STATE_INSENSITIVE]->slider_mid = rc->scroll_v[GTK_STATE_NORMAL]->slider_mid;
+	  break;
+	case GTK_STATE_PRELIGHT:
+	case GTK_STATE_ACTIVE:
+	case GTK_STATE_SELECTED:
+	  tmp_pb = gdk_pixbuf_new_from_inline (-1, scroll_bar_h_mid_prelight, FALSE, error);
+	  tmp_pb_bis = rotate_simple (tmp_pb, ROTATE_COUNTERCLOCKWISE);
+	  rc->scroll_v[GTK_STATE_PRELIGHT]->slider_mid = replicate_rows (tmp_pb_bis, 0, 0, gdk_pixbuf_get_width (tmp_pb_bis), size);
+	  gdk_pixbuf_unref (tmp_pb);  
+	  gdk_pixbuf_unref (tmp_pb_bis); 
+	  rc->scroll_v[GTK_STATE_ACTIVE]->slider_mid = rc->scroll_v[GTK_STATE_PRELIGHT]->slider_mid;
+	  break;
+	}
+    }
+}
+
+void nimbus_init_scale (NimbusData* rc,
+			GtkStateType state, 
+			int size,
+			gboolean horizontal)
+{
+
+  GdkPixbuf* tmp_pb , *tmp_pb_bis;
+  GError **error = NULL;
+  gboolean init_bkg = FALSE;
+  gboolean init_slider = FALSE;
+
+  if (horizontal)
+    {
+      if (rc->scale_h[state]->bkg_mid == NULL)
+	init_bkg = TRUE;
+      else if (gdk_pixbuf_get_width (rc->scale_h[state]->bkg_mid) >= size)
+	{
+	  init_bkg = TRUE;
+	  gdk_pixbuf_unref (rc->scale_h[state]->bkg_mid);
+	}
+      if (init_bkg)
+	switch (state) {
+	case GTK_STATE_NORMAL:
+	case GTK_STATE_PRELIGHT:
+	case GTK_STATE_ACTIVE:
+	case GTK_STATE_SELECTED:
+	  tmp_pb = gdk_pixbuf_new_from_inline (-1, scale_corner_mid_normal, FALSE, error);
+	  rc->scale_h[GTK_STATE_NORMAL]->bkg_mid = replicate_cols (tmp_pb, 0,0, size, gdk_pixbuf_get_height (tmp_pb));
+	  gdk_pixbuf_unref (tmp_pb);
+	  rc->scale_h[GTK_STATE_PRELIGHT]->bkg_mid = rc->scale_h[GTK_STATE_NORMAL]->bkg_mid;
+	  rc->scale_h[GTK_STATE_ACTIVE]->bkg_mid = rc->scale_h[GTK_STATE_NORMAL]->bkg_mid;
+	  break;
+	case GTK_STATE_INSENSITIVE:
+	  tmp_pb = gdk_pixbuf_new_from_inline (-1, scale_corner_mid_disable, FALSE, error);
+	  rc->scale_h[GTK_STATE_INSENSITIVE]->bkg_mid = replicate_cols (tmp_pb, 0,0, size, gdk_pixbuf_get_height (tmp_pb));
+	  gdk_pixbuf_unref (tmp_pb);
+	  break;
+	}
+    }
+  else
+    {
+      if (rc->scale_v[state]->bkg_mid == NULL)
+	init_bkg = TRUE;
+      else if (gdk_pixbuf_get_height (rc->scale_v[state]->bkg_mid) >= size)
+	{
+	  init_bkg = TRUE;
+	  gdk_pixbuf_unref (rc->scale_v[state]->bkg_mid);
+	}
+      if (init_bkg)
+	switch (state) {
+	case GTK_STATE_NORMAL:
+	case GTK_STATE_PRELIGHT:
+	case GTK_STATE_ACTIVE:
+	case GTK_STATE_SELECTED:
+	  tmp_pb = gdk_pixbuf_new_from_inline (-1, scale_corner_mid_normal, FALSE, error);
+	  tmp_pb_bis = rotate_simple (tmp_pb, ROTATE_COUNTERCLOCKWISE);
+	  rc->scale_v[GTK_STATE_NORMAL]->bkg_mid = replicate_rows (tmp_pb_bis, 0,0, gdk_pixbuf_get_width (tmp_pb_bis), size);
+	  gdk_pixbuf_unref (tmp_pb);
+	  gdk_pixbuf_unref (tmp_pb_bis);
+	  rc->scale_v[GTK_STATE_PRELIGHT]->bkg_mid = rc->scale_v[GTK_STATE_NORMAL]->bkg_mid;
+	  rc->scale_v[GTK_STATE_ACTIVE]->bkg_mid = rc->scale_v[GTK_STATE_NORMAL]->bkg_mid;
+	  break;
+	case GTK_STATE_INSENSITIVE:
+	  tmp_pb = gdk_pixbuf_new_from_inline (-1, scale_corner_mid_disable, FALSE, error);
+	  tmp_pb_bis = rotate_simple (tmp_pb, ROTATE_COUNTERCLOCKWISE);  
+	  rc->scale_v[GTK_STATE_INSENSITIVE]->bkg_mid = replicate_rows (tmp_pb_bis, 0,0, gdk_pixbuf_get_width (tmp_pb_bis), size);
+	  gdk_pixbuf_unref (tmp_pb);
+	  gdk_pixbuf_unref (tmp_pb_bis);
+	  break;
+	}
+    }
+}
+
+void nimbus_init_button_drop_shadow (NimbusData* rc,
+				     GtkStateType state, 
+				     int size)
+{
+  if (rc->drop_shadow[state] && gdk_pixbuf_get_width (rc->drop_shadow[state]) >= size)
+    return;
+
+  if (rc->drop_shadow[state])
+    gdk_pixbuf_unref (rc->drop_shadow[state]);
+
+  rc->drop_shadow[state] =  gdk_pixbuf_new (GDK_COLORSPACE_RGB, TRUE, 8, size + 10, 1);
+
+  /* button shadow */
+
+  if (state == GTK_STATE_ACTIVE) /* white, opacity 60% */
+    gdk_pixbuf_fill (rc->drop_shadow[state], 0xffffff99);
+  else
+    { /* black, opacity 20% */
+      gdk_pixbuf_fill (rc->drop_shadow[state], 0x00000033);
+      rc->drop_shadow[GTK_STATE_NORMAL] = rc->drop_shadow[state];
+      rc->drop_shadow[GTK_STATE_PRELIGHT] = rc->drop_shadow[state];
+      rc->drop_shadow[GTK_STATE_SELECTED] = rc->drop_shadow[state];
+      rc->drop_shadow[GTK_STATE_INSENSITIVE] = rc->drop_shadow[state];
+    }
+}
+
 
 static void nimbus_data_rc_style_init (NimbusRcStyle* nimbus_rc)
 {
-  GdkPixbuf *black_drop_shadow, *white_drop_shadow, *tmp_pb, *tmp_pb_bis;
+  GdkPixbuf *tmp_pb, *tmp_pb_bis;
   GError **error = NULL;
   static NimbusData *rc = NULL;
   int screen_w = gdk_screen_get_width (gdk_display_get_default_screen (gdk_display_get_default ()));
@@ -676,21 +935,6 @@ static void nimbus_data_rc_style_init (NimbusRcStyle* nimbus_rc)
   define_arrow_button_states (rc, TRUE);
   define_arrow_button_states (rc, FALSE);
   define_progressbar (rc, screen_w, screen_h);
-
-  black_drop_shadow = gdk_pixbuf_new (GDK_COLORSPACE_RGB, TRUE, 8, screen_w, 1);
-  white_drop_shadow = gdk_pixbuf_new (GDK_COLORSPACE_RGB, TRUE, 8, screen_w, 1);
-
-  /* button shadow */
-  /* black, opacity 20% */
-  gdk_pixbuf_fill (black_drop_shadow, 0x00000033);
-  /* white, opacity 60% */
-  gdk_pixbuf_fill (white_drop_shadow, 0xffffff99);
-
-  rc->drop_shadow[GTK_STATE_NORMAL] = black_drop_shadow;
-  rc->drop_shadow[GTK_STATE_PRELIGHT] = black_drop_shadow;
-  rc->drop_shadow[GTK_STATE_ACTIVE] = white_drop_shadow;
-  rc->drop_shadow[GTK_STATE_SELECTED] = black_drop_shadow;
-  rc->drop_shadow[GTK_STATE_INSENSITIVE] = black_drop_shadow;
 
   rc->combo_arrow[GTK_STATE_NORMAL] =  gdk_pixbuf_new_from_inline (-1, combo_caret_normal, FALSE, error);
   rc->combo_arrow[GTK_STATE_PRELIGHT] =  gdk_pixbuf_new_from_inline (-1, combo_caret_prelight, FALSE, error);
@@ -786,49 +1030,26 @@ static void nimbus_data_rc_style_init (NimbusRcStyle* nimbus_rc)
   rc->scroll_h[GTK_STATE_NORMAL] = g_new0 (NimbusScrollbar, 1);
   rc->scroll_h[GTK_STATE_NORMAL]->button_start = gdk_pixbuf_new_from_inline (-1, scroll_button_h_left_normal, FALSE, error);
   rc->scroll_h[GTK_STATE_NORMAL]->button_end = gdk_pixbuf_new_from_inline (-1, scroll_button_h_right_normal, FALSE, error);
-  
-  tmp_pb = gdk_pixbuf_new_from_inline (-1, scroll_bar_h_bkg_normal, FALSE, error);
-  rc->scroll_h[GTK_STATE_NORMAL]->bkg = replicate_cols (tmp_pb, 0,0, screen_w, gdk_pixbuf_get_height (tmp_pb));
-  gdk_pixbuf_unref (tmp_pb);
-
   rc->scroll_h[GTK_STATE_NORMAL]->slider_start = gdk_pixbuf_new_from_inline (-1, scroll_bar_h_left_normal, FALSE, error);
   rc->scroll_h[GTK_STATE_NORMAL]->slider_end = gdk_pixbuf_new_from_inline (-1, scroll_bar_h_right_normal, FALSE, error);
-  
-  tmp_pb = gdk_pixbuf_new_from_inline (-1, scroll_bar_h_mid_normal, FALSE, error);
-  rc->scroll_h[GTK_STATE_NORMAL]->slider_mid = replicate_cols (tmp_pb, 0,0, screen_w, gdk_pixbuf_get_height (tmp_pb));
-  gdk_pixbuf_unref (tmp_pb);
-
 
   rc->scroll_h[GTK_STATE_PRELIGHT] = g_new0 (NimbusScrollbar, 1);
   rc->scroll_h[GTK_STATE_PRELIGHT]->button_start = gdk_pixbuf_new_from_inline (-1, scroll_button_h_left_prelight, FALSE, error);
   rc->scroll_h[GTK_STATE_PRELIGHT]->button_end = gdk_pixbuf_new_from_inline (-1, scroll_button_h_right_prelight, FALSE, error);
-  rc->scroll_h[GTK_STATE_PRELIGHT]->bkg = rc->scroll_h[GTK_STATE_NORMAL]->bkg;
   rc->scroll_h[GTK_STATE_PRELIGHT]->slider_start = gdk_pixbuf_new_from_inline (-1, scroll_bar_h_left_prelight, FALSE, error);
   rc->scroll_h[GTK_STATE_PRELIGHT]->slider_end = gdk_pixbuf_new_from_inline (-1, scroll_bar_h_right_prelight, FALSE, error);
-  tmp_pb = gdk_pixbuf_new_from_inline (-1, scroll_bar_h_mid_prelight, FALSE, error);
-  rc->scroll_h[GTK_STATE_PRELIGHT]->slider_mid = replicate_cols (tmp_pb, 0,0, screen_w, gdk_pixbuf_get_height (tmp_pb));
-  gdk_pixbuf_unref (tmp_pb);
   
   rc->scroll_h[GTK_STATE_ACTIVE] = g_new0 (NimbusScrollbar, 1);
   rc->scroll_h[GTK_STATE_ACTIVE]->button_start = gdk_pixbuf_new_from_inline (-1, scroll_button_h_left_active, FALSE, error);
   rc->scroll_h[GTK_STATE_ACTIVE]->button_end = gdk_pixbuf_new_from_inline (-1, scroll_button_h_right_active, FALSE, error);
-  rc->scroll_h[GTK_STATE_ACTIVE]->bkg = rc->scroll_h[GTK_STATE_NORMAL]->bkg;
   rc->scroll_h[GTK_STATE_ACTIVE]->slider_start = gdk_pixbuf_new_from_inline (-1, scroll_bar_h_left_active, FALSE, error);
   rc->scroll_h[GTK_STATE_ACTIVE]->slider_end = gdk_pixbuf_new_from_inline (-1, scroll_bar_h_right_active, FALSE, error);
-  tmp_pb = gdk_pixbuf_new_from_inline (-1, scroll_bar_h_mid_active, FALSE, error);
-  rc->scroll_h[GTK_STATE_ACTIVE]->slider_mid = replicate_cols (tmp_pb, 0,0, screen_w, gdk_pixbuf_get_height (tmp_pb));
-  gdk_pixbuf_unref (tmp_pb);  
   
   rc->scroll_h[GTK_STATE_SELECTED] = rc->scroll_h[GTK_STATE_ACTIVE];
 
   rc->scroll_h[GTK_STATE_INSENSITIVE] = g_new0 (NimbusScrollbar, 1);
   rc->scroll_h[GTK_STATE_INSENSITIVE]->button_start =  rc->scroll_h[GTK_STATE_NORMAL]->button_start;
   rc->scroll_h[GTK_STATE_INSENSITIVE]->button_end =  rc->scroll_h[GTK_STATE_NORMAL]->button_end;
-  
-  tmp_pb = gdk_pixbuf_new_from_inline (-1, scroll_bar_h_bkg_disable, FALSE, error);
-  rc->scroll_h[GTK_STATE_INSENSITIVE]->bkg = replicate_cols (tmp_pb, 0,0, screen_w, gdk_pixbuf_get_height (tmp_pb));
-  gdk_pixbuf_unref (tmp_pb);
-
   rc->scroll_h[GTK_STATE_INSENSITIVE]->slider_start = rc->scroll_h[GTK_STATE_NORMAL]->slider_end;
   rc->scroll_h[GTK_STATE_INSENSITIVE]->slider_mid = rc->scroll_h[GTK_STATE_NORMAL]->slider_mid;
 
@@ -839,46 +1060,29 @@ static void nimbus_data_rc_style_init (NimbusRcStyle* nimbus_rc)
 									   ROTATE_COUNTERCLOCKWISE);
   rc->scroll_v[GTK_STATE_NORMAL]->button_end = rotate_simple (rc->scroll_h[GTK_STATE_NORMAL]->button_start, 
 									 ROTATE_COUNTERCLOCKWISE);
-  tmp_pb = gdk_pixbuf_new_from_inline (-1, scroll_bar_h_bkg_normal, FALSE, error);
-  tmp_pb_bis = rotate_simple (tmp_pb, ROTATE_COUNTERCLOCKWISE);
-  rc->scroll_v[GTK_STATE_NORMAL]->bkg = replicate_rows (tmp_pb_bis, 0, 0, gdk_pixbuf_get_width (tmp_pb_bis), screen_h);
-  gdk_pixbuf_unref (tmp_pb);  
-  gdk_pixbuf_unref (tmp_pb_bis);  
-						
   rc->scroll_v[GTK_STATE_NORMAL]->slider_start = rotate_simple (rc->scroll_h[GTK_STATE_NORMAL]->slider_end,
 									 ROTATE_COUNTERCLOCKWISE);
   rc->scroll_v[GTK_STATE_NORMAL]->slider_end = rotate_simple (rc->scroll_h[GTK_STATE_NORMAL]->slider_start,
 									 ROTATE_COUNTERCLOCKWISE);
-  rc->scroll_v[GTK_STATE_NORMAL]->slider_mid = rotate_simple (rc->scroll_h[GTK_STATE_NORMAL]->slider_mid,
-									 ROTATE_COUNTERCLOCKWISE);
-
-
 
   rc->scroll_v[GTK_STATE_PRELIGHT] = g_new0 (NimbusScrollbar, 1);
   rc->scroll_v[GTK_STATE_PRELIGHT]->button_start = rotate_simple (rc->scroll_h[GTK_STATE_PRELIGHT]->button_end,
 									 ROTATE_COUNTERCLOCKWISE);
   rc->scroll_v[GTK_STATE_PRELIGHT]->button_end = rotate_simple (rc->scroll_h[GTK_STATE_PRELIGHT]->button_start,
 									 ROTATE_COUNTERCLOCKWISE);
-  rc->scroll_v[GTK_STATE_PRELIGHT]->bkg = rc->scroll_v[GTK_STATE_NORMAL]->bkg;
   rc->scroll_v[GTK_STATE_PRELIGHT]->slider_start = rotate_simple (rc->scroll_h[GTK_STATE_PRELIGHT]->slider_end,
 									 ROTATE_COUNTERCLOCKWISE);
   rc->scroll_v[GTK_STATE_PRELIGHT]->slider_end = rotate_simple (rc->scroll_h[GTK_STATE_PRELIGHT]->slider_start,
 									 ROTATE_COUNTERCLOCKWISE);
-  rc->scroll_v[GTK_STATE_PRELIGHT]->slider_mid = rotate_simple (rc->scroll_h[GTK_STATE_PRELIGHT]->slider_mid,
-									 ROTATE_COUNTERCLOCKWISE);
-
   
   rc->scroll_v[GTK_STATE_ACTIVE] = g_new0 (NimbusScrollbar, 1);
   rc->scroll_v[GTK_STATE_ACTIVE]->button_start = rotate_simple (rc->scroll_h[GTK_STATE_ACTIVE]->button_end,
 									 ROTATE_COUNTERCLOCKWISE);
   rc->scroll_v[GTK_STATE_ACTIVE]->button_end = rotate_simple (rc->scroll_h[GTK_STATE_ACTIVE]->button_start,
 									 ROTATE_COUNTERCLOCKWISE);
-  rc->scroll_v[GTK_STATE_ACTIVE]->bkg = rc->scroll_v[GTK_STATE_NORMAL]->bkg;
   rc->scroll_v[GTK_STATE_ACTIVE]->slider_start = rotate_simple (rc->scroll_h[GTK_STATE_ACTIVE]->slider_end,
 									 ROTATE_COUNTERCLOCKWISE);
   rc->scroll_v[GTK_STATE_ACTIVE]->slider_end = rotate_simple (rc->scroll_h[GTK_STATE_ACTIVE]->slider_start,
-									 ROTATE_COUNTERCLOCKWISE);
-  rc->scroll_v[GTK_STATE_ACTIVE]->slider_mid = rotate_simple (rc->scroll_h[GTK_STATE_ACTIVE]->slider_mid,
 									 ROTATE_COUNTERCLOCKWISE);
   
   rc->scroll_v[GTK_STATE_SELECTED] = rc->scroll_v[GTK_STATE_ACTIVE];
@@ -886,15 +1090,7 @@ static void nimbus_data_rc_style_init (NimbusRcStyle* nimbus_rc)
   rc->scroll_v[GTK_STATE_INSENSITIVE] = g_new0 (NimbusScrollbar, 1);
   rc->scroll_v[GTK_STATE_INSENSITIVE]->button_start =  rc->scroll_v[GTK_STATE_NORMAL]->button_start;
   rc->scroll_v[GTK_STATE_INSENSITIVE]->button_end =  rc->scroll_v[GTK_STATE_NORMAL]->button_end;
-  
-  tmp_pb = gdk_pixbuf_new_from_inline (-1, scroll_bar_h_bkg_disable, FALSE, error);
-  tmp_pb_bis = rotate_simple (tmp_pb, ROTATE_COUNTERCLOCKWISE);
-  rc->scroll_v[GTK_STATE_INSENSITIVE]->bkg = replicate_rows (tmp_pb_bis, 0, 0, gdk_pixbuf_get_width (tmp_pb_bis), screen_h);
-  gdk_pixbuf_unref (tmp_pb);  
-  gdk_pixbuf_unref (tmp_pb_bis);  
-
   rc->scroll_v[GTK_STATE_INSENSITIVE]->slider_start = rc->scroll_v[GTK_STATE_NORMAL]->slider_end;
-  rc->scroll_v[GTK_STATE_INSENSITIVE]->slider_mid = rc->scroll_v[GTK_STATE_NORMAL]->slider_mid;
 
   /* panes */
 
@@ -910,21 +1106,16 @@ static void nimbus_data_rc_style_init (NimbusRcStyle* nimbus_rc)
   rc->scale_h[GTK_STATE_NORMAL]->button = gdk_pixbuf_new_from_inline (-1, scale_button_normal, FALSE, error);
   rc->scale_h[GTK_STATE_NORMAL]->bkg_start = gdk_pixbuf_new_from_inline (-1, scale_corner_left_normal, FALSE, error);
   rc->scale_h[GTK_STATE_NORMAL]->bkg_end = gdk_pixbuf_new_from_inline (-1, scale_corner_right_normal, FALSE, error);
-  tmp_pb = gdk_pixbuf_new_from_inline (-1, scale_corner_mid_normal, FALSE, error);
-  rc->scale_h[GTK_STATE_NORMAL]->bkg_mid = replicate_cols (tmp_pb, 0,0, screen_w, gdk_pixbuf_get_height (tmp_pb));
-  gdk_pixbuf_unref (tmp_pb);
 
   rc->scale_h[GTK_STATE_PRELIGHT] = g_new0 (NimbusScale, 1);
   rc->scale_h[GTK_STATE_PRELIGHT]->button = gdk_pixbuf_new_from_inline (-1, scale_button_prelight, FALSE, error);
   rc->scale_h[GTK_STATE_PRELIGHT]->bkg_start = rc->scale_h[GTK_STATE_NORMAL]->bkg_start;
   rc->scale_h[GTK_STATE_PRELIGHT]->bkg_end = rc->scale_h[GTK_STATE_NORMAL]->bkg_end;
-  rc->scale_h[GTK_STATE_PRELIGHT]->bkg_mid = rc->scale_h[GTK_STATE_NORMAL]->bkg_mid;
   
   rc->scale_h[GTK_STATE_ACTIVE] = g_new0 (NimbusScale, 1);
   rc->scale_h[GTK_STATE_ACTIVE]->button = gdk_pixbuf_new_from_inline (-1, scale_button_active, FALSE, error);
   rc->scale_h[GTK_STATE_ACTIVE]->bkg_start = rc->scale_h[GTK_STATE_NORMAL]->bkg_start;
   rc->scale_h[GTK_STATE_ACTIVE]->bkg_end = rc->scale_h[GTK_STATE_NORMAL]->bkg_end;
-  rc->scale_h[GTK_STATE_ACTIVE]->bkg_mid = rc->scale_h[GTK_STATE_NORMAL]->bkg_mid;
   
   rc->scale_h[GTK_STATE_SELECTED] = rc->scale_h[GTK_STATE_ACTIVE];
 
@@ -932,9 +1123,6 @@ static void nimbus_data_rc_style_init (NimbusRcStyle* nimbus_rc)
   rc->scale_h[GTK_STATE_INSENSITIVE]->button = gdk_pixbuf_new_from_inline (-1, scale_button_disable, FALSE, error);
   rc->scale_h[GTK_STATE_INSENSITIVE]->bkg_start = gdk_pixbuf_new_from_inline (-1, scale_corner_left_disable, FALSE, error);
   rc->scale_h[GTK_STATE_INSENSITIVE]->bkg_end = gdk_pixbuf_new_from_inline (-1, scale_corner_right_disable, FALSE, error);
-  tmp_pb = gdk_pixbuf_new_from_inline (-1, scale_corner_mid_disable, FALSE, error);
-  rc->scale_h[GTK_STATE_INSENSITIVE]->bkg_mid = replicate_cols (tmp_pb, 0,0, screen_w, gdk_pixbuf_get_height (tmp_pb));
-  gdk_pixbuf_unref (tmp_pb);
 
   /* scale vertical */
 
@@ -944,23 +1132,16 @@ static void nimbus_data_rc_style_init (NimbusRcStyle* nimbus_rc)
 								       ROTATE_COUNTERCLOCKWISE);
   rc->scale_v[GTK_STATE_NORMAL]->bkg_end = rotate_simple (rc->scale_h[GTK_STATE_NORMAL]->bkg_start,
 								       ROTATE_COUNTERCLOCKWISE);
-  tmp_pb = gdk_pixbuf_new_from_inline (-1, scale_corner_mid_normal, FALSE, error);
-  tmp_pb_bis = rotate_simple (tmp_pb, ROTATE_COUNTERCLOCKWISE);
-  rc->scale_v[GTK_STATE_NORMAL]->bkg_mid = replicate_rows (tmp_pb_bis, 0,0, gdk_pixbuf_get_width (tmp_pb_bis), screen_h);
-  gdk_pixbuf_unref (tmp_pb);
-  gdk_pixbuf_unref (tmp_pb_bis);
  
   rc->scale_v[GTK_STATE_PRELIGHT] = g_new0 (NimbusScale, 1);
   rc->scale_v[GTK_STATE_PRELIGHT]->button = rc->scale_h[GTK_STATE_PRELIGHT]->button;
   rc->scale_v[GTK_STATE_PRELIGHT]->bkg_start = rc->scale_v[GTK_STATE_NORMAL]->bkg_start;
   rc->scale_v[GTK_STATE_PRELIGHT]->bkg_end = rc->scale_v[GTK_STATE_NORMAL]->bkg_end;
-  rc->scale_v[GTK_STATE_PRELIGHT]->bkg_mid = rc->scale_v[GTK_STATE_NORMAL]->bkg_mid;
 
   rc->scale_v[GTK_STATE_ACTIVE] = g_new0 (NimbusScale, 1);
   rc->scale_v[GTK_STATE_ACTIVE]->button = rc->scale_h[GTK_STATE_ACTIVE]->button;
   rc->scale_v[GTK_STATE_ACTIVE]->bkg_start = rc->scale_v[GTK_STATE_NORMAL]->bkg_start;
   rc->scale_v[GTK_STATE_ACTIVE]->bkg_end = rc->scale_v[GTK_STATE_NORMAL]->bkg_end;
-  rc->scale_v[GTK_STATE_ACTIVE]->bkg_mid = rc->scale_v[GTK_STATE_NORMAL]->bkg_mid; 
 
   rc->scale_v[GTK_STATE_SELECTED] = rc->scale_v[GTK_STATE_ACTIVE];
  
@@ -971,12 +1152,6 @@ static void nimbus_data_rc_style_init (NimbusRcStyle* nimbus_rc)
   rc->scale_v[GTK_STATE_INSENSITIVE]->bkg_end = rotate_simple (rc->scale_h[GTK_STATE_INSENSITIVE]->bkg_start,
 									  ROTATE_COUNTERCLOCKWISE);
   
-  tmp_pb = gdk_pixbuf_new_from_inline (-1, scale_corner_mid_disable, FALSE, error);
-  tmp_pb_bis = rotate_simple (tmp_pb, ROTATE_COUNTERCLOCKWISE);  
-  rc->scale_v[GTK_STATE_INSENSITIVE]->bkg_mid = replicate_rows (tmp_pb_bis, 0,0, gdk_pixbuf_get_width (tmp_pb_bis), screen_h);
-  gdk_pixbuf_unref (tmp_pb);
-  gdk_pixbuf_unref (tmp_pb_bis);
-
   /* tab mini gradient */
   rc->tab[GTK_STATE_NORMAL] = g_new0 (NimbusTab, 1);
   rc->tab[GTK_STATE_NORMAL]->start = color_cache_get_color ("#b5cadd");

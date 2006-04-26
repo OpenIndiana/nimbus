@@ -31,8 +31,9 @@ void main (int argc, char **argv)
                     NULL);
 
   notebook = gtk_notebook_new  ();
-  gtk_notebook_set_tab_pos (GTK_NOTEBOOK (notebook), GTK_POS_LEFT);
-  page1 = gtk_label_new ("page 1");
+  /* gtk_container_set_border_width(GTK_CONTAINER (notebook), 10); */
+  gtk_notebook_set_tab_pos (GTK_NOTEBOOK (notebook), GTK_POS_TOP);
+  page1 = gtk_label_new ("pagepagepagepaga\n\n\n\n\n\n\n\n\n\nepagepagepagepagepagepagepagepagepagepagepagepagepagepagepage 1");
   gtk_notebook_append_page (GTK_NOTEBOOK (notebook), page1, NULL);
   page2 = gtk_label_new ("page 2");
   gtk_notebook_append_page (GTK_NOTEBOOK (notebook), page2, NULL);
