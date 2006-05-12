@@ -1,3 +1,5 @@
+include "iconrc"
+
 style "default"
 {
   bg[NORMAL]        = "#d6d9df"
@@ -7,7 +9,7 @@ style "default"
   bg[ACTIVE]        = "#d6d9df" 
 
   PanelMenu::stripe-enabled = FALSE
-
+  
   engine "nimbus" 
     {
     }
@@ -44,6 +46,14 @@ style "menu" = "default"
   PanelMenu::stripe-enabled = FALSE
 }
 
+style "PanelFrame"
+{
+  xthickness = 1
+  ythickness = 1
+}
+
+
+class "Panel*" style "PanelFrame"
 class "GtkMenu*" style "menu"
 class "GtkScale" style "scrollbar"
 class "GtkTreeView" style "entry"
@@ -51,3 +61,4 @@ class "GtkWidget" style "default"
 class "GtkEntry" style "entry"
 class "GtkScrollbar" style "scrollbar"
 class "GtkPaned" style "pane"
+

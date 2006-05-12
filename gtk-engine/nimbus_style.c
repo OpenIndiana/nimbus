@@ -332,18 +332,20 @@ draw_arrow (GtkStyle      *style,
       if (arrow_type == GTK_ARROW_DOWN)
 	arrow = rc->arrow_down[state_type];
       
-      x_center_offset = (width - gdk_pixbuf_get_width (arrow)) / 2;
-      y_center_offset = (height - gdk_pixbuf_get_height (arrow)) / 2;
-
       if (arrow)
-	gdk_draw_pixbuf (window,
-			 NULL,
-			 arrow,
-			 0,0,
-			 x + x_center_offset, y + y_center_offset,
-			 gdk_pixbuf_get_width (arrow),
-			 gdk_pixbuf_get_height (arrow),
-			 GDK_RGB_DITHER_NONE,0,0);
+	{
+	  x_center_offset = (width - gdk_pixbuf_get_width (arrow)) / 2;
+	  y_center_offset = (height - gdk_pixbuf_get_height (arrow)) / 2;
+
+	  gdk_draw_pixbuf (window,
+			   NULL,
+			   arrow,
+			   0,0,
+			   x + x_center_offset, y + y_center_offset,
+			   gdk_pixbuf_get_width (arrow),
+			   gdk_pixbuf_get_height (arrow),
+			   GDK_RGB_DITHER_NONE,0,0);
+	}
       else
 	parent_class->draw_arrow (style, window, state_type, shadow_type, area, widget, detail, arrow_type, fill, x, y, width, height);
 
@@ -1585,7 +1587,12 @@ draw_option (GtkStyle      *style,
   if (shadow_type == GTK_SHADOW_ETCHED_IN) /* insensitive */
     {
       state_type = GTK_STATE_INSENSITIVE;
-      if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)))
+      if (GTK_IS_RADIO_MENU_ITEM (widget) && 
+	  gtk_check_menu_item_get_active (GTK_RADIO_MENU_ITEM (widget)))
+	  image = rc->radio_set;
+
+      if (GTK_IS_TOGGLE_BUTTON (widget) && 
+	  gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)))
 	  image = rc->radio_set;
     }
 
