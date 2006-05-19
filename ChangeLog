@@ -1,3 +1,7 @@
+2006-05-19 Erwann Chenede - <erwann.chenede@sun.com>
+
+  * gtk-engine/nimbus_style.c : fix for 6426784
+
 2006-05-12 Erwann Chenede - <erwann.chenede@sun.com>
 
   * added stock icons

@@ -478,7 +478,8 @@ draw_shadow (GtkStyle        *style,
 	general_case = FALSE; /*combo case */
       
       /* work around for a bug in gtkentry were the state isn't set */
-      state_type = GTK_WIDGET_STATE(widget);
+      if (widget)
+	state_type = GTK_WIDGET_STATE(widget);
 
       /* border gradients points */
       gdk_draw_line (window, 
