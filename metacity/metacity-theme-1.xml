@@ -375,32 +375,34 @@
         <line color="#a6abb3" x1="width-2" y1="height-2" x2="width-2" y2="height-2"/>
     </draw_ops>
     
-    
-    
     <!-- Maximized state -->
     
     <draw_ops name="background_maximized_focused">
         <!-- fill color -->
-        <rectangle color="red" x="0" y="0" width="width" height="height" filled="true"/>
-        <!-- blackish outline -->
-        <!-- draw gradient -->
-        <gradient type="vertical" x="0" y="0" width="width" height="title_height + 8">
+        <rectangle color="#aaafb9" x="0" y="0" width="width" height="height" filled="true"/>
+	<!-- draw title gradient -->
+        <gradient type="vertical" x="0" y="0" width="width" height="title_height + 2">
             <color value="#e3e5e8"/>
             <color value="#aaafb9"/>
         </gradient>
-        <line color="#6c7280" x1="0" y1="title_height + 7" x2="width" y2="title_height + 7"/>
     </draw_ops>
     
+    <draw_ops name="bottom_titlebar_maximized_focused">
+        <line color="#6c7280" x1="0" y1="height-1" x2="width" y2="height-1"/>
+    </draw_ops>
+
     <draw_ops name="background_maximized_unfocused">
         <!-- fill color -->
         <rectangle color="#c0c4cb" x="0" y="0" width="width" height="height" filled="true"/>
         <!-- draw gradient -->
-        <gradient type="vertical" x="0" y="0" width="width" height="title_height + 8">
+        <gradient type="vertical" x="0" y="0" width="width" height="title_height + 2">
             <color value="#aaaeb7"/>
             <color value="#c0c4cb"/>
         </gradient>
-        	
-        <line color="#9ea3ad" x1="0" y1="title_height + 7" x2="width" y2="title_height + 7"/>
+    </draw_ops>
+    
+    <draw_ops name="bottom_titlebar_maximized_unfocused">
+        <line color="#9ea3ad" x1="0" y1="height-1" x2="width" y2="height-1"/>
     </draw_ops>
     
     <!-- dialog box -->
@@ -552,7 +554,7 @@
     
     <frame_style name="maximized_unfocused" geometry="normal_maximized" parent="normal_unfocused">
         <piece position="top_titlebar_edge" draw_ops="blank"/>
-        <piece position="bottom_titlebar_edge" draw_ops="blank"/>
+        <piece position="bottom_titlebar_edge" draw_ops="bottom_titlebar_maximized_unfocused"/>
         <piece position="entire_background" draw_ops="background_maximized_unfocused"/>
         <button function="maximize" state="normal" draw_ops="unmaximize_button_unfocused"/>
         <button function="maximize" state="prelight" draw_ops="unmaximize_button_prelight"/>
@@ -561,7 +563,7 @@
     
     <frame_style name="maximized_focused" geometry="normal_maximized" parent="normal_focused">
         <piece position="top_titlebar_edge" draw_ops="blank"/>
-        <piece position="bottom_titlebar_edge" draw_ops="blank"/>
+        <piece position="bottom_titlebar_edge" draw_ops="bottom_titlebar_maximized_focused"/>
         <piece position="entire_background" draw_ops="background_maximized_focused"/>
         <button function="maximize" state="normal" draw_ops="unmaximize_button_not_over"/>
         <button function="maximize" state="prelight" draw_ops="unmaximize_button_prelight"/>

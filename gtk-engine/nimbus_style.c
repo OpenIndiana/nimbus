@@ -549,7 +549,7 @@ draw_shadow (GtkStyle        *style,
 		       x+width, 
 		       y+height -  1);
     }
-  else
+  else   
     parent_class->draw_shadow (style, window, state_type, shadow_type, area, widget, detail, x, y, width, height);
   verbose ("draw\t shadow \t-%s-\n", detail ? detail : "no detail");
 }
@@ -927,8 +927,8 @@ draw_flat_box (GtkStyle      *style,
 			  x, y+1, width, height-1);
     }
   else
-    parent_class->draw_box (style, window, state_type, shadow_type, area,
-			    widget, detail, x, y, width, height);
+    parent_class->draw_flat_box (style, window, state_type, shadow_type, area,
+				 widget, detail, x, y, width, height);
 
   verbose ("draw\t flat box \t-%s-\n", detail ? detail : "no detail");
 }

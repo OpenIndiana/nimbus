@@ -1,3 +1,11 @@
+2006-05-22 Erwann Chenede - <erwann.chenede@sun.com>
+
+  * gtk-engine/nimbus_style.c :
+  * gtk-engine/gtk-2.0/gtkrc : implemented tooltips
+
+  * metacity/metacity-theme-1.xml : fixed maximized toolbar 
+    problem when fonts are very small
+
 2006-05-19 Erwann Chenede - <erwann.chenede@sun.com>
 
   * gtk-engine/nimbus_style.c : fix for 6426784

@@ -8,8 +8,6 @@ style "default"
   bg[INSENSITIVE]   = "#efebe5" 
   bg[ACTIVE]        = "#d6d9df" 
 
-  PanelMenu::stripe-enabled = FALSE
-  
   engine "nimbus" 
     {
     }
@@ -62,3 +60,14 @@ class "GtkEntry" style "entry"
 class "GtkScrollbar" style "scrollbar"
 class "GtkPaned" style "pane"
 
+style "lighter" = "default"
+{
+  bg[NORMAL] = "#c5c6cc"
+}
+style "tips" 
+{
+  bg[NORMAL] = "#ffffcc"
+}
+
+widget_class "*.tooltips.*.GtkToggleButton"  style "lighter"
+widget "gtk-tooltips" style "tips"
