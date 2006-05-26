@@ -41,7 +41,7 @@ static gint color_cache_compare (CachedColor *tmp, char *color)
 
 
 GdkColor *
-color_cache_get_color (char *color_name)
+nimbus_color_cache_get (char *color_name)
 {
   CachedColor *color;
   GSList *cached_color = g_slist_find_custom (colors_list, 
@@ -72,8 +72,8 @@ nimbus_gradient_add_segment (NimbusGradient *gradient,
 {
   NimbusGradientSegment* seg = g_new (NimbusGradientSegment, 1);
 
-  seg->start_color = color_cache_get_color (start_color);
-  seg->end_color = color_cache_get_color(end_color);
+  seg->start_color = nimbus_color_cache_get (start_color);
+  seg->end_color = nimbus_color_cache_get(end_color);
   seg->start_location = start_location;
   seg->end_location = end_location;
   gradient->segments = g_slist_append (gradient->segments, seg);
@@ -291,7 +291,7 @@ nimbus_draw_horizontal_gradient (GdkWindow *window,
 			from->blue + (delta_b * i) / height};
      /* GdkColor color = { 0, 0, 0, 60000};  */
 
-      gc = realize_color (style, &color);
+      gc = nimbus_realize_color (style, &color);
 		     
       if (i < corner_height && start_corner) /* troncate start of this gradient */
 	{
@@ -380,7 +380,7 @@ nimbus_draw_vertical_gradient (GdkWindow *window,
 			from->blue + (delta_b * i) / width};
      /* GdkColor color = { 0, 0, 0, 60000};  */
 
-      gc = realize_color (style, &color);
+      gc = nimbus_realize_color (style, &color);
 		     
       if (i < corner_width && start_corner) /* troncate start of this gradient */
 	{
@@ -412,7 +412,7 @@ nimbus_draw_vertical_gradient (GdkWindow *window,
 
 
 GdkGC *
-realize_color (GtkStyle * style,
+nimbus_realize_color (GtkStyle * style,
 	       GdkColor * color)
 {
   GdkGCValues gc_values;
@@ -426,13 +426,13 @@ realize_color (GtkStyle * style,
 		     &gc_values, GDK_GC_FOREGROUND);
 }
 
-/* modified copy of gdk_pixbuf_rotate_simple for compatibility with gtk 2.4
+/* modified copy of gdk_pixbuf_nimbus_rotate_simple for compatibility with gtk 2.4
  */
 
 #define OFFSET(pb, x, y, n_channel, rowstride) ((x) * (n_channel) + (y) * (rowstride))
 
 GdkPixbuf *
-rotate_simple (const GdkPixbuf   *src,
+nimbus_rotate_simple (const GdkPixbuf   *src,
 	       NimbusRotation     angle)
 {
   GdkPixbuf *dest;
@@ -538,7 +538,7 @@ rotate_simple (const GdkPixbuf   *src,
       break;
     default:
       dest = NULL;
-      g_warning ("rotate_simple() can only rotate "
+      g_warning ("nimbus_rotate_simple() can only rotate "
 		 "by multiples of 90 degrees");
       g_assert_not_reached ();
   } 

@@ -7,7 +7,7 @@
 #include "nimbus_rc_style.h"
 #include "nimbus_utils.h"
 
-char *state_names[5] = {
+static char *state_names[5] = {
     "Normal",
     "Active",
     "Prelight",
@@ -21,7 +21,7 @@ typedef enum
   NIMBUS_SPIN_DOWN
 } NimbusSpinButton;
 
-void
+static void
 verbose (const char *format, ...)
 {
   va_list args;
@@ -92,7 +92,7 @@ static void draw_nimbus_box	   (GtkStyle      *style,
 
 static GtkStyleClass *parent_class;
 
-GtkWidget *print_ancestors (GtkWidget *widget)
+static GtkWidget *print_ancestors (GtkWidget *widget)
 {
   GtkWidget *tmp;
 
@@ -109,7 +109,7 @@ GtkWidget *print_ancestors (GtkWidget *widget)
   printf ("\n");
 }
 
-GtkWidget *get_ancestor_of_type (GtkWidget *widget,
+static GtkWidget *get_ancestor_of_type (GtkWidget *widget,
 				 gchar	 *ancestor_type_s)
 {
   GtkWidget *tmp;
@@ -483,59 +483,59 @@ draw_shadow (GtkStyle        *style,
 
       /* border gradients points */
       gdk_draw_line (window, 
-		     realize_color (style,rc->textfield_color[state_type]->vertical_line_gradient1), 
+		     nimbus_realize_color (style,rc->textfield_color[state_type]->vertical_line_gradient1), 
 		     x, y+1, x, y+1);
       
       if (general_case)
 	{
 	  gdk_draw_line (window, 
-			 realize_color (style,rc->textfield_color[state_type]->vertical_line_gradient1), 
+			 nimbus_realize_color (style,rc->textfield_color[state_type]->vertical_line_gradient1), 
 			 x+width-1, y+1, x+width-1, y+1);
 	    
 	  gdk_draw_line (window, 
-			 realize_color (style,rc->textfield_color[state_type]->vertical_line_gradient2), 
+			 nimbus_realize_color (style,rc->textfield_color[state_type]->vertical_line_gradient2), 
 			 x+width-1, y+2, x+width-1, y+2);
 	  
 
 	}
 
       gdk_draw_line (window, 
-		     realize_color (style,rc->textfield_color[state_type]->vertical_line_gradient2), 
+		     nimbus_realize_color (style,rc->textfield_color[state_type]->vertical_line_gradient2), 
 		     x, y+2, x, y+2);
       
 
       /* third gradient line end points as they can't be drawn in draw_flat_box */
       
       gdk_draw_line (window, 
-		     realize_color (style,rc->textfield_color[state_type]->gradient_line3), 
+		     nimbus_realize_color (style,rc->textfield_color[state_type]->gradient_line3), 
 		     x+1, y+2, x+1, y+2);
 
       gdk_draw_line (window, 
-		     realize_color (style,rc->textfield_color[state_type]->gradient_line3), 
+		     nimbus_realize_color (style,rc->textfield_color[state_type]->gradient_line3), 
 		     x+width-2, y+2, x+width-2, y+2);
 
       /* horizontal gradient */
       gdk_draw_line (window, 
-		     realize_color (style,rc->textfield_color[state_type]->gradient_line1), 
+		     nimbus_realize_color (style,rc->textfield_color[state_type]->gradient_line1), 
 		     x, y, x + width - 1, y);
 
       gdk_draw_line (window, 
-		     realize_color (style,rc->textfield_color[state_type]->gradient_line2), 
+		     nimbus_realize_color (style,rc->textfield_color[state_type]->gradient_line2), 
 		     x+1, y+1, x+width- (general_case ? 2 :1), y+1);
      
       /* vertical borders */
       gdk_draw_line (window, 
-		     realize_color (style,rc->textfield_color[state_type]->vertical_line), 
+		     nimbus_realize_color (style,rc->textfield_color[state_type]->vertical_line), 
 		     x, y+3, x, y+height-1);
       
       if (general_case)
 	gdk_draw_line (window, 
-		       realize_color (style,rc->textfield_color[state_type]->vertical_line), 
+		       nimbus_realize_color (style,rc->textfield_color[state_type]->vertical_line), 
 		       x+width-1, y+3, x+width-1, y+height-1);
 
       /* bottom line */
       gdk_draw_line (window, 
-		     realize_color (style,rc->textfield_color[state_type]->vertical_line), 
+		     nimbus_realize_color (style,rc->textfield_color[state_type]->vertical_line), 
 		     x+1, 
 		     y+height - (general_case ? 1 : 2),
 		     x+width - (general_case ? 2 : 1), 
@@ -659,11 +659,11 @@ draw_box_gap (GtkStyle       *style,
       gdk_draw_line (window, style->black_gc, x + gap_x + gap_width, y, x + width, y);
       /* gradient */
       
-      gdk_draw_line (window, realize_color (style, rc->tab[state_type]->start), 
+      gdk_draw_line (window, nimbus_realize_color (style, rc->tab[state_type]->start), 
 		     x+1, y + 1, x + width-1, y + 1);
-      gdk_draw_line (window, realize_color (style, rc->tab[state_type]->mid),
+      gdk_draw_line (window, nimbus_realize_color (style, rc->tab[state_type]->mid),
 		     x+1, y + 2, x + width-1, y + 2);
-      gdk_draw_line (window, realize_color (style, rc->tab[state_type]->end),
+      gdk_draw_line (window, nimbus_realize_color (style, rc->tab[state_type]->end),
 		     x+1, y + 3, x + width-1, y + 3);
       gdk_draw_line (window, style->black_gc, x, y + 4, x + width, y + 4);
       break;
@@ -681,11 +681,11 @@ draw_box_gap (GtkStyle       *style,
       gdk_draw_line (window, style->black_gc, x + gap_x + gap_width, y+ height, x + width, y+ height);
       /* gradient */
       
-      gdk_draw_line (window, realize_color (style, rc->tab[state_type]->start), 
+      gdk_draw_line (window, nimbus_realize_color (style, rc->tab[state_type]->start), 
 		     x+1, y + height - 1, x + width-1, y + height - 1);
-      gdk_draw_line (window, realize_color (style, rc->tab[state_type]->mid),
+      gdk_draw_line (window, nimbus_realize_color (style, rc->tab[state_type]->mid),
 		     x+1, y + height - 2, x + width-1, y + height - 2);
-      gdk_draw_line (window, realize_color (style, rc->tab[state_type]->end),
+      gdk_draw_line (window, nimbus_realize_color (style, rc->tab[state_type]->end),
 		     x+1, y + height - 3, x + width-1, y + height - 3);
       gdk_draw_line (window, style->black_gc, x, y + height - 4, x + width, y + height - 4);
       break;
@@ -703,11 +703,11 @@ draw_box_gap (GtkStyle       *style,
 		     x, y + height);
       /* gradient */
       
-      gdk_draw_line (window, realize_color (style, rc->tab[state_type]->start), 
+      gdk_draw_line (window, nimbus_realize_color (style, rc->tab[state_type]->start), 
 		     x+1, y + 1, x+1, y+height-1);
-      gdk_draw_line (window, realize_color (style, rc->tab[state_type]->mid),
+      gdk_draw_line (window, nimbus_realize_color (style, rc->tab[state_type]->mid),
 		     x+2, y + 1, x+2, y+height-1);
-      gdk_draw_line (window, realize_color (style, rc->tab[state_type]->end),
+      gdk_draw_line (window, nimbus_realize_color (style, rc->tab[state_type]->end),
 		     x+3, y + 1, x+3, y+height-1);
       gdk_draw_line (window, style->black_gc, x+4, y + 1, x+4, y+height-1);
           break;
@@ -725,11 +725,11 @@ draw_box_gap (GtkStyle       *style,
 		     x+ width, y + height);
       /* gradient */
       
-      gdk_draw_line (window, realize_color (style, rc->tab[state_type]->start), 
+      gdk_draw_line (window, nimbus_realize_color (style, rc->tab[state_type]->start), 
 		     x+width-1, y + 1, x+width-1, y+height-1);
-      gdk_draw_line (window, realize_color (style, rc->tab[state_type]->mid),
+      gdk_draw_line (window, nimbus_realize_color (style, rc->tab[state_type]->mid),
 		     x+width-2, y + 1, x+width-2, y+height-1);
-      gdk_draw_line (window, realize_color (style, rc->tab[state_type]->end),
+      gdk_draw_line (window, nimbus_realize_color (style, rc->tab[state_type]->end),
 		     x+width-3, y + 1, x+width-3, y+height-1);
       gdk_draw_line (window, style->black_gc, x+width-4, y + 1, x+width-4, y+height-1);
           break;
@@ -769,7 +769,7 @@ draw_extension (GtkStyle       *style,
       selected_offset--;
     }
   else
-    gc = realize_color (style, rc->tab[state_type]->junction);
+    gc = nimbus_realize_color (style, rc->tab[state_type]->junction);
 
   if (position == TAB_POS_BOTTOM)
     y++;
@@ -856,13 +856,13 @@ draw_handle (GtkStyle      *style,
       pane = rc->pane->pane_h;
       if (draw_outline)
 	{
-	  gdk_draw_line (window, realize_color (style, rc->pane->outline),
+	  gdk_draw_line (window, nimbus_realize_color (style, rc->pane->outline),
 			 x+1, y, x+width-1, y);      
-	  gdk_draw_line (window, realize_color (style, rc->pane->outline),
+	  gdk_draw_line (window, nimbus_realize_color (style, rc->pane->outline),
 			 x+1, y+height, x+width-1, y+height);      
-	  gdk_draw_line (window, realize_color (style, rc->pane->innerline),
+	  gdk_draw_line (window, nimbus_realize_color (style, rc->pane->innerline),
 			 x+1, y+1, x+width-1, y+1);      
-	  gdk_draw_line (window, realize_color (style, rc->pane->innerline),
+	  gdk_draw_line (window, nimbus_realize_color (style, rc->pane->innerline),
 			 x+1, y+height-1, x+width-1, y+height-1);      
 	}
 	    
@@ -873,13 +873,13 @@ draw_handle (GtkStyle      *style,
       pane = rc->pane->pane_v;
       if (draw_outline)
 	{
-	  gdk_draw_line (window, realize_color (style, rc->pane->outline),
+	  gdk_draw_line (window, nimbus_realize_color (style, rc->pane->outline),
 			 x, y, x, y+height-1);      
-	  gdk_draw_line (window, realize_color (style, rc->pane->outline),
+	  gdk_draw_line (window, nimbus_realize_color (style, rc->pane->outline),
 			 x+width-1, y, x+width-1, y+height-1);      
-	  gdk_draw_line (window, realize_color (style, rc->pane->innerline),
+	  gdk_draw_line (window, nimbus_realize_color (style, rc->pane->innerline),
 			 x+1, y, x+1, y+height-1);      
-	  gdk_draw_line (window, realize_color (style, rc->pane->innerline),
+	  gdk_draw_line (window, nimbus_realize_color (style, rc->pane->innerline),
 			 x+width-2, y, x+width-2, y+height-1);      
 	}
     }
@@ -920,7 +920,7 @@ draw_flat_box (GtkStyle      *style,
     {
       NimbusData *rc = NIMBUS_RC_STYLE (style->rc_style)->data;
 
-      gdk_draw_line (window, realize_color (style, rc->textfield_color[state_type]->gradient_line3),
+      gdk_draw_line (window, nimbus_realize_color (style, rc->textfield_color[state_type]->gradient_line3),
 		     x, y, x+width, y);
 		     
       gdk_draw_rectangle (window, style->bg_gc[state_type], TRUE,
@@ -1258,11 +1258,11 @@ draw_box (GtkStyle      *style,
 			   GTK_ORIENTATION_HORIZONTAL);
 
 	  gdk_draw_line (window, 
-			 realize_color (style,rc->spin_color[spin_up_state]->top),
+			 nimbus_realize_color (style,rc->spin_color[spin_up_state]->top),
 			 spin_x + 1, spin_y + (spin_height/2) - 1, 
 			 spin_x + spin_width - 2, spin_y + (spin_height/2) - 1);
 	  gdk_draw_line (window, 
-			 realize_color (style,rc->spin_color[state_type]->bottom),
+			 nimbus_realize_color (style,rc->spin_color[state_type]->bottom),
 			 spin_x + 1, spin_y + (spin_height/2), 
 			 spin_x + spin_width - 2, spin_y + (spin_height/2));
 	}
@@ -1379,18 +1379,18 @@ draw_box (GtkStyle      *style,
   else if (DETAIL ("bar"))
     draw_progress (style, window, state_type, shadow_type, area, widget, detail, x, y, width, height);
   else if (DETAIL ("toolbar"))
-      gdk_draw_line (window, realize_color (style, rc->menubar_border), x,y+height-1,x+width-1,y+height-1);
+      gdk_draw_line (window, nimbus_realize_color (style, rc->menubar_border), x,y+height-1,x+width-1,y+height-1);
   else if (DETAIL ("menu"))
     {
       GdkGC *start, *mid_start, *mid_end, *end;
       sanitize_size (window, &width, &height);
-      gdk_draw_rectangle (window, realize_color (style, rc->menu->border), FALSE, x,y,width-1,height-1); 
-      gdk_draw_line (window, realize_color (style, rc->menu->shadow), x + width - 2,y+1,x + width - 2,height-2); 
+      gdk_draw_rectangle (window, nimbus_realize_color (style, rc->menu->border), FALSE, x,y,width-1,height-1); 
+      gdk_draw_line (window, nimbus_realize_color (style, rc->menu->shadow), x + width - 2,y+1,x + width - 2,height-2); 
       
-      start = realize_color (style, rc->menu->start);
-      mid_start = realize_color (style, rc->menu->mid_start);
-      mid_end = realize_color (style, rc->menu->mid_end);
-      end = realize_color (style, rc->menu->end);
+      start = nimbus_realize_color (style, rc->menu->start);
+      mid_start = nimbus_realize_color (style, rc->menu->mid_start);
+      mid_end = nimbus_realize_color (style, rc->menu->mid_end);
+      end = nimbus_realize_color (style, rc->menu->end);
       gdk_draw_line (window, start, x+1,y+1,x + width - 2,y+1); 
       gdk_draw_line (window, mid_start, x+1,y+2,x + width - 2,y+2); 
       gdk_draw_line (window, mid_end, x+1,y+3,x + width - 2,y+3); 
@@ -1404,9 +1404,12 @@ draw_box (GtkStyle      *style,
     }
   else if (DETAIL ("menubar"))
     {
+/*      gdk_draw_rectangle (window, style->black_gc, FALSE,
+			  x, y+1, width, height-1);*/
       nimbus_draw_gradient (window, style, rc->menubar,
 			    x, y, width, height-1, -1, TRUE, GTK_ORIENTATION_HORIZONTAL, NO_TAB);
-      gdk_draw_line (window, realize_color (style, rc->menubar_border), x,y+height-1,x+width-1,y+height-1);
+      gdk_draw_line (window, nimbus_realize_color (style, rc->menubar_border), x,y+height-1,x+width-1,y+height-1);
+      
     }
   else
     parent_class->draw_box (style, window, state_type, shadow_type, area, widget, detail, x, y, width, height);
@@ -1652,7 +1655,7 @@ draw_hline (GtkStyle     *style,
 {
   NimbusData *rc = NIMBUS_RC_STYLE (style->rc_style)->data;
 
-  gdk_draw_line (window, realize_color (style, rc->hline), x1,y,x2,y);
+  gdk_draw_line (window, nimbus_realize_color (style, rc->hline), x1,y,x2,y);
   /* parent_class->draw_hline (style, window, state_type, area, widget, detail, x1, x2, y);   */
   verbose ("draw\t hline \t-%s-\n", detail ? detail : "no detail");
 }
@@ -1675,7 +1678,7 @@ draw_vline (GtkStyle     *style,
   
   if (!get_ancestor_of_type (widget, "GtkComboBox"))
     {
-      GdkGC *color = realize_color (style, rc->vline);
+      GdkGC *color = nimbus_realize_color (style, rc->vline);
       for (i=0; i <= (y2 - y1); i += 3)
 	  gdk_draw_line (window, color, x, y1+i, x, y1+i);
 	  

@@ -219,6 +219,7 @@ static void define_normal_button_states (NimbusData *nimbus_rc)
   tmp->gradients = g_slist_append (tmp->gradients, tmp_gradient);
   
   nimbus_rc->button[GTK_STATE_ACTIVE] = tmp;
+  nimbus_rc->button[GTK_STATE_SELECTED] = tmp;
 
   /* button GTK_STATE_INSENSITIVE */
   tmp = g_new0 (NimbusButton, 1);
@@ -334,6 +335,7 @@ static void define_default_button_states (NimbusData *nimbus_rc)
   tmp->gradients = g_slist_append (tmp->gradients, tmp_gradient);
     
   nimbus_rc->button_default[GTK_STATE_ACTIVE] = tmp;
+  nimbus_rc->button_default[GTK_STATE_SELECTED] = tmp;
 
   /* button GTK_STATE_INSENSITIVE */
   
@@ -586,99 +588,6 @@ static void define_arrow_button_states (NimbusData *nimbus_rc, gboolean combo_en
   nimbus_rc->combo_entry_button[GTK_STATE_INSENSITIVE] = tmp;
 }
 
-gboolean my_expose_event_h (GtkWidget        *widget,
-			  GdkEventExpose   *event,
-			  gpointer          data)
-{
-  GdkGC *gc;
-  int i, x, width;
-  NimbusData *rc = ((NimbusRcStyle*) data)->data;
-  gboolean tmpbool = FALSE;
-
-
-  gc = gdk_gc_new (widget->window);
-
-  x = widget->allocation.x;
-  width = 20;
-
-  for (i = 0; i < 5; i++)
-    {
-      if (rc->button[i])
-	{
-	  GSList *tmp = rc->button[i]->gradients;
-	  
-	  while (tmp)
-	    {
-	      NimbusGradient *tmp_gradient = (NimbusGradient*) tmp->data;
-	      tmpbool = !tmpbool;
-	      nimbus_draw_gradient (widget->window,
-				    gtk_widget_get_style (widget),
-				    tmp_gradient,
-				    x,
-				    widget->allocation.y,
-				    width,
-				    widget->allocation.height,
-				    widget->allocation.height / 2, tmpbool,
-				    GTK_ORIENTATION_HORIZONTAL,
-				    NO_TAB);
-	      x += 30;
-	      tmp = tmp->next;
-	    }
-	  x += 20;
-	}
-    }
-   for (i = 0; i < 5; i++)
-    {
-      if (rc->button_default[i])
-	{
-	  GSList *tmp = rc->button_default[i]->gradients;
-	  
-	  while (tmp)
-	    {
-	      NimbusGradient *tmp_gradient = (NimbusGradient*) tmp->data;
-	      tmpbool = !tmpbool;
-	      nimbus_draw_gradient (widget->window,
-				    gtk_widget_get_style (widget),
-				    tmp_gradient,
-				    x,
-				    widget->allocation.y,
-				    width,
-				    widget->allocation.height,
-				    widget->allocation.height / 2, tmpbool,
-				    GTK_ORIENTATION_HORIZONTAL,
-				    NO_TAB);
-	      x += 30;
-	      tmp = tmp->next;
-	    }
-	  x += 20;
-	}
-    }
-}
-
-static void debug_gradients (NimbusRcStyle *nimbus_rc)
-{
-  static gboolean started = FALSE;
-  GtkWidget *window;
-
-  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-
-  gtk_window_set_default_size (GTK_WINDOW (window), 200, 600);
-
-  g_signal_connect (G_OBJECT (window), 
-		    "expose_event", 
-		    G_CALLBACK (my_expose_event_h),
-		    nimbus_rc);
-  
-  g_signal_connect (G_OBJECT (window), 
-		    "delete_event", 
-		    G_CALLBACK (gtk_main_quit),
-		    NULL);
- 
-  gtk_widget_show_all (window);
-
-
-
-}
 void nimbus_init_scrollbar (NimbusData* rc,
 			    GtkStateType state, 
 			    int size,
@@ -773,7 +682,7 @@ void nimbus_init_scrollbar (NimbusData* rc,
 	case GTK_STATE_ACTIVE:
 	case GTK_STATE_SELECTED:
 	  tmp_pb = gdk_pixbuf_new_from_inline (-1, scroll_bar_h_bkg_normal, FALSE, error);
-	  tmp_pb_bis = rotate_simple (tmp_pb, ROTATE_COUNTERCLOCKWISE);
+	  tmp_pb_bis = nimbus_rotate_simple (tmp_pb, ROTATE_COUNTERCLOCKWISE);
 	  rc->scroll_v[GTK_STATE_NORMAL]->bkg = replicate_rows (tmp_pb_bis, 0, 0, gdk_pixbuf_get_width (tmp_pb_bis), size);
 	  gdk_pixbuf_unref (tmp_pb);  
 	  gdk_pixbuf_unref (tmp_pb_bis); 
@@ -783,7 +692,7 @@ void nimbus_init_scrollbar (NimbusData* rc,
 	break;
 	case GTK_STATE_INSENSITIVE:
 	  tmp_pb = gdk_pixbuf_new_from_inline (-1, scroll_bar_h_bkg_disable, FALSE, error);
-	  tmp_pb_bis = rotate_simple (tmp_pb, ROTATE_COUNTERCLOCKWISE);
+	  tmp_pb_bis = nimbus_rotate_simple (tmp_pb, ROTATE_COUNTERCLOCKWISE);
 	  rc->scroll_v[GTK_STATE_INSENSITIVE]->bkg = replicate_rows (tmp_pb_bis, 0, 0, gdk_pixbuf_get_width (tmp_pb_bis), size);
 	  gdk_pixbuf_unref (tmp_pb);  
 	  gdk_pixbuf_unref (tmp_pb_bis); 
@@ -795,7 +704,7 @@ void nimbus_init_scrollbar (NimbusData* rc,
 	case GTK_STATE_NORMAL:
 	case GTK_STATE_INSENSITIVE:
 	  tmp_pb = gdk_pixbuf_new_from_inline (-1, scroll_bar_h_mid_normal, FALSE, error);
-	  tmp_pb_bis = rotate_simple (tmp_pb, ROTATE_COUNTERCLOCKWISE);
+	  tmp_pb_bis = nimbus_rotate_simple (tmp_pb, ROTATE_COUNTERCLOCKWISE);
 	  rc->scroll_v[GTK_STATE_NORMAL]->slider_mid = replicate_rows (tmp_pb_bis, 0, 0, gdk_pixbuf_get_width (tmp_pb_bis), size);
 	  gdk_pixbuf_unref (tmp_pb);  
 	  gdk_pixbuf_unref (tmp_pb_bis); 
@@ -805,7 +714,7 @@ void nimbus_init_scrollbar (NimbusData* rc,
 	case GTK_STATE_ACTIVE:
 	case GTK_STATE_SELECTED:
 	  tmp_pb = gdk_pixbuf_new_from_inline (-1, scroll_bar_h_mid_prelight, FALSE, error);
-	  tmp_pb_bis = rotate_simple (tmp_pb, ROTATE_COUNTERCLOCKWISE);
+	  tmp_pb_bis = nimbus_rotate_simple (tmp_pb, ROTATE_COUNTERCLOCKWISE);
 	  rc->scroll_v[GTK_STATE_PRELIGHT]->slider_mid = replicate_rows (tmp_pb_bis, 0, 0, gdk_pixbuf_get_width (tmp_pb_bis), size);
 	  gdk_pixbuf_unref (tmp_pb);  
 	  gdk_pixbuf_unref (tmp_pb_bis); 
@@ -870,7 +779,7 @@ void nimbus_init_scale (NimbusData* rc,
 	case GTK_STATE_ACTIVE:
 	case GTK_STATE_SELECTED:
 	  tmp_pb = gdk_pixbuf_new_from_inline (-1, scale_corner_mid_normal, FALSE, error);
-	  tmp_pb_bis = rotate_simple (tmp_pb, ROTATE_COUNTERCLOCKWISE);
+	  tmp_pb_bis = nimbus_rotate_simple (tmp_pb, ROTATE_COUNTERCLOCKWISE);
 	  rc->scale_v[GTK_STATE_NORMAL]->bkg_mid = replicate_rows (tmp_pb_bis, 0,0, gdk_pixbuf_get_width (tmp_pb_bis), size);
 	  gdk_pixbuf_unref (tmp_pb);
 	  gdk_pixbuf_unref (tmp_pb_bis);
@@ -879,7 +788,7 @@ void nimbus_init_scale (NimbusData* rc,
 	  break;
 	case GTK_STATE_INSENSITIVE:
 	  tmp_pb = gdk_pixbuf_new_from_inline (-1, scale_corner_mid_disable, FALSE, error);
-	  tmp_pb_bis = rotate_simple (tmp_pb, ROTATE_COUNTERCLOCKWISE);  
+	  tmp_pb_bis = nimbus_rotate_simple (tmp_pb, ROTATE_COUNTERCLOCKWISE);  
 	  rc->scale_v[GTK_STATE_INSENSITIVE]->bkg_mid = replicate_rows (tmp_pb_bis, 0,0, gdk_pixbuf_get_width (tmp_pb_bis), size);
 	  gdk_pixbuf_unref (tmp_pb);
 	  gdk_pixbuf_unref (tmp_pb_bis);
@@ -945,46 +854,46 @@ static void nimbus_data_rc_style_init (NimbusRcStyle* nimbus_rc)
   /* textfield spec */
 
   rc->textfield_color[GTK_STATE_NORMAL] = g_new0 (NimbusTextfield, 1);
-  rc->textfield_color[GTK_STATE_NORMAL]->gradient_line1 = color_cache_get_color ("#8d8e8f");
-  rc->textfield_color[GTK_STATE_NORMAL]->gradient_line2 = color_cache_get_color ("#cbcbcc");
-  rc->textfield_color[GTK_STATE_NORMAL]->gradient_line3 = color_cache_get_color ("#f4f4f4");
-  rc->textfield_color[GTK_STATE_NORMAL]->vertical_line_gradient1= color_cache_get_color ("#989899");
-  rc->textfield_color[GTK_STATE_NORMAL]->vertical_line_gradient2 = color_cache_get_color ("#b0b0b1");
-  rc->textfield_color[GTK_STATE_NORMAL]->bottom_line = color_cache_get_color ("#c0c0c1");
-  rc->textfield_color[GTK_STATE_NORMAL]->vertical_line = color_cache_get_color ("#b8b8b9");
+  rc->textfield_color[GTK_STATE_NORMAL]->gradient_line1 = nimbus_color_cache_get ("#8d8e8f");
+  rc->textfield_color[GTK_STATE_NORMAL]->gradient_line2 = nimbus_color_cache_get ("#cbcbcc");
+  rc->textfield_color[GTK_STATE_NORMAL]->gradient_line3 = nimbus_color_cache_get ("#f4f4f4");
+  rc->textfield_color[GTK_STATE_NORMAL]->vertical_line_gradient1= nimbus_color_cache_get ("#989899");
+  rc->textfield_color[GTK_STATE_NORMAL]->vertical_line_gradient2 = nimbus_color_cache_get ("#b0b0b1");
+  rc->textfield_color[GTK_STATE_NORMAL]->bottom_line = nimbus_color_cache_get ("#c0c0c1");
+  rc->textfield_color[GTK_STATE_NORMAL]->vertical_line = nimbus_color_cache_get ("#b8b8b9");
 
   rc->textfield_color[GTK_STATE_PRELIGHT] = rc->textfield_color[GTK_STATE_NORMAL];
   rc->textfield_color[GTK_STATE_ACTIVE] = rc->textfield_color[GTK_STATE_NORMAL];
   rc->textfield_color[GTK_STATE_SELECTED] = rc->textfield_color[GTK_STATE_NORMAL];
 
   rc->textfield_color[GTK_STATE_INSENSITIVE] = g_new0 (NimbusTextfield, 1);
-  rc->textfield_color[GTK_STATE_INSENSITIVE]->gradient_line1 = color_cache_get_color ("#c7c9ce");
-  rc->textfield_color[GTK_STATE_INSENSITIVE]->gradient_line2 = color_cache_get_color ("#d3d6db");
-  rc->textfield_color[GTK_STATE_INSENSITIVE]->gradient_line3 = color_cache_get_color ("#dcdee3");
-  rc->textfield_color[GTK_STATE_INSENSITIVE]->vertical_line_gradient1= color_cache_get_color ("#c9cbd0");
-  rc->textfield_color[GTK_STATE_INSENSITIVE]->vertical_line_gradient2 = color_cache_get_color ("#ced0d5");
-  rc->textfield_color[GTK_STATE_INSENSITIVE]->bottom_line = color_cache_get_color ("#d1d3d8");
-  rc->textfield_color[GTK_STATE_INSENSITIVE]->vertical_line = color_cache_get_color ("#cfd2d7");
+  rc->textfield_color[GTK_STATE_INSENSITIVE]->gradient_line1 = nimbus_color_cache_get ("#c7c9ce");
+  rc->textfield_color[GTK_STATE_INSENSITIVE]->gradient_line2 = nimbus_color_cache_get ("#d3d6db");
+  rc->textfield_color[GTK_STATE_INSENSITIVE]->gradient_line3 = nimbus_color_cache_get ("#dcdee3");
+  rc->textfield_color[GTK_STATE_INSENSITIVE]->vertical_line_gradient1= nimbus_color_cache_get ("#c9cbd0");
+  rc->textfield_color[GTK_STATE_INSENSITIVE]->vertical_line_gradient2 = nimbus_color_cache_get ("#ced0d5");
+  rc->textfield_color[GTK_STATE_INSENSITIVE]->bottom_line = nimbus_color_cache_get ("#d1d3d8");
+  rc->textfield_color[GTK_STATE_INSENSITIVE]->vertical_line = nimbus_color_cache_get ("#cfd2d7");
 
   /* spin separator spec */
 
   rc->spin_color[GTK_STATE_NORMAL] = g_new0 (NimbusSpinSeparator, 1);
-  rc->spin_color[GTK_STATE_NORMAL]->top = color_cache_get_color ("#5d6f80");
-  rc->spin_color[GTK_STATE_NORMAL]->bottom = color_cache_get_color ("#ccd7e2");
+  rc->spin_color[GTK_STATE_NORMAL]->top = nimbus_color_cache_get ("#5d6f80");
+  rc->spin_color[GTK_STATE_NORMAL]->bottom = nimbus_color_cache_get ("#ccd7e2");
   
   rc->spin_color[GTK_STATE_PRELIGHT] = g_new0 (NimbusSpinSeparator, 1);
-  rc->spin_color[GTK_STATE_PRELIGHT]->top = color_cache_get_color ("#6d8091");
-  rc->spin_color[GTK_STATE_PRELIGHT]->bottom = color_cache_get_color ("#dde9f4");
+  rc->spin_color[GTK_STATE_PRELIGHT]->top = nimbus_color_cache_get ("#6d8091");
+  rc->spin_color[GTK_STATE_PRELIGHT]->bottom = nimbus_color_cache_get ("#dde9f4");
   
   rc->spin_color[GTK_STATE_ACTIVE] = g_new0 (NimbusSpinSeparator, 1);
-  rc->spin_color[GTK_STATE_ACTIVE]->top = color_cache_get_color ("#0f2b52");
-  rc->spin_color[GTK_STATE_ACTIVE]->bottom = color_cache_get_color ("#6b8dac");
+  rc->spin_color[GTK_STATE_ACTIVE]->top = nimbus_color_cache_get ("#0f2b52");
+  rc->spin_color[GTK_STATE_ACTIVE]->bottom = nimbus_color_cache_get ("#6b8dac");
 
   rc->spin_color[GTK_STATE_SELECTED] = rc->spin_color[GTK_STATE_ACTIVE];
 
   rc->spin_color[GTK_STATE_INSENSITIVE] = g_new0 (NimbusSpinSeparator, 1);
-  rc->spin_color[GTK_STATE_INSENSITIVE]->top = color_cache_get_color ("#bcc2cb");
-  rc->spin_color[GTK_STATE_INSENSITIVE]->bottom = color_cache_get_color ("#d4d9e0");
+  rc->spin_color[GTK_STATE_INSENSITIVE]->top = nimbus_color_cache_get ("#bcc2cb");
+  rc->spin_color[GTK_STATE_INSENSITIVE]->bottom = nimbus_color_cache_get ("#d4d9e0");
 
   /* arrows */
   rc->arrow_up[GTK_STATE_NORMAL] = gdk_pixbuf_new_from_inline (-1, arrow_top_normal, FALSE, error);
@@ -1056,33 +965,33 @@ static void nimbus_data_rc_style_init (NimbusRcStyle* nimbus_rc)
  /* vertical scrollbar */
 
   rc->scroll_v[GTK_STATE_NORMAL] = g_new0 (NimbusScrollbar, 1);
-  rc->scroll_v[GTK_STATE_NORMAL]->button_start = rotate_simple (rc->scroll_h[GTK_STATE_NORMAL]->button_end, 
+  rc->scroll_v[GTK_STATE_NORMAL]->button_start = nimbus_rotate_simple (rc->scroll_h[GTK_STATE_NORMAL]->button_end, 
 									   ROTATE_COUNTERCLOCKWISE);
-  rc->scroll_v[GTK_STATE_NORMAL]->button_end = rotate_simple (rc->scroll_h[GTK_STATE_NORMAL]->button_start, 
+  rc->scroll_v[GTK_STATE_NORMAL]->button_end = nimbus_rotate_simple (rc->scroll_h[GTK_STATE_NORMAL]->button_start, 
 									 ROTATE_COUNTERCLOCKWISE);
-  rc->scroll_v[GTK_STATE_NORMAL]->slider_start = rotate_simple (rc->scroll_h[GTK_STATE_NORMAL]->slider_end,
+  rc->scroll_v[GTK_STATE_NORMAL]->slider_start = nimbus_rotate_simple (rc->scroll_h[GTK_STATE_NORMAL]->slider_end,
 									 ROTATE_COUNTERCLOCKWISE);
-  rc->scroll_v[GTK_STATE_NORMAL]->slider_end = rotate_simple (rc->scroll_h[GTK_STATE_NORMAL]->slider_start,
+  rc->scroll_v[GTK_STATE_NORMAL]->slider_end = nimbus_rotate_simple (rc->scroll_h[GTK_STATE_NORMAL]->slider_start,
 									 ROTATE_COUNTERCLOCKWISE);
 
   rc->scroll_v[GTK_STATE_PRELIGHT] = g_new0 (NimbusScrollbar, 1);
-  rc->scroll_v[GTK_STATE_PRELIGHT]->button_start = rotate_simple (rc->scroll_h[GTK_STATE_PRELIGHT]->button_end,
+  rc->scroll_v[GTK_STATE_PRELIGHT]->button_start = nimbus_rotate_simple (rc->scroll_h[GTK_STATE_PRELIGHT]->button_end,
 									 ROTATE_COUNTERCLOCKWISE);
-  rc->scroll_v[GTK_STATE_PRELIGHT]->button_end = rotate_simple (rc->scroll_h[GTK_STATE_PRELIGHT]->button_start,
+  rc->scroll_v[GTK_STATE_PRELIGHT]->button_end = nimbus_rotate_simple (rc->scroll_h[GTK_STATE_PRELIGHT]->button_start,
 									 ROTATE_COUNTERCLOCKWISE);
-  rc->scroll_v[GTK_STATE_PRELIGHT]->slider_start = rotate_simple (rc->scroll_h[GTK_STATE_PRELIGHT]->slider_end,
+  rc->scroll_v[GTK_STATE_PRELIGHT]->slider_start = nimbus_rotate_simple (rc->scroll_h[GTK_STATE_PRELIGHT]->slider_end,
 									 ROTATE_COUNTERCLOCKWISE);
-  rc->scroll_v[GTK_STATE_PRELIGHT]->slider_end = rotate_simple (rc->scroll_h[GTK_STATE_PRELIGHT]->slider_start,
+  rc->scroll_v[GTK_STATE_PRELIGHT]->slider_end = nimbus_rotate_simple (rc->scroll_h[GTK_STATE_PRELIGHT]->slider_start,
 									 ROTATE_COUNTERCLOCKWISE);
   
   rc->scroll_v[GTK_STATE_ACTIVE] = g_new0 (NimbusScrollbar, 1);
-  rc->scroll_v[GTK_STATE_ACTIVE]->button_start = rotate_simple (rc->scroll_h[GTK_STATE_ACTIVE]->button_end,
+  rc->scroll_v[GTK_STATE_ACTIVE]->button_start = nimbus_rotate_simple (rc->scroll_h[GTK_STATE_ACTIVE]->button_end,
 									 ROTATE_COUNTERCLOCKWISE);
-  rc->scroll_v[GTK_STATE_ACTIVE]->button_end = rotate_simple (rc->scroll_h[GTK_STATE_ACTIVE]->button_start,
+  rc->scroll_v[GTK_STATE_ACTIVE]->button_end = nimbus_rotate_simple (rc->scroll_h[GTK_STATE_ACTIVE]->button_start,
 									 ROTATE_COUNTERCLOCKWISE);
-  rc->scroll_v[GTK_STATE_ACTIVE]->slider_start = rotate_simple (rc->scroll_h[GTK_STATE_ACTIVE]->slider_end,
+  rc->scroll_v[GTK_STATE_ACTIVE]->slider_start = nimbus_rotate_simple (rc->scroll_h[GTK_STATE_ACTIVE]->slider_end,
 									 ROTATE_COUNTERCLOCKWISE);
-  rc->scroll_v[GTK_STATE_ACTIVE]->slider_end = rotate_simple (rc->scroll_h[GTK_STATE_ACTIVE]->slider_start,
+  rc->scroll_v[GTK_STATE_ACTIVE]->slider_end = nimbus_rotate_simple (rc->scroll_h[GTK_STATE_ACTIVE]->slider_start,
 									 ROTATE_COUNTERCLOCKWISE);
   
   rc->scroll_v[GTK_STATE_SELECTED] = rc->scroll_v[GTK_STATE_ACTIVE];
@@ -1097,8 +1006,8 @@ static void nimbus_data_rc_style_init (NimbusRcStyle* nimbus_rc)
   rc->pane = g_new0 (NimbusPane, 1);
   rc->pane->pane_h = gdk_pixbuf_new_from_inline (-1, pane_h, FALSE, error);
   rc->pane->pane_v = gdk_pixbuf_new_from_inline (-1, pane_v, FALSE, error);
-  rc->pane->outline = color_cache_get_color ("#9297a1");
-  rc->pane->innerline = color_cache_get_color ("#f4f4f6");
+  rc->pane->outline = nimbus_color_cache_get ("#9297a1");
+  rc->pane->innerline = nimbus_color_cache_get ("#f4f4f6");
 
   /* scale horizontal */
 
@@ -1128,9 +1037,9 @@ static void nimbus_data_rc_style_init (NimbusRcStyle* nimbus_rc)
 
   rc->scale_v[GTK_STATE_NORMAL] = g_new0 (NimbusScale, 1);
   rc->scale_v[GTK_STATE_NORMAL]->button = rc->scale_h[GTK_STATE_NORMAL]->button;
-  rc->scale_v[GTK_STATE_NORMAL]->bkg_start = rotate_simple (rc->scale_h[GTK_STATE_NORMAL]->bkg_end,
+  rc->scale_v[GTK_STATE_NORMAL]->bkg_start = nimbus_rotate_simple (rc->scale_h[GTK_STATE_NORMAL]->bkg_end,
 								       ROTATE_COUNTERCLOCKWISE);
-  rc->scale_v[GTK_STATE_NORMAL]->bkg_end = rotate_simple (rc->scale_h[GTK_STATE_NORMAL]->bkg_start,
+  rc->scale_v[GTK_STATE_NORMAL]->bkg_end = nimbus_rotate_simple (rc->scale_h[GTK_STATE_NORMAL]->bkg_start,
 								       ROTATE_COUNTERCLOCKWISE);
  
   rc->scale_v[GTK_STATE_PRELIGHT] = g_new0 (NimbusScale, 1);
@@ -1147,30 +1056,30 @@ static void nimbus_data_rc_style_init (NimbusRcStyle* nimbus_rc)
  
   rc->scale_v[GTK_STATE_INSENSITIVE] = g_new0 (NimbusScale, 1);
   rc->scale_v[GTK_STATE_INSENSITIVE]->button = rc->scale_h[GTK_STATE_INSENSITIVE]->button;
-  rc->scale_v[GTK_STATE_INSENSITIVE]->bkg_start = rotate_simple (rc->scale_h[GTK_STATE_INSENSITIVE]->bkg_end,
+  rc->scale_v[GTK_STATE_INSENSITIVE]->bkg_start = nimbus_rotate_simple (rc->scale_h[GTK_STATE_INSENSITIVE]->bkg_end,
 									    ROTATE_COUNTERCLOCKWISE);
-  rc->scale_v[GTK_STATE_INSENSITIVE]->bkg_end = rotate_simple (rc->scale_h[GTK_STATE_INSENSITIVE]->bkg_start,
+  rc->scale_v[GTK_STATE_INSENSITIVE]->bkg_end = nimbus_rotate_simple (rc->scale_h[GTK_STATE_INSENSITIVE]->bkg_start,
 									  ROTATE_COUNTERCLOCKWISE);
   
   /* tab mini gradient */
   rc->tab[GTK_STATE_NORMAL] = g_new0 (NimbusTab, 1);
-  rc->tab[GTK_STATE_NORMAL]->start = color_cache_get_color ("#b5cadd");
-  rc->tab[GTK_STATE_NORMAL]->mid = color_cache_get_color ("#bbd0e3");
-  rc->tab[GTK_STATE_NORMAL]->end = color_cache_get_color ("#c0d5e8");
-  rc->tab[GTK_STATE_NORMAL]->junction = color_cache_get_color ("#bbd0e3");
+  rc->tab[GTK_STATE_NORMAL]->start = nimbus_color_cache_get ("#b5cadd");
+  rc->tab[GTK_STATE_NORMAL]->mid = nimbus_color_cache_get ("#bbd0e3");
+  rc->tab[GTK_STATE_NORMAL]->end = nimbus_color_cache_get ("#c0d5e8");
+  rc->tab[GTK_STATE_NORMAL]->junction = nimbus_color_cache_get ("#bbd0e3");
 
   rc->tab[GTK_STATE_ACTIVE] = g_new0 (NimbusTab, 1);
-  rc->tab[GTK_STATE_ACTIVE]->start = color_cache_get_color ("#406f99");
-  rc->tab[GTK_STATE_ACTIVE]->mid = color_cache_get_color ("#4776a0");
-  rc->tab[GTK_STATE_ACTIVE]->end = color_cache_get_color ("#4b7aa4");
-  rc->tab[GTK_STATE_ACTIVE]->junction = color_cache_get_color ("#406f99");
+  rc->tab[GTK_STATE_ACTIVE]->start = nimbus_color_cache_get ("#406f99");
+  rc->tab[GTK_STATE_ACTIVE]->mid = nimbus_color_cache_get ("#4776a0");
+  rc->tab[GTK_STATE_ACTIVE]->end = nimbus_color_cache_get ("#4b7aa4");
+  rc->tab[GTK_STATE_ACTIVE]->junction = nimbus_color_cache_get ("#406f99");
 
   rc->tab[GTK_STATE_PRELIGHT] = rc->tab[GTK_STATE_NORMAL];
   rc->tab[GTK_STATE_INSENSITIVE] = rc->tab[GTK_STATE_NORMAL];
   rc->tab[GTK_STATE_SELECTED] = rc->tab[GTK_STATE_ACTIVE];
 
   /* menubar toolbar border */
-  rc->menubar_border = color_cache_get_color ("#9ea3ad");
+  rc->menubar_border = nimbus_color_cache_get ("#9ea3ad");
 
   /* menubar gradient */
 
@@ -1184,17 +1093,17 @@ static void nimbus_data_rc_style_init (NimbusRcStyle* nimbus_rc)
   /*menu border and shadow */
 
   rc->menu = g_new0 (NimbusMenu, 1);
-  rc->menu->border = color_cache_get_color ("#595959");
-  rc->menu->shadow = color_cache_get_color ("#eaebee");
-  rc->menu->start = color_cache_get_color ("white");
-  rc->menu->mid_start = color_cache_get_color ("#fbfcfc");
-  rc->menu->mid_end= color_cache_get_color ("#f6f7f9");
-  rc->menu->end = color_cache_get_color ("#f1f2f5");
+  rc->menu->border = nimbus_color_cache_get ("#595959");
+  rc->menu->shadow = nimbus_color_cache_get ("#eaebee");
+  rc->menu->start = nimbus_color_cache_get ("white");
+  rc->menu->mid_start = nimbus_color_cache_get ("#fbfcfc");
+  rc->menu->mid_end= nimbus_color_cache_get ("#f6f7f9");
+  rc->menu->end = nimbus_color_cache_get ("#f1f2f5");
 
   /* horizontal line */
-  rc->hline = color_cache_get_color ("#c7c7c7");
+  rc->hline = nimbus_color_cache_get ("#c7c7c7");
   /* vertical line */
-  rc->vline = color_cache_get_color ("#46494f");
+  rc->vline = nimbus_color_cache_get ("#46494f");
 
   nimbus_rc->data = rc;
 }
@@ -1272,8 +1181,6 @@ nimbus_rc_style_parse (GtkRcStyle *rc_style,
   g_scanner_get_next_token(scanner);
 
   g_scanner_set_scope(scanner, old_scope);
-
-  /* debug_gradients (nimbus_style);  */
 
   return G_TOKEN_NONE;
 }

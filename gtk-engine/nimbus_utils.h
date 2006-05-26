@@ -42,7 +42,7 @@ typedef enum {
 } NimbusRotation;
 
 GdkPixbuf *
-rotate_simple (const GdkPixbuf   *src,
+nimbus_rotate_simple (const GdkPixbuf   *src,
 	       NimbusRotation     angle);
 
 struct _NimbusGradient 
@@ -124,10 +124,10 @@ nimbus_draw_vertical_gradient (GdkWindow *window,
 
 
 GdkColor *
-color_cache_get_color (char *color_name);
+nimbus_color_cache_get (char *color_name);
 
 GdkGC * 
-realize_color (GtkStyle * style,
+nimbus_realize_color (GtkStyle * style,
 	       GdkColor * color);
 
 
