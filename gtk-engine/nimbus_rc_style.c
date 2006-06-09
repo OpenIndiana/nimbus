@@ -246,6 +246,104 @@ static void define_normal_button_states (NimbusData *nimbus_rc)
     
   nimbus_rc->button[GTK_STATE_INSENSITIVE] = tmp;
 }
+
+static void define_header_button_states (NimbusData *nimbus_rc)
+{
+  NimbusButton *tmp;
+  NimbusGradient *tmp_gradient;
+  GError **error = NULL;
+
+  /* header_button GTK_STATE_NORMAL */
+  tmp = g_new0 (NimbusButton, 1);
+  
+  tmp_gradient = nimbus_gradient_new (0,0,0,0, 
+				      CORNER_NO_CORNER,
+				      0, 0);
+  
+  nimbus_gradient_add_segment (tmp_gradient, "#95989e", "#95989e", 0, 5);
+  nimbus_gradient_add_segment (tmp_gradient, "#95989e", "#55585e", 5, 95);
+  nimbus_gradient_add_segment (tmp_gradient, "#55585e", "#55585e", 95, 100);
+  tmp->gradients = g_slist_append (tmp->gradients, tmp_gradient);
+
+  tmp_gradient =  nimbus_gradient_new (1,1,0,0, 
+				       CORNER_NO_CORNER,
+				       0, 0);
+  
+  nimbus_gradient_add_segment (tmp_gradient, "#fbfbfc","#f1f2f4", 0, 6);
+  nimbus_gradient_add_segment (tmp_gradient, "#f1f2f4","#d6d9df", 6, 60);
+  nimbus_gradient_add_segment (tmp_gradient, "#d6d9df", "#d6d9df", 60, 70);
+  nimbus_gradient_add_segment (tmp_gradient, "#d6d9df", "#f4f7fd", 70, 96);
+  nimbus_gradient_add_segment (tmp_gradient, "#f4f7fd", "#ffffff",96, 100);
+  tmp->gradients = g_slist_append (tmp->gradients, tmp_gradient);
+
+  nimbus_rc->header_button[GTK_STATE_NORMAL] = tmp;
+  
+  /* header_button GTK_STATE_PRELIGHT */
+  tmp = g_new0 (NimbusButton, 1);
+ 
+  tmp_gradient = nimbus_gradient_new (0,0,0,0,
+				      CORNER_NO_CORNER,
+				      0, 0);
+  
+  nimbus_gradient_add_segment (tmp_gradient, "#7a7e86", "#7a7e86", 0, 5);
+  nimbus_gradient_add_segment (tmp_gradient, "#7a7e86", "#2a2e36", 5, 95);
+  nimbus_gradient_add_segment (tmp_gradient, "#2a2e36", "#2a2e36", 95, 100);
+  tmp->gradients = g_slist_append (tmp->gradients, tmp_gradient);
+
+  tmp_gradient =  nimbus_gradient_new (1,1,0,0, CORNER_NO_CORNER, 0, 0);
+  
+  nimbus_gradient_add_segment (tmp_gradient, "#fdfdfe","#f7f8fa", 0, 6);
+  nimbus_gradient_add_segment (tmp_gradient, "#f7f8fa","#e9ecf2", 6, 60);
+  nimbus_gradient_add_segment (tmp_gradient, "#e9ecf2", "#e9ecf2", 60, 70);
+  nimbus_gradient_add_segment (tmp_gradient, "#e9ecf2", "#ffffff", 70, 96);
+  nimbus_gradient_add_segment (tmp_gradient, "#ffffff", "#ffffff",96, 100);
+  tmp->gradients = g_slist_append (tmp->gradients, tmp_gradient);
+    
+  nimbus_rc->header_button[GTK_STATE_PRELIGHT] = tmp;
+  
+  /* header_button GTK_STATE_ACTIVE */
+  tmp = g_new0 (NimbusButton, 1);
+ 
+  tmp_gradient = nimbus_gradient_new (0,0,1,0, CORNER_NO_CORNER, 0, 0);
+  
+  nimbus_gradient_add_segment (tmp_gradient, "#000007", "#000007", 0, 5);
+  nimbus_gradient_add_segment (tmp_gradient, "#000007", "#60646c", 5, 95);
+  nimbus_gradient_add_segment (tmp_gradient, "#60646c", "#60646c", 95, 100);
+  tmp->gradients = g_slist_append (tmp->gradients, tmp_gradient);
+
+  tmp_gradient =  nimbus_gradient_new (1,1,3,0, CORNER_NO_CORNER, 0, 0);
+  
+  nimbus_gradient_add_segment (tmp_gradient, "#cdd1d8","#c2c7cf", 0, 6);
+  nimbus_gradient_add_segment (tmp_gradient, "#c2c7cf","#a4abb8", 6, 60);
+  nimbus_gradient_add_segment (tmp_gradient, "#a4abb8", "#ccd3e0", 60, 96);
+  nimbus_gradient_add_segment (tmp_gradient, "#ccd3e0", "#e7edfb",96, 100);
+  tmp->gradients = g_slist_append (tmp->gradients, tmp_gradient);
+  
+  nimbus_rc->header_button[GTK_STATE_ACTIVE] = tmp;
+  nimbus_rc->header_button[GTK_STATE_SELECTED] = tmp;
+
+  /* header_button GTK_STATE_INSENSITIVE */
+  tmp = g_new0 (NimbusButton, 1);
+  
+  tmp_gradient = nimbus_gradient_new (0,0,1,0, CORNER_NO_CORNER, 0, 0);
+  
+  nimbus_gradient_add_segment (tmp_gradient, "#c9ccd2", "#c9ccd2", 0, 5);
+  nimbus_gradient_add_segment (tmp_gradient, "#c9ccd2", "#bcbfc5", 5, 95);
+  nimbus_gradient_add_segment (tmp_gradient, "#bcbfc5", "#bcbfc5", 95, 100);
+  tmp->gradients = g_slist_append (tmp->gradients, tmp_gradient);
+
+  tmp_gradient =  nimbus_gradient_new (1,1,3,0, CORNER_NO_CORNER, 0, 0);
+
+  nimbus_gradient_add_segment (tmp_gradient, "#e3e5e9","#dfe2e6", 0, 6);
+  nimbus_gradient_add_segment (tmp_gradient, "#dfe2e6","#d6d9df", 6, 60);
+  nimbus_gradient_add_segment (tmp_gradient, "#d6d9df", "#d6d9df", 60, 70);
+  nimbus_gradient_add_segment (tmp_gradient, "#d6d9df", "#d8dbe1", 70, 96);
+  nimbus_gradient_add_segment (tmp_gradient, "#d8dbe1", "#dadde3",96, 100);
+  tmp->gradients = g_slist_append (tmp->gradients, tmp_gradient);
+    
+  nimbus_rc->header_button[GTK_STATE_INSENSITIVE] = tmp;
+}
+
 /* for buttondefault  special case */
 static void define_default_button_states (NimbusData *nimbus_rc)
 {
@@ -739,7 +837,7 @@ void nimbus_init_scale (NimbusData* rc,
     {
       if (rc->scale_h[state]->bkg_mid == NULL)
 	init_bkg = TRUE;
-      else if (gdk_pixbuf_get_width (rc->scale_h[state]->bkg_mid) >= size)
+      else if (gdk_pixbuf_get_width (rc->scale_h[state]->bkg_mid) <= size)
 	{
 	  init_bkg = TRUE;
 	  gdk_pixbuf_unref (rc->scale_h[state]->bkg_mid);
@@ -767,7 +865,7 @@ void nimbus_init_scale (NimbusData* rc,
     {
       if (rc->scale_v[state]->bkg_mid == NULL)
 	init_bkg = TRUE;
-      else if (gdk_pixbuf_get_height (rc->scale_v[state]->bkg_mid) >= size)
+      else if (gdk_pixbuf_get_height (rc->scale_v[state]->bkg_mid) <= size)
 	{
 	  init_bkg = TRUE;
 	  gdk_pixbuf_unref (rc->scale_v[state]->bkg_mid);
@@ -823,6 +921,72 @@ void nimbus_init_button_drop_shadow (NimbusData* rc,
     }
 }
 
+void nimbus_init_handle_bar (NimbusData* rc,
+			     int size,
+			     GtkOrientation orientation)
+{
+  GError **error = NULL;
+
+  if (!rc->handlebar[orientation])
+    rc->handlebar[orientation] = g_new0 (NimbusHandlebar, 1);
+  
+  if (rc->handlebar[orientation]->mid && 
+      gdk_pixbuf_get_height (rc->handlebar[orientation]->mid) == (size - 4))
+    return;
+  else
+    {
+      GdkPixbuf *mid = gdk_pixbuf_new_from_inline (-1, 
+						   handlebar_mid, 
+						   FALSE, 
+						   error);
+      if (rc->handlebar[orientation]->mid)
+	gdk_pixbuf_unref (rc->handlebar[orientation]->mid);
+
+      if(orientation == GTK_ORIENTATION_HORIZONTAL)
+	{
+	  GdkPixbuf *tmp;
+	  tmp = nimbus_rotate_simple (mid, ROTATE_CLOCKWISE);
+	  rc->handlebar[orientation]->mid = replicate_cols(tmp,
+							   0,0, 
+							   size - 4,
+							   gdk_pixbuf_get_height (tmp));
+	  gdk_pixbuf_unref (tmp);
+	}
+      else
+	rc->handlebar[orientation]->mid = replicate_rows (mid,
+							  0,0, 
+							  gdk_pixbuf_get_width (mid),
+							  size - 4);
+      gdk_pixbuf_unref (mid);
+    }
+
+  if (!rc->handlebar[orientation]->top)
+    {
+      if (orientation == GTK_ORIENTATION_HORIZONTAL)
+	{
+	  GdkPixbuf *tmp;
+	  tmp = gdk_pixbuf_new_from_inline (-1, handlebar_top, FALSE, error);
+	  rc->handlebar[orientation]->top = nimbus_rotate_simple (tmp, ROTATE_CLOCKWISE);
+
+	  gdk_pixbuf_unref (tmp);
+	  tmp = gdk_pixbuf_new_from_inline (-1, handlebar_bottom, FALSE, error);
+	  rc->handlebar[orientation]->bottom = nimbus_rotate_simple (tmp, ROTATE_CLOCKWISE);
+	  gdk_pixbuf_unref (tmp);
+	}
+      else
+	{
+	  rc->handlebar[orientation]->top = gdk_pixbuf_new_from_inline (-1, 
+									handlebar_top, 
+									FALSE,
+									error);
+	  rc->handlebar[orientation]->bottom = gdk_pixbuf_new_from_inline (-1, 
+									   handlebar_bottom, 
+									   FALSE, 
+									   error);
+	}
+    }
+}
+
 
 static void nimbus_data_rc_style_init (NimbusRcStyle* nimbus_rc)
 {
@@ -841,6 +1005,7 @@ static void nimbus_data_rc_style_init (NimbusRcStyle* nimbus_rc)
   
   define_normal_button_states (rc);
   define_default_button_states (rc);
+  define_header_button_states (rc);
   define_arrow_button_states (rc, TRUE);
   define_arrow_button_states (rc, FALSE);
   define_progressbar (rc, screen_w, screen_h);

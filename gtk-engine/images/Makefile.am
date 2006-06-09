@@ -90,7 +90,10 @@ IMAGES = \
 	progress-shadow-corner-top-right.png		\
 	progress-shadow-left.png			\
 	progress-shadow-right.png			\
-	progress-shadow-top.png
+	progress-shadow-top.png				\
+	handlebar-top.png				\
+	handlebar-mid.png				\
+	handlebar-bottom.png				
 
 noinst_DATA = images.h
 CLEANFILES = $(noinst_DATA)

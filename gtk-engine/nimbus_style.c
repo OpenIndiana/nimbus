@@ -1,4 +1,5 @@
 #include <gtk/gtk.h>
+#include <gtk/gtkenums.h>
 #include <math.h>
 #include <string.h>
 #include <stdio.h>
@@ -13,6 +14,13 @@ static char *state_names[5] = {
     "Prelight",
     "Selected",
     "Insensitive"};
+
+static char *shadow_names[5] = {
+  "GTK_SHADOW_NONE",
+  "GTK_SHADOW_IN",
+  "GTK_SHADOW_OUT",
+  "GTK_SHADOW_ETCHED_IN",
+  "GTK_SHADOW_ETCHED_OUT"};
 
 typedef enum
 {
@@ -57,6 +65,10 @@ static int scroll_button_x;
 static int scroll_button_y;
 static int scroll_button_width;
 static int scroll_button_height;
+static int scroll_trough_x;
+static int scroll_trough_y;
+static int scroll_trough_width;
+static int scroll_trough_height;
 static GtkStateType scroll_slider_state;
 
 
@@ -91,6 +103,22 @@ static void draw_nimbus_box	   (GtkStyle      *style,
 				    GtkOrientation orientation);
 
 static GtkStyleClass *parent_class;
+
+static GdkGC *
+get_clipping_gc (GdkWindow* window, GdkRectangle *clip)
+{
+  static GdkGC *clipping_gc = NULL;
+  if (clip)
+    {
+      if (!clipping_gc)
+	clipping_gc = gdk_gc_new (window);
+      
+      gdk_gc_set_clip_rectangle (clipping_gc, clip);
+      return clipping_gc;
+    }
+  return NULL;
+}
+  
 
 static GtkWidget *print_ancestors (GtkWidget *widget)
 {
@@ -146,6 +174,12 @@ sanitize_size (GdkWindow      *window,
 
   return set_bg;
 }
+static char *arrow_names[4] = {
+  "GTK_ARROW_UP",
+  "GTK_ARROW_DOWN",
+  "GTK_ARROW_LEFT",
+  "GTK_ARROW_RIGHT"
+};
 
 static void
 draw_arrow (GtkStyle      *style,
@@ -173,38 +207,48 @@ draw_arrow (GtkStyle      *style,
     {
       int offset_x = 0; int offset_y = 0;
       int offset_width = 0;  int offset_height = 0;
+      gboolean firefox_hack = FALSE; /* use to avoid drawing start part of the slider for UP and LEFT 
+				      * as it would result in a darker slider */
       GdkPixbuf *tmp_pb = NULL;
       GtkAdjustment *adj = gtk_range_get_adjustment (GTK_RANGE (widget));
 
       if (state_type == GTK_STATE_INSENSITIVE)
 	return;
-
+      
       if (arrow_type == GTK_ARROW_DOWN)
 	{
 	  tmp_pb = rc->scroll_v[state_type]->button_end;
-	  offset_y -=  gdk_pixbuf_get_height (tmp_pb) - scroll_button_height;
 	  offset_height += gdk_pixbuf_get_height (tmp_pb) - scroll_button_height;
+	  scroll_button_y = (scroll_trough_y + scroll_trough_height) - gdk_pixbuf_get_height (tmp_pb); 
 	}
       if (arrow_type == GTK_ARROW_UP)
 	{
+	  int tmp_y = scroll_button_y;
 	  tmp_pb = rc->scroll_v[state_type]->button_start;
-	  offset_height += gdk_pixbuf_get_height (tmp_pb) - scroll_button_height;
+	  offset_height += gdk_pixbuf_get_height (tmp_pb) - scroll_button_height; 
+	  scroll_button_y = scroll_trough_y;
+	  if (tmp_y != scroll_button_y)
+	      firefox_hack = TRUE; 
 	}
       if (arrow_type == GTK_ARROW_LEFT)
 	{
+	  int tmp_x = scroll_button_x;
 	  tmp_pb = rc->scroll_h[state_type]->button_start;
 	  offset_width += gdk_pixbuf_get_width (tmp_pb) - scroll_button_width;
+	  scroll_button_x = scroll_trough_x;
+	  if (tmp_x != scroll_button_x)
+	      firefox_hack = TRUE;
 	}
       if (arrow_type == GTK_ARROW_RIGHT)
 	{
 	  tmp_pb = rc->scroll_h[state_type]->button_end;
-	  offset_x -= gdk_pixbuf_get_width (tmp_pb) - scroll_button_width;
 	  offset_width += gdk_pixbuf_get_width (tmp_pb) - scroll_button_width;
+	  scroll_button_x = (scroll_trough_x + scroll_trough_width) - gdk_pixbuf_get_width (tmp_pb);
 	}
 
       if (tmp_pb)
  	gdk_draw_pixbuf (window,
-			 NULL,
+			 NULL, /* don't clip as we're drawing outside the boundary one purpose */
 			 tmp_pb,
 			 0,0,
 			 scroll_button_x +  offset_x,
@@ -214,8 +258,9 @@ draw_arrow (GtkStyle      *style,
 			 GDK_RGB_DITHER_NONE,0,0);
 
 
-      /* draw the button and slider merge properly as the slider is drawn before 
-       * the button.... */
+      /* redraw the slider after the button to achieve the proper effect
+       * this is needed as the slider is drawn before the button. */
+
       tmp_pb = NULL;
       /* height  width offset needed for the translucent button border as end up 
        * darker as 2 translucent colors are added */
@@ -227,14 +272,16 @@ draw_arrow (GtkStyle      *style,
 	  if (arrow_type == GTK_ARROW_UP)
 	    {
 	      tmp_pb = rc->scroll_v[scroll_slider_state]->slider_start;
+	      offset_x += 1;
 	      offset_y += 17;
-	      offset_width = -1;
+	      offset_width = -2;
 	    }
 	  if (arrow_type == GTK_ARROW_LEFT)
 	    {
 	      tmp_pb = rc->scroll_h[scroll_slider_state]->slider_start;
+	      offset_y += 1;
 	      offset_x += 17;
-	      offset_height = -1;
+	      offset_height = -2;
 	    }
 	}
       if (adj->value + adj->page_size == adj->upper)
@@ -242,26 +289,28 @@ draw_arrow (GtkStyle      *style,
 	  if (arrow_type == GTK_ARROW_DOWN)
 	    {
 	      tmp_pb = rc->scroll_v[scroll_slider_state]->slider_end;
-	      offset_width = -1;
+	      offset_x += 1;
+	      offset_width = -2;
 	    }
 	  if (arrow_type == GTK_ARROW_RIGHT)
 	    {
 	      tmp_pb = rc->scroll_h[scroll_slider_state]->slider_end;
-	      offset_height = -1;
+	      offset_y +=1;
+	      offset_height -=2;
 	    }
 	}
 
-      if (tmp_pb)   
+      if (tmp_pb && !firefox_hack)   
 	  gdk_draw_pixbuf (window,
-			   NULL,
+			   NULL, /* don't clip as we're drawing outside the boundary one purpose */
 			   tmp_pb,
-			   0,0,
+			   (arrow_type == GTK_ARROW_DOWN || arrow_type == GTK_ARROW_UP) ? 1 : 0,
+			   (arrow_type == GTK_ARROW_LEFT || arrow_type == GTK_ARROW_RIGHT) ? 1 : 0,
 			   scroll_button_x +  offset_x,
 			   scroll_button_y + offset_y,
 			   gdk_pixbuf_get_width (tmp_pb) + offset_width,
 			   gdk_pixbuf_get_height (tmp_pb) + offset_height,
 			   GDK_RGB_DITHER_NONE,0,0);
-      
     }
   else if (get_ancestor_of_type (widget, "GtkComboBox") || 
 	   get_ancestor_of_type (widget, "GimpEnumComboBox"))
@@ -286,7 +335,7 @@ draw_arrow (GtkStyle      *style,
       if (tmp_list)
 	 g_list_free(tmp_list);
 
-      draw_nimbus_box (style, window, state_type, shadow_type, area, widget, "combobox_arrow",
+      draw_nimbus_box (style, window, state_type, shadow_type, NULL, widget, "combobox_arrow",
 		       rc->arrow_button[state_type],
 		       FALSE,
 		       x - vsep_offset,
@@ -297,7 +346,7 @@ draw_arrow (GtkStyle      *style,
 
       if (rc->combo_arrow[state_type])
 	gdk_draw_pixbuf (window,
-			 NULL,
+			 get_clipping_gc (window, area),
 			 rc->combo_arrow[state_type],
 			 0,0,
 			 (x - vsep_offset) + (widget->parent->parent->allocation.x + widget->parent->parent->allocation.width - x + vsep_offset - gdk_pixbuf_get_width (rc->combo_arrow[state_type])) / 2,
@@ -312,7 +361,7 @@ draw_arrow (GtkStyle      *style,
     {
       if (rc->combo_arrow[state_type])
 	gdk_draw_pixbuf (window,
-			 NULL,
+			 get_clipping_gc (window, area),
 			 rc->combo_arrow[state_type],
 			 0,0,
 			 x + 1 + (width - gdk_pixbuf_get_width (rc->combo_arrow[state_type])) / 2 ,
@@ -326,9 +375,12 @@ draw_arrow (GtkStyle      *style,
       GdkPixbuf *arrow = NULL;
       int x_center_offset, y_center_offset;
 
-
       if (arrow_type == GTK_ARROW_UP)
-	arrow = rc->arrow_up[state_type];
+	{
+	  arrow = rc->arrow_up[state_type];
+	  if (DETAIL ("spinbutton"))
+	    y--;
+	}
       if (arrow_type == GTK_ARROW_DOWN)
 	arrow = rc->arrow_down[state_type];
       
@@ -338,7 +390,7 @@ draw_arrow (GtkStyle      *style,
 	  y_center_offset = (height - gdk_pixbuf_get_height (arrow)) / 2;
 
 	  gdk_draw_pixbuf (window,
-			   NULL,
+			   get_clipping_gc (window, area),
 			   arrow,
 			   0,0,
 			   x + x_center_offset, y + y_center_offset,
@@ -435,7 +487,7 @@ draw_tab (GtkStyle      *style,
 
     if (rc->combo_arrow[state_type])
       gdk_draw_pixbuf (window,
-		       NULL,
+		       get_clipping_gc (window, area),
 		       rc->combo_arrow[state_type],
 		       0,0,
 		       x, y,
@@ -483,75 +535,88 @@ draw_shadow (GtkStyle        *style,
 
       /* border gradients points */
       gdk_draw_line (window, 
-		     nimbus_realize_color (style,rc->textfield_color[state_type]->vertical_line_gradient1), 
+		     nimbus_realize_color (style,rc->textfield_color[state_type]->vertical_line_gradient1, area), 
 		     x, y+1, x, y+1);
       
       if (general_case)
 	{
 	  gdk_draw_line (window, 
-			 nimbus_realize_color (style,rc->textfield_color[state_type]->vertical_line_gradient1), 
+			 nimbus_realize_color (style,rc->textfield_color[state_type]->vertical_line_gradient1, area), 
 			 x+width-1, y+1, x+width-1, y+1);
 	    
 	  gdk_draw_line (window, 
-			 nimbus_realize_color (style,rc->textfield_color[state_type]->vertical_line_gradient2), 
+			 nimbus_realize_color (style,rc->textfield_color[state_type]->vertical_line_gradient2, area), 
 			 x+width-1, y+2, x+width-1, y+2);
 	  
 
 	}
 
       gdk_draw_line (window, 
-		     nimbus_realize_color (style,rc->textfield_color[state_type]->vertical_line_gradient2), 
+		     nimbus_realize_color (style,rc->textfield_color[state_type]->vertical_line_gradient2, area), 
 		     x, y+2, x, y+2);
       
 
       /* third gradient line end points as they can't be drawn in draw_flat_box */
       
       gdk_draw_line (window, 
-		     nimbus_realize_color (style,rc->textfield_color[state_type]->gradient_line3), 
+		     nimbus_realize_color (style,rc->textfield_color[state_type]->gradient_line3, area), 
 		     x+1, y+2, x+1, y+2);
 
       gdk_draw_line (window, 
-		     nimbus_realize_color (style,rc->textfield_color[state_type]->gradient_line3), 
+		     nimbus_realize_color (style,rc->textfield_color[state_type]->gradient_line3, area), 
 		     x+width-2, y+2, x+width-2, y+2);
 
       /* horizontal gradient */
       gdk_draw_line (window, 
-		     nimbus_realize_color (style,rc->textfield_color[state_type]->gradient_line1), 
+		     nimbus_realize_color (style,rc->textfield_color[state_type]->gradient_line1, area), 
 		     x, y, x + width - 1, y);
 
       gdk_draw_line (window, 
-		     nimbus_realize_color (style,rc->textfield_color[state_type]->gradient_line2), 
+		     nimbus_realize_color (style,rc->textfield_color[state_type]->gradient_line2, area), 
 		     x+1, y+1, x+width- (general_case ? 2 :1), y+1);
      
       /* vertical borders */
       gdk_draw_line (window, 
-		     nimbus_realize_color (style,rc->textfield_color[state_type]->vertical_line), 
+		     nimbus_realize_color (style,rc->textfield_color[state_type]->vertical_line, area), 
 		     x, y+3, x, y+height-1);
       
       if (general_case)
 	gdk_draw_line (window, 
-		       nimbus_realize_color (style,rc->textfield_color[state_type]->vertical_line), 
+		       nimbus_realize_color (style,rc->textfield_color[state_type]->vertical_line, area), 
 		       x+width-1, y+3, x+width-1, y+height-1);
 
       /* bottom line */
       gdk_draw_line (window, 
-		     nimbus_realize_color (style,rc->textfield_color[state_type]->vertical_line), 
+		     nimbus_realize_color (style,rc->textfield_color[state_type]->vertical_line, area), 
 		     x+1, 
 		     y+height - (general_case ? 1 : 2),
 		     x+width - (general_case ? 2 : 1), 
 		     y+height - (general_case ? 1 : 2));
 
       if (!general_case)
+	{
+	  if (area)
+	    gdk_gc_set_clip_rectangle (style->bg_gc[GTK_STATE_ACTIVE], area);
 	gdk_draw_line (window, 
 		       style->bg_gc[GTK_STATE_ACTIVE],  /* hack to get #d6d9df color */
 		       x, 
 		       y+height - 1,
 		       x+width, 
 		       y+height -  1);
+	  if (area)
+	    gdk_gc_set_clip_rectangle (style->bg_gc[GTK_STATE_ACTIVE], NULL);
+	}
+      verbose ("draw\t shadow \t-%s-\n", detail ? detail : "no detail");
     }
   else   
-    parent_class->draw_shadow (style, window, state_type, shadow_type, area, widget, detail, x, y, width, height);
-  verbose ("draw\t shadow \t-%s-\n", detail ? detail : "no detail");
+    {
+      if (shadow_type != GTK_SHADOW_NONE && !DETAIL ("pager"))
+	gdk_draw_rectangle (window, nimbus_realize_color (style, rc->pane->outline, area),
+			    FALSE, x, y, width-1, height-1);
+							
+      /* parent_class->draw_shadow (style, window, state_type, shadow_type, area, widget, detail, x, y, width, height); */
+      verbose ("draw\t shadow \t-%s-\t shadow_type %s \\n", detail ? detail : "no detail", shadow_names[shadow_type]);
+    }
 }
 
 /**************************************************************************/
@@ -576,7 +641,7 @@ draw_nimbus_tab (GtkStyle*	    style,
   tmp = button->gradients;
   while (tmp)
     {
-      nimbus_draw_gradient (window, style, (NimbusGradient*)tmp->data,
+      nimbus_draw_gradient (window, style, area,(NimbusGradient*)tmp->data,
 			    x, y, width, height, 
 			    -1, TRUE, GTK_ORIENTATION_HORIZONTAL, position);
       tmp = tmp->next;
@@ -584,7 +649,7 @@ draw_nimbus_tab (GtkStyle*	    style,
      
   if (button->corner_top_left && position != TAB_POS_LEFT && position != TAB_POS_TOP)
     gdk_draw_pixbuf (window,
-    		 NULL,
+    		 get_clipping_gc (window, area),
     		 button->corner_top_left,
     		 0,0,
     		 x,y,
@@ -594,7 +659,7 @@ draw_nimbus_tab (GtkStyle*	    style,
   
   if (button->corner_top_right && position != TAB_POS_RIGHT && position != TAB_POS_TOP)
     gdk_draw_pixbuf (window,
-    		 NULL,
+    		 get_clipping_gc (window, area),
     		 button->corner_top_right,
     		 0,0,
     		 x+ width - gdk_pixbuf_get_width (button->corner_top_right),
@@ -605,7 +670,7 @@ draw_nimbus_tab (GtkStyle*	    style,
 
   if (button->corner_bottom_left && position != TAB_POS_BOTTOM && position != TAB_POS_LEFT)
       gdk_draw_pixbuf (window,
-    		   NULL,
+    		   get_clipping_gc (window, area),
     		   button->corner_bottom_left,
     		   0,0,
     		   x, 
@@ -615,7 +680,7 @@ draw_nimbus_tab (GtkStyle*	    style,
     		   GDK_RGB_DITHER_NONE,0,0);
   if (button->corner_bottom_right && position != TAB_POS_BOTTOM && position != TAB_POS_RIGHT)
       gdk_draw_pixbuf (window,
-    		   NULL,
+    		   get_clipping_gc (window, area),
     		   button->corner_bottom_right,
     		   0,0,
     		   x+ width -gdk_pixbuf_get_width (button->corner_bottom_right), 
@@ -642,6 +707,9 @@ draw_box_gap (GtkStyle       *style,
 	      gint            gap_width)
 {
   NimbusData *rc = NIMBUS_RC_STYLE (style->rc_style)->data;
+
+  if (area)
+    gdk_gc_set_clip_rectangle (style->black_gc, area);
   
   switch (gap_side)
     {
@@ -659,11 +727,11 @@ draw_box_gap (GtkStyle       *style,
       gdk_draw_line (window, style->black_gc, x + gap_x + gap_width, y, x + width, y);
       /* gradient */
       
-      gdk_draw_line (window, nimbus_realize_color (style, rc->tab[state_type]->start), 
+      gdk_draw_line (window, nimbus_realize_color (style, rc->tab[state_type]->start, area), 
 		     x+1, y + 1, x + width-1, y + 1);
-      gdk_draw_line (window, nimbus_realize_color (style, rc->tab[state_type]->mid),
+      gdk_draw_line (window, nimbus_realize_color (style, rc->tab[state_type]->mid, area),
 		     x+1, y + 2, x + width-1, y + 2);
-      gdk_draw_line (window, nimbus_realize_color (style, rc->tab[state_type]->end),
+      gdk_draw_line (window, nimbus_realize_color (style, rc->tab[state_type]->end, area),
 		     x+1, y + 3, x + width-1, y + 3);
       gdk_draw_line (window, style->black_gc, x, y + 4, x + width, y + 4);
       break;
@@ -681,11 +749,11 @@ draw_box_gap (GtkStyle       *style,
       gdk_draw_line (window, style->black_gc, x + gap_x + gap_width, y+ height, x + width, y+ height);
       /* gradient */
       
-      gdk_draw_line (window, nimbus_realize_color (style, rc->tab[state_type]->start), 
+      gdk_draw_line (window, nimbus_realize_color (style, rc->tab[state_type]->start, area), 
 		     x+1, y + height - 1, x + width-1, y + height - 1);
-      gdk_draw_line (window, nimbus_realize_color (style, rc->tab[state_type]->mid),
+      gdk_draw_line (window, nimbus_realize_color (style, rc->tab[state_type]->mid, area),
 		     x+1, y + height - 2, x + width-1, y + height - 2);
-      gdk_draw_line (window, nimbus_realize_color (style, rc->tab[state_type]->end),
+      gdk_draw_line (window, nimbus_realize_color (style, rc->tab[state_type]->end, area),
 		     x+1, y + height - 3, x + width-1, y + height - 3);
       gdk_draw_line (window, style->black_gc, x, y + height - 4, x + width, y + height - 4);
       break;
@@ -703,11 +771,11 @@ draw_box_gap (GtkStyle       *style,
 		     x, y + height);
       /* gradient */
       
-      gdk_draw_line (window, nimbus_realize_color (style, rc->tab[state_type]->start), 
+      gdk_draw_line (window, nimbus_realize_color (style, rc->tab[state_type]->start, area), 
 		     x+1, y + 1, x+1, y+height-1);
-      gdk_draw_line (window, nimbus_realize_color (style, rc->tab[state_type]->mid),
+      gdk_draw_line (window, nimbus_realize_color (style, rc->tab[state_type]->mid, area),
 		     x+2, y + 1, x+2, y+height-1);
-      gdk_draw_line (window, nimbus_realize_color (style, rc->tab[state_type]->end),
+      gdk_draw_line (window, nimbus_realize_color (style, rc->tab[state_type]->end, area),
 		     x+3, y + 1, x+3, y+height-1);
       gdk_draw_line (window, style->black_gc, x+4, y + 1, x+4, y+height-1);
           break;
@@ -725,15 +793,17 @@ draw_box_gap (GtkStyle       *style,
 		     x+ width, y + height);
       /* gradient */
       
-      gdk_draw_line (window, nimbus_realize_color (style, rc->tab[state_type]->start), 
+      gdk_draw_line (window, nimbus_realize_color (style, rc->tab[state_type]->start, area), 
 		     x+width-1, y + 1, x+width-1, y+height-1);
-      gdk_draw_line (window, nimbus_realize_color (style, rc->tab[state_type]->mid),
+      gdk_draw_line (window, nimbus_realize_color (style, rc->tab[state_type]->mid, area),
 		     x+width-2, y + 1, x+width-2, y+height-1);
-      gdk_draw_line (window, nimbus_realize_color (style, rc->tab[state_type]->end),
+      gdk_draw_line (window, nimbus_realize_color (style, rc->tab[state_type]->end, area),
 		     x+width-3, y + 1, x+width-3, y+height-1);
       gdk_draw_line (window, style->black_gc, x+width-4, y + 1, x+width-4, y+height-1);
           break;
     }
+  if (area)
+    gdk_gc_set_clip_rectangle (style->black_gc, NULL);
 
   /* parent_class->draw_box_gap (style, window, state_type, shadow_type, area, widget, detail, x, y, width, height, gap_side, gap_x, gap_width); */
   verbose ("draw\t box gap \t-%s-\n", detail ? detail : "no detail"); 
@@ -769,7 +839,7 @@ draw_extension (GtkStyle       *style,
       selected_offset--;
     }
   else
-    gc = nimbus_realize_color (style, rc->tab[state_type]->junction);
+    gc = nimbus_realize_color (style, rc->tab[state_type]->junction, NULL);
 
   if (position == TAB_POS_BOTTOM)
     y++;
@@ -782,6 +852,8 @@ draw_extension (GtkStyle       *style,
   
   draw_nimbus_tab (style, window, state_type, shadow_type, area,
 		   widget, detail, button, x, y, width, height, position);
+
+  if (area) gdk_gc_set_clip_rectangle (gc, area);
 
    switch (gap_side)
     {
@@ -798,6 +870,7 @@ draw_extension (GtkStyle       *style,
        gdk_draw_line (window, gc, x+width-1, y+1, x+width-1,y+height-1-selected_offset); 
       break;
     }
+  if (area) gdk_gc_set_clip_rectangle (gc, NULL);
 
 
   /* parent_class->draw_extension (style, window, state_type, shadow_type, area, widget, detail, x, y, width, height, gap_side); */
@@ -829,73 +902,130 @@ draw_handle (GtkStyle      *style,
 
   /* printf ("in draw_handle detail %s\n", detail ? detail : "no detail"); */
 
-  if (DETAIL ("handlebox") && get_ancestor_of_type (widget, "PanelToplevel"))
-    draw_outline = FALSE;
-
-/*  if (DETAIL ("handlebox"))
+  if ((DETAIL ("handlebox") || DETAIL ("dockitem")) && (get_ancestor_of_type (widget, "PanelToplevel") == NULL))
     {
-      GList *list = gtk_container_get_children (GTK_CONTAINER (widget));
-      
-      for (list; list; list = list->next)
-	{
-	  printf ("type %s\n", g_type_name (G_OBJECT_TYPE (list->data)));
-	  if (GTK_IS_TOOLBAR (list->data))
-	    printf ("got a toolbar\n");
-	  if (GTK_IS_MENU_BAR (list->data))
-	    printf ("got a menubar\n");
-	}
+      height--;
+      if (get_ancestor_of_type (widget, "GtkFixed")) /* heuristic for soffice */
+        height--;
 
-
-    }
-  if (get_ancestor_of_type (widget, "GtkToolbar"))
-    printf ("got a handlebar in a toolbar\n"); */
-
-
-  if (orientation == GTK_ORIENTATION_HORIZONTAL)
-    {
-      pane = rc->pane->pane_h;
-      if (draw_outline)
-	{
-	  gdk_draw_line (window, nimbus_realize_color (style, rc->pane->outline),
-			 x+1, y, x+width-1, y);      
-	  gdk_draw_line (window, nimbus_realize_color (style, rc->pane->outline),
-			 x+1, y+height, x+width-1, y+height);      
-	  gdk_draw_line (window, nimbus_realize_color (style, rc->pane->innerline),
-			 x+1, y+1, x+width-1, y+1);      
-	  gdk_draw_line (window, nimbus_realize_color (style, rc->pane->innerline),
-			 x+1, y+height-1, x+width-1, y+height-1);      
-	}
-	    
-      c_y = 1;
+      if (orientation == GTK_ORIENTATION_VERTICAL)
+        {
+          nimbus_init_handle_bar (rc, height, orientation);
+          
+          gdk_draw_pixbuf (window,
+            	       NULL,
+            	       rc->handlebar[orientation]->top,
+            	       0, 0,
+            	       x, y,
+            	       gdk_pixbuf_get_width (rc->handlebar[orientation]->top),
+            	       gdk_pixbuf_get_height (rc->handlebar[orientation]->top),
+            	       GDK_RGB_DITHER_NONE,0,0);
+          gdk_draw_pixbuf (window,
+            	       NULL,
+            	       rc->handlebar[orientation]->mid,
+            	       0, 0,
+            	       x, y + gdk_pixbuf_get_height (rc->handlebar[orientation]->top),
+            	       gdk_pixbuf_get_width (rc->handlebar[orientation]->mid),
+            	       gdk_pixbuf_get_height (rc->handlebar[orientation]->mid),
+            	       GDK_RGB_DITHER_NONE,0,0);	  
+          gdk_draw_pixbuf (window,
+            	       NULL,
+            	       rc->handlebar[orientation]->bottom,
+            	       0, 0,
+            	       x, 
+            	       y + gdk_pixbuf_get_height (rc->handlebar[orientation]->top) + gdk_pixbuf_get_height (rc->handlebar[orientation]->mid),
+            	       gdk_pixbuf_get_width (rc->handlebar[orientation]->bottom),
+            	       gdk_pixbuf_get_height (rc->handlebar[orientation]->bottom),
+            	       GDK_RGB_DITHER_NONE,0,0);
+          draw_box (style, window, state_type, shadow_type, area, widget, "toolbar", x, 
+            	y + height, width, 1);
+        }
+      else
+        {
+          nimbus_init_handle_bar (rc, width, orientation);
+          
+          gdk_draw_pixbuf (window,
+            	       NULL,
+            	       rc->handlebar[orientation]->top,
+            	       0, 0,
+            	       x, y,
+            	       gdk_pixbuf_get_width (rc->handlebar[orientation]->top),
+            	       gdk_pixbuf_get_height (rc->handlebar[orientation]->top),
+            	       GDK_RGB_DITHER_NONE,0,0);
+          gdk_draw_pixbuf (window,
+            	       NULL,
+            	       rc->handlebar[orientation]->mid,
+            	       0, 0,
+            	       x + gdk_pixbuf_get_width (rc->handlebar[orientation]->top), y,
+            	       gdk_pixbuf_get_width (rc->handlebar[orientation]->mid),
+            	       gdk_pixbuf_get_height (rc->handlebar[orientation]->mid),
+            	       GDK_RGB_DITHER_NONE,0,0);	  
+          gdk_draw_pixbuf (window,
+            	       NULL,
+            	       rc->handlebar[orientation]->bottom,
+            	       0, 0,
+            	       x + gdk_pixbuf_get_width (rc->handlebar[orientation]->top) + gdk_pixbuf_get_width (rc->handlebar[orientation]->mid), 
+            	       y,
+            	       gdk_pixbuf_get_width (rc->handlebar[orientation]->bottom),
+            	       gdk_pixbuf_get_height (rc->handlebar[orientation]->bottom),
+            	       GDK_RGB_DITHER_NONE,0,0);
+          draw_box (style, window, state_type, shadow_type, area, widget, "toolbar", x, 
+            	y + height, width, 1);
+        }
     }
   else
     {
-      pane = rc->pane->pane_v;
-      if (draw_outline)
+      /* pane and gnome panel case */
+      
+      if (get_ancestor_of_type (widget, "PanelToplevel"))
+	draw_outline = FALSE;
+      
+      if (orientation == GTK_ORIENTATION_HORIZONTAL)
 	{
-	  gdk_draw_line (window, nimbus_realize_color (style, rc->pane->outline),
-			 x, y, x, y+height-1);      
-	  gdk_draw_line (window, nimbus_realize_color (style, rc->pane->outline),
-			 x+width-1, y, x+width-1, y+height-1);      
-	  gdk_draw_line (window, nimbus_realize_color (style, rc->pane->innerline),
-			 x+1, y, x+1, y+height-1);      
-	  gdk_draw_line (window, nimbus_realize_color (style, rc->pane->innerline),
-			 x+width-2, y, x+width-2, y+height-1);      
+	  pane = rc->pane->pane_h;
+	  if (draw_outline)
+	    {
+	      gdk_draw_line (window, nimbus_realize_color (style, rc->pane->outline, area),
+			     x+1, y, x+width-1, y);      
+	      gdk_draw_line (window, nimbus_realize_color (style, rc->pane->outline, area),
+			     x+1, y+height, x+width-1, y+height);      
+	      gdk_draw_line (window, nimbus_realize_color (style, rc->pane->innerline, area),
+			     x+1, y+1, x+width-1, y+1);      
+	      gdk_draw_line (window, nimbus_realize_color (style, rc->pane->innerline, area),
+			     x+1, y+height-1, x+width-1, y+height-1);      
+	    }
+	  
+	  c_y = 1;
 	}
+      else
+	{
+	  pane = rc->pane->pane_v;
+	  if (draw_outline)
+	    {
+	      gdk_draw_line (window, nimbus_realize_color (style, rc->pane->outline, area),
+			     x, y, x, y+height-1);      
+	      gdk_draw_line (window, nimbus_realize_color (style, rc->pane->outline, area),
+			     x+width-1, y, x+width-1, y+height-1);      
+	      gdk_draw_line (window, nimbus_realize_color (style, rc->pane->innerline, area),
+			     x+1, y, x+1, y+height-1);      
+	      gdk_draw_line (window, nimbus_realize_color (style, rc->pane->innerline, area),
+			     x+width-2, y, x+width-2, y+height-1);      
+	    }
+	}
+      
+      c_x = (width - gdk_pixbuf_get_width (pane)) / 2;
+      c_y += (height - gdk_pixbuf_get_height (pane)) /2;
+      
+      gdk_draw_pixbuf (window,
+		       get_clipping_gc (window, area),
+		       pane,
+		       0,0,
+		       x + c_x, y + c_y,
+		       gdk_pixbuf_get_width (pane),
+		       gdk_pixbuf_get_height (pane),
+		       GDK_RGB_DITHER_NONE,0,0);
+      
     }
-  
-  c_x = (width - gdk_pixbuf_get_width (pane)) / 2;
-  c_y += (height - gdk_pixbuf_get_height (pane)) /2;
-
-  gdk_draw_pixbuf (window,
-		   NULL,
-		   pane,
-		   0,0,
-		   x + c_x, y + c_y,
-		   gdk_pixbuf_get_width (pane),
-		   gdk_pixbuf_get_height (pane),
-		   GDK_RGB_DITHER_NONE,0,0);
-  
    /* parent_class->draw_handle (style, window, state_type, shadow_type, area, widget, detail, x, y, width, height, orientation);  */
   verbose ("draw\t handle \t-%s-\n", detail ? detail : "no detail");
 
@@ -918,13 +1048,23 @@ draw_flat_box (GtkStyle      *style,
 {
   if (DETAIL ("entry_bg"))
     {
+      GdkGC *gc = style->bg_gc[state_type];
       NimbusData *rc = NIMBUS_RC_STYLE (style->rc_style)->data;
 
-      gdk_draw_line (window, nimbus_realize_color (style, rc->textfield_color[state_type]->gradient_line3),
+      gdk_draw_line (window, nimbus_realize_color (style, 
+						   rc->textfield_color[state_type]->gradient_line3, 
+						   area),
 		     x, y, x+width, y);
+
+      if (widget && !GTK_IS_ENTRY (widget)) /* soffice special case */
+	{    
+	  if (state_type == GTK_STATE_NORMAL)
+	    gc = style->white_gc;
+	}
 		     
-      gdk_draw_rectangle (window, style->bg_gc[state_type], TRUE,
-			  x, y+1, width, height-1);
+      if (area) gdk_gc_set_clip_rectangle (gc, area);
+      gdk_draw_rectangle (window, gc, TRUE, x, y+1, width, height-1);
+      if (area) gdk_gc_set_clip_rectangle (gc, NULL);
     }
   else
     parent_class->draw_flat_box (style, window, state_type, shadow_type, area,
@@ -962,7 +1102,7 @@ draw_nimbus_box (GtkStyle      *style,
     {
       draw_top = FALSE;
       draw_partial_from_start = FALSE;
-      partial_height = (height - drop_shadow_offset) / 2 + 1;
+      partial_height = (height - drop_shadow_offset) / 2;
     }
   if (spin_type == NIMBUS_SPIN_UP)
     {
@@ -973,16 +1113,16 @@ draw_nimbus_box (GtkStyle      *style,
   tmp = button->gradients;
   while (tmp)
     {
-      nimbus_draw_gradient (window, style, (NimbusGradient*)tmp->data,
-    			x, y, width, height - drop_shadow_offset, 
-    			partial_height, draw_partial_from_start,
-    			orientation, NO_TAB);
+      nimbus_draw_gradient (window, style, area, (NimbusGradient*)tmp->data,
+			    x, y, width, height - drop_shadow_offset, 
+			    partial_height, draw_partial_from_start,
+			    orientation, NO_TAB);
       tmp = tmp->next;
     }
      
   if (button->corner_top_left && draw_top)
     gdk_draw_pixbuf (window,
-    		 NULL,
+    		 get_clipping_gc (window, area),
     		 button->corner_top_left,
     		 0,0,
     		 x,y,
@@ -992,7 +1132,7 @@ draw_nimbus_box (GtkStyle      *style,
   
   if (button->corner_top_right && draw_top)
     gdk_draw_pixbuf (window,
-    		 NULL,
+    		 get_clipping_gc (window, area),
     		 button->corner_top_right,
     		 0,0,
     		 x+ width - gdk_pixbuf_get_width (button->corner_top_right),
@@ -1005,7 +1145,7 @@ draw_nimbus_box (GtkStyle      *style,
     {
       bottom_left_c_w = gdk_pixbuf_get_width (button->corner_bottom_left);
       gdk_draw_pixbuf (window,
-    		   NULL,
+    		   get_clipping_gc (window, area),
     		   button->corner_bottom_left,
     		   0,0,
     		   x, 
@@ -1018,7 +1158,7 @@ draw_nimbus_box (GtkStyle      *style,
     {
       bottom_right_c_w = gdk_pixbuf_get_width (button->corner_bottom_right);
       gdk_draw_pixbuf (window,
-    		   NULL,
+    		   get_clipping_gc (window, area),
     		   button->corner_bottom_right,
     		   0,0,
     		   x+ width - bottom_right_c_w, 
@@ -1032,7 +1172,7 @@ draw_nimbus_box (GtkStyle      *style,
     {
       nimbus_init_button_drop_shadow (rc, state_type, width);
       gdk_draw_pixbuf (window,
-		       NULL,
+		       get_clipping_gc (window, area),
 		       rc->drop_shadow[state_type],
 		       0,0,
 		       x + bottom_left_c_w, 
@@ -1080,7 +1220,7 @@ draw_progress (GtkStyle      *style,
 
   /* corners */
   gdk_draw_pixbuf (window,			 
-		   NULL,
+		   get_clipping_gc (window, area),
 		   progress->corner_top_left,
 		   0,0,
 		   x - gdk_pixbuf_get_width (progress->corner_top_left),
@@ -1089,7 +1229,7 @@ draw_progress (GtkStyle      *style,
 		   gdk_pixbuf_get_height (progress->corner_top_left),
 		   GDK_RGB_DITHER_NONE,0,0);
   gdk_draw_pixbuf (window,			 
-		   NULL,
+		   get_clipping_gc (window, area),
 		   progress->corner_top_right,
 		   0,0,
 		   x + width + 1,
@@ -1098,7 +1238,7 @@ draw_progress (GtkStyle      *style,
 		   gdk_pixbuf_get_height (progress->corner_top_right),
 		   GDK_RGB_DITHER_NONE,0,0);
   gdk_draw_pixbuf (window,			 
-		   NULL,
+		   get_clipping_gc (window, area),
 		   progress->corner_bottom_left,
 		   0,0,
 		   x - gdk_pixbuf_get_width (progress->corner_bottom_left),
@@ -1108,7 +1248,7 @@ draw_progress (GtkStyle      *style,
 		   GDK_RGB_DITHER_NONE,0,0);
 
   gdk_draw_pixbuf (window,			 
-		   NULL,
+		   get_clipping_gc (window, area),
 		   progress->corner_bottom_right,
 		   0,0,
 		   x + width + 1,
@@ -1119,7 +1259,7 @@ draw_progress (GtkStyle      *style,
   /* lines */
   
   gdk_draw_pixbuf (window,			 
-		   NULL,
+		   get_clipping_gc (window, area),
 		   progress->border_left,
 		   0,0,
 		   x - gdk_pixbuf_get_width (progress->border_left), 
@@ -1129,7 +1269,7 @@ draw_progress (GtkStyle      *style,
 		   GDK_RGB_DITHER_NONE,0,0);
 
   gdk_draw_pixbuf (window,			 
-		   NULL,
+		   get_clipping_gc (window, area),
 		   progress->border_right,
 		   0,0,
 		   x + width + 1,
@@ -1139,7 +1279,7 @@ draw_progress (GtkStyle      *style,
 		   GDK_RGB_DITHER_NONE,0,0);
  
   gdk_draw_pixbuf (window,			 
-		   NULL,
+		   get_clipping_gc (window, area),
 		   progress->border_top,
 		   0,0,
 		   x, 
@@ -1149,7 +1289,7 @@ draw_progress (GtkStyle      *style,
 		   GDK_RGB_DITHER_NONE,0,0);
 
   gdk_draw_pixbuf (window,			 
-		   NULL,
+		   get_clipping_gc (window, area),
 		   progress->border_bottom,
 		   0,0,
 		   x, 
@@ -1174,6 +1314,53 @@ debug_print_corners (NimbusButtonCorner corners)
     printf (" BOTTOM_RIGHT ");
   printf ("\n");
 }
+typedef enum {
+  MOUSE_OUTSIDE,
+  MOUSE_STEPPER_A,
+  MOUSE_STEPPER_B,
+  MOUSE_STEPPER_C,
+  MOUSE_STEPPER_D,
+  MOUSE_TROUGH,
+  MOUSE_SLIDER,
+  MOUSE_WIDGET /* inside widget but not in any of the above GUI elements */
+} MouseLocation;
+
+typedef enum
+{
+  GTK_SENSITIVITY_AUTO,
+  GTK_SENSITIVITY_ON,
+  GTK_SENSITIVITY_OFF
+} GtkSensitivityType;
+
+/* typedef struct GtkRangeLayout NimbusGtkRangeLayout; */
+
+struct _GtkRangeLayout
+{
+  /* These are in widget->window coordinates */
+  GdkRectangle stepper_a;
+  GdkRectangle stepper_b;
+  GdkRectangle stepper_c;
+  GdkRectangle stepper_d;
+  /* The trough rectangle is the area the thumb can slide in, not the
+   * entire range_rect
+   */
+  GdkRectangle trough;
+  GdkRectangle slider;
+
+  /* Layout-related state */
+  
+  MouseLocation mouse_location;
+  /* last mouse coords we got, or -1 if mouse is outside the range */
+  gint mouse_x;
+  gint mouse_y;
+  /* "grabbed" mouse location, OUTSIDE for no grab */
+  MouseLocation grab_location;
+  gint grab_button; /* 0 if none */
+
+  /* Stepper sensitivity */
+  GtkSensitivityType lower_sensitivity;
+  GtkSensitivityType upper_sensitivity;
+};
 
 static void
 draw_box (GtkStyle      *style,
@@ -1192,35 +1379,30 @@ draw_box (GtkStyle      *style,
   NimbusData* rc = NIMBUS_RC_STYLE (style->rc_style)->data;
 
   /* printf ("draw box state %s %s\n", state_names [state_type], state_names [GTK_WIDGET_STATE(widget)]); */
-      
   if (DETAIL ("button") || DETAIL ("optionmenu"))
     {
+      NimbusButton *button_type = rc->button[state_type];
+
+      if (widget && widget->parent &&
+	  (GTK_IS_TREE_VIEW(widget->parent) ||
+	   GTK_IS_CLIST (widget->parent) || get_ancestor_of_type (widget, "MessageList")))
+	button_type = rc->header_button[state_type];
       
       if (get_ancestor_of_type (widget, "GtkCombo") || 
 	  get_ancestor_of_type (widget, "GtkComboBoxEntry") ||
 	  get_ancestor_of_type (widget, "GnomeEntry"))
+	button_type = rc->combo_entry_button[state_type];
+      
+      if (should_draw_defaultbutton)
 	{
-	  draw_nimbus_box (style, window, state_type, shadow_type, area,
-			   widget, detail, rc->combo_entry_button[state_type], TRUE,
-			   x, y, width, height, NIMBUS_SPIN_NONE,
-			   GTK_ORIENTATION_HORIZONTAL);
+	  x -= 1;  y -= 1; width += 2; height += 2;
+	  button_type = rc->button_default[state_type];
 	}
-      else
-	{
-	  if (should_draw_defaultbutton)
-	    {
-	      x -= 1;  y -= 1; width += 2; height += 2;
-	      draw_nimbus_box (style, window, state_type, shadow_type, area,
-			       widget, detail, rc->button_default[state_type], TRUE,
-			       x, y, width, height, NIMBUS_SPIN_NONE, 
-			       GTK_ORIENTATION_HORIZONTAL);
-	    }
-	  else
-	    draw_nimbus_box (style, window, state_type, shadow_type, area,
-			     widget, detail, rc->button[state_type], TRUE,
-			     x, y, width, height, NIMBUS_SPIN_NONE,
-			     GTK_ORIENTATION_HORIZONTAL);
-	}
+      
+      draw_nimbus_box (style, window, state_type, shadow_type, area,
+		       widget, detail, button_type, TRUE,
+		       x, y, width, height, NIMBUS_SPIN_NONE,			     
+		       GTK_ORIENTATION_HORIZONTAL);
       should_draw_defaultbutton = FALSE;
     }
   else if (DETAIL ("buttondefault")) /* needed as buttondefault is just an addon in gtkbutton.c */
@@ -1235,8 +1417,11 @@ draw_box (GtkStyle      *style,
       if (DETAIL ("spinbutton"))
       { /* only kept location of the global button */ 
 	spin_x = x; spin_y = y; spin_width = width; spin_height = height;
+	
+	if (area) gdk_gc_set_clip_rectangle (style->bg_gc[GTK_STATE_ACTIVE], area);
 	gdk_draw_rectangle (window, style->bg_gc[GTK_STATE_ACTIVE], TRUE,
 			      spin_x, spin_y, spin_width, spin_height);
+	if (area) gdk_gc_set_clip_rectangle (style->bg_gc[GTK_STATE_ACTIVE], NULL);
 	return;
       }
       if (DETAIL ("spinbutton_up")) 
@@ -1257,12 +1442,18 @@ draw_box (GtkStyle      *style,
 			   spin_x, spin_y, spin_width, spin_height, NIMBUS_SPIN_DOWN,
 			   GTK_ORIENTATION_HORIZONTAL);
 
+	  if (spin_up_state == GTK_STATE_INSENSITIVE)
+	    {
+	      spin_y++; /* draw the separation lines 1 pix up is the up spinner is insensitive */
+	      spin_up_state = state_type;
+	    }
+		
 	  gdk_draw_line (window, 
-			 nimbus_realize_color (style,rc->spin_color[spin_up_state]->top),
+			 nimbus_realize_color (style,rc->spin_color[spin_up_state]->top, area),
 			 spin_x + 1, spin_y + (spin_height/2) - 1, 
 			 spin_x + spin_width - 2, spin_y + (spin_height/2) - 1);
 	  gdk_draw_line (window, 
-			 nimbus_realize_color (style,rc->spin_color[state_type]->bottom),
+			 nimbus_realize_color (style,rc->spin_color[state_type]->bottom, area),
 			 spin_x + 1, spin_y + (spin_height/2), 
 			 spin_x + spin_width - 2, spin_y + (spin_height/2));
 	}
@@ -1280,7 +1471,7 @@ draw_box (GtkStyle      *style,
 	      sc = rc->scale_h [state_type];
 	      int center_offset = (height - gdk_pixbuf_get_height (sc->bkg_mid)) / 2 + 1;
 	      gdk_draw_pixbuf (window,			 
-			       NULL,
+			       get_clipping_gc (window, area),
 			       sc->bkg_start,
 			       0,0,
 			       x,y + center_offset,
@@ -1288,7 +1479,7 @@ draw_box (GtkStyle      *style,
 			       gdk_pixbuf_get_height (sc->bkg_start),
 			       GDK_RGB_DITHER_NONE,0,0);
 	      gdk_draw_pixbuf (window,			 
-			       NULL,
+			       get_clipping_gc (window, area),
 			       sc->bkg_mid,
 			       0,0,
 			       x+gdk_pixbuf_get_width (sc->bkg_start), y  + center_offset,
@@ -1296,7 +1487,7 @@ draw_box (GtkStyle      *style,
 			       gdk_pixbuf_get_height (sc->bkg_mid),
 			       GDK_RGB_DITHER_NONE,0,0);
 	      gdk_draw_pixbuf (window,			 
-			       NULL,
+			       get_clipping_gc (window, area),
 			       sc->bkg_end,
 			       0,0,
 			       x+gdk_pixbuf_get_width (sc->bkg_start)+ (width - (gdk_pixbuf_get_width (sc->bkg_start) + gdk_pixbuf_get_width (sc->bkg_end))),
@@ -1311,7 +1502,7 @@ draw_box (GtkStyle      *style,
 	      sc = rc->scale_v [state_type];
 	      int center_offset = (width - gdk_pixbuf_get_width (sc->bkg_mid)) / 2 + 1;
 	      gdk_draw_pixbuf (window,			 
-			       NULL,
+			       get_clipping_gc (window, area),
 			       sc->bkg_start,
 			       0,0,
 			       x + center_offset,y,
@@ -1319,7 +1510,7 @@ draw_box (GtkStyle      *style,
 			       gdk_pixbuf_get_height (sc->bkg_start),
 			       GDK_RGB_DITHER_NONE,0,0);
 	      gdk_draw_pixbuf (window,			 
-			       NULL,
+			       get_clipping_gc (window, area),
 			       sc->bkg_mid,
 			       0,0,
 			       x + center_offset, y + gdk_pixbuf_get_height (sc->bkg_start),
@@ -1327,7 +1518,7 @@ draw_box (GtkStyle      *style,
 			       height - (gdk_pixbuf_get_height (sc->bkg_start) + gdk_pixbuf_get_height (sc->bkg_end)) ,
 			       GDK_RGB_DITHER_NONE,0,0);
 	      gdk_draw_pixbuf (window,			 
-			       NULL,
+			       get_clipping_gc (window, area),
 			       sc->bkg_end,
 			       0,0,
 			       x + center_offset,
@@ -1345,9 +1536,11 @@ draw_box (GtkStyle      *style,
 	  if (p_orientation == GTK_PROGRESS_BOTTOM_TO_TOP ||
 	      p_orientation == GTK_PROGRESS_TOP_TO_BOTTOM)
 	    orientation = GTK_ORIENTATION_VERTICAL;
-	  
+	 
+	  if (area) gdk_gc_set_clip_rectangle (style->bg_gc[state_type], area);
 	  gdk_draw_rectangle (window, style->bg_gc[state_type], TRUE,
-			  x, y, width, height);
+			      x, y, width, height);
+	  if (area) gdk_gc_set_clip_rectangle (style->bg_gc[state_type], NULL);
 
 	  draw_nimbus_box (style, window, state_type, shadow_type, area,
 			   widget, detail, rc->progress->bkg, FALSE,
@@ -1355,11 +1548,12 @@ draw_box (GtkStyle      *style,
 	}
       else
 	{
+	  GtkRange *range = GTK_RANGE (widget);
 	  nimbus_init_scrollbar (rc, state_type, (width > height) ? width : height, (width > height) ? TRUE : FALSE);
 	  tmp_pb = (width > height) ? rc->scroll_h[state_type]->bkg : rc->scroll_v[state_type]->bkg;
 	  
 	  gdk_draw_pixbuf (window,
-			   NULL,
+			   get_clipping_gc (window, area),
 			   tmp_pb,
 			   0,0,
 			   x,
@@ -1367,9 +1561,93 @@ draw_box (GtkStyle      *style,
 			   width,
 			   height,
 			   GDK_RGB_DITHER_NONE,0,0);
+
+	  scroll_trough_x = x;
+	  scroll_trough_y = y;
+	  scroll_trough_width = width;
+	  scroll_trough_height = height;
+
+	/* curved bits */
+	  if (width > height) /*horizontal*/
+	    {
+	      /* left */
+	      GtkStateType state = state_type;
+	      if (range->layout->grab_location == MOUSE_STEPPER_A)
+		state = GTK_STATE_ACTIVE;
+	      else if (range->layout->mouse_location == MOUSE_STEPPER_A)
+		state = GTK_STATE_PRELIGHT;
+	      else if (state != GTK_STATE_INSENSITIVE)
+		state = GTK_STATE_NORMAL;
+		
+	      gdk_draw_pixbuf (window,
+			       get_clipping_gc (window, area),
+			       rc->scroll_h[state]->button_start,
+			       0,0,
+			       x,
+			       y,		       
+			       gdk_pixbuf_get_width (rc->scroll_h[state]->button_start),
+			       gdk_pixbuf_get_height(rc->scroll_h[state]->button_start),
+			       GDK_RGB_DITHER_NONE,0,0);
+
+	      /* right */
+	      if (range->layout->grab_location == MOUSE_STEPPER_D)
+		state = GTK_STATE_ACTIVE;
+	      else if (range->layout->mouse_location == MOUSE_STEPPER_D)
+		state = GTK_STATE_PRELIGHT;
+	      else if (state != GTK_STATE_INSENSITIVE)
+		state = GTK_STATE_NORMAL;
+
+	      gdk_draw_pixbuf (window,
+			       get_clipping_gc (window, area),
+			       rc->scroll_h[state]->button_end,
+			       0,0,
+			       x+width-gdk_pixbuf_get_width (rc->scroll_h[state]->button_end),
+			       y,		       
+			       gdk_pixbuf_get_width (rc->scroll_h[state]->button_end),
+			       gdk_pixbuf_get_height(rc->scroll_h[state]->button_end),
+			       GDK_RGB_DITHER_NONE,0,0);
+	    }
+	  else
+	    {
+	      GtkStateType state = state_type;
+	      /* top */
+	      if (range->layout->grab_location == MOUSE_STEPPER_A)
+		state = GTK_STATE_ACTIVE;
+	      else if (range->layout->mouse_location == MOUSE_STEPPER_A)
+		state = GTK_STATE_PRELIGHT;
+	      else if (state != GTK_STATE_INSENSITIVE)
+		state = GTK_STATE_NORMAL;
+
+	      gdk_draw_pixbuf (window,
+			       get_clipping_gc (window, area),
+			       rc->scroll_v[state]->button_start,
+			       0,0,
+			       x,
+			       y,		       
+			       gdk_pixbuf_get_width (rc->scroll_v[state]->button_start),
+			       gdk_pixbuf_get_height(rc->scroll_v[state]->button_start),
+			       GDK_RGB_DITHER_NONE,0,0);
+	      /* bottom */
+	      if (range->layout->grab_location == MOUSE_STEPPER_D)
+		state = GTK_STATE_ACTIVE;
+	      else if (range->layout->mouse_location == MOUSE_STEPPER_D)
+		state = GTK_STATE_PRELIGHT;
+	      else if (state != GTK_STATE_INSENSITIVE)
+		state = GTK_STATE_NORMAL;
+
+	      gdk_draw_pixbuf (window,
+			       get_clipping_gc (window, area),
+			       rc->scroll_v[state]->button_end,
+			       0,0,
+			       x,
+			       y+height-gdk_pixbuf_get_height (rc->scroll_v[state]->button_end),		       
+			       gdk_pixbuf_get_width (rc->scroll_v[state]->button_end),
+			       gdk_pixbuf_get_height(rc->scroll_v[state]->button_end),
+			       GDK_RGB_DITHER_NONE,0,0);
+	    }
 	}
     }
-  else if (DETAIL ("hscrollbar") || DETAIL ("vscrollbar"))
+  else if (DETAIL ("hscrollbar") || DETAIL ("vscrollbar") || DETAIL ("stepper"))
     { /* save coord at the box will be drawn in draw_arrow as we don't have the direction of the box here */
       scroll_button_x = x - 1;
       scroll_button_y = y - 1;
@@ -1378,19 +1656,19 @@ draw_box (GtkStyle      *style,
     }
   else if (DETAIL ("bar"))
     draw_progress (style, window, state_type, shadow_type, area, widget, detail, x, y, width, height);
-  else if (DETAIL ("toolbar"))
-      gdk_draw_line (window, nimbus_realize_color (style, rc->menubar_border), x,y+height-1,x+width-1,y+height-1);
+  else if (DETAIL ("toolbar") || DETAIL ("dockitem_bin") || DETAIL ("handlebox_bin"))
+      gdk_draw_line (window, nimbus_realize_color (style, rc->menubar_border, area), x,y+height-1,x+width-1,y+height-1);
   else if (DETAIL ("menu"))
     {
       GdkGC *start, *mid_start, *mid_end, *end;
       sanitize_size (window, &width, &height);
-      gdk_draw_rectangle (window, nimbus_realize_color (style, rc->menu->border), FALSE, x,y,width-1,height-1); 
-      gdk_draw_line (window, nimbus_realize_color (style, rc->menu->shadow), x + width - 2,y+1,x + width - 2,height-2); 
+      gdk_draw_rectangle (window, nimbus_realize_color (style, rc->menu->border, area), FALSE, x,y,width-1,height-1); 
+      gdk_draw_line (window, nimbus_realize_color (style, rc->menu->shadow, area), x + width - 2,y+1,x + width - 2,height-2); 
       
-      start = nimbus_realize_color (style, rc->menu->start);
-      mid_start = nimbus_realize_color (style, rc->menu->mid_start);
-      mid_end = nimbus_realize_color (style, rc->menu->mid_end);
-      end = nimbus_realize_color (style, rc->menu->end);
+      start = nimbus_realize_color (style, rc->menu->start, area);
+      mid_start = nimbus_realize_color (style, rc->menu->mid_start, area);
+      mid_end = nimbus_realize_color (style, rc->menu->mid_end, area);
+      end = nimbus_realize_color (style, rc->menu->end, area);
       gdk_draw_line (window, start, x+1,y+1,x + width - 2,y+1); 
       gdk_draw_line (window, mid_start, x+1,y+2,x + width - 2,y+2); 
       gdk_draw_line (window, mid_end, x+1,y+3,x + width - 2,y+3); 
@@ -1404,17 +1682,18 @@ draw_box (GtkStyle      *style,
     }
   else if (DETAIL ("menubar"))
     {
-/*      gdk_draw_rectangle (window, style->black_gc, FALSE,
-			  x, y+1, width, height-1);*/
-      nimbus_draw_gradient (window, style, rc->menubar,
-			    x, y, width, height-1, -1, TRUE, GTK_ORIENTATION_HORIZONTAL, NO_TAB);
-      gdk_draw_line (window, nimbus_realize_color (style, rc->menubar_border), x,y+height-1,x+width-1,y+height-1);
+      nimbus_draw_gradient (window, style, area, rc->menubar,
+			    x, y, width, height-1, -1, TRUE, 
+			    GTK_ORIENTATION_HORIZONTAL, NO_TAB);
+
+      gdk_draw_line (window, nimbus_realize_color (style, rc->menubar_border, area), 
+		     x,y+height-1,x+width-1,y+height-1);
       
     }
   else
     parent_class->draw_box (style, window, state_type, shadow_type, area, widget, detail, x, y, width, height);
     
-  verbose ("draw\t box \t-%s-\n", detail ? detail : "no detail");
+  verbose ("draw\t box \t\t-%s-\n", detail ? detail : "no detail");
 }
 
 /**************************************************************************/
@@ -1447,7 +1726,7 @@ draw_check (GtkStyle      *style,
     }
 
   gdk_draw_pixbuf (window,			 
-		   NULL,
+		   get_clipping_gc (window, area),
 		   image[state_type],
 		   0,0,
 		   x,y,
@@ -1490,8 +1769,10 @@ draw_slider (GtkStyle      *style,
 	{
 	  nimbus_init_scrollbar (rc, state_type, width, TRUE);
 	  sb = rc->scroll_h[state_type];
+	  if (area)
+	    area->height++; /* grow clip area for the slider shadow */
 	  gdk_draw_pixbuf (window,			 
-			   NULL,
+			   get_clipping_gc (window, area),
 			   sb->slider_start,
 			   0,0,
 			   x,y-1,
@@ -1499,7 +1780,7 @@ draw_slider (GtkStyle      *style,
 			   gdk_pixbuf_get_height (sb->slider_start),
 			   GDK_RGB_DITHER_NONE,0,0);
 	  gdk_draw_pixbuf (window,			 
-			   NULL,
+			   get_clipping_gc (window, area),
 			   sb->slider_mid,
 			   0,0,
 			   x+gdk_pixbuf_get_width (sb->slider_start), y -1,
@@ -1507,7 +1788,7 @@ draw_slider (GtkStyle      *style,
 			   gdk_pixbuf_get_height (sb->slider_mid),
 			   GDK_RGB_DITHER_NONE,0,0);
 	  gdk_draw_pixbuf (window,			 
-			   NULL,
+			   get_clipping_gc (window, area),
 			   sb->slider_end,
 			   0,0,
 			   x+gdk_pixbuf_get_width (sb->slider_start)+ (width - (gdk_pixbuf_get_width (sb->slider_start) + gdk_pixbuf_get_width (sb->slider_end))),
@@ -1519,9 +1800,11 @@ draw_slider (GtkStyle      *style,
       else
 	{
 	  nimbus_init_scrollbar (rc, state_type, height, FALSE);
-	  sb = rc->scroll_v[state_type];
+	  sb = rc->scroll_v[state_type]; 
+	  if (area)
+	    area->width++; /* grow clip area for the slider shadow */
 	  gdk_draw_pixbuf (window,			 
-			   NULL,
+			   get_clipping_gc (window, area),
 			   sb->slider_start,
 			   0,0,
 			   x - 1,y,
@@ -1529,7 +1812,7 @@ draw_slider (GtkStyle      *style,
 			   gdk_pixbuf_get_height (sb->slider_start),
 			   GDK_RGB_DITHER_NONE,0,0);
 	  gdk_draw_pixbuf (window,			 
-			   NULL,
+			   get_clipping_gc (window, area),
 			   sb->slider_mid,
 			   0,0,
 			   x - 1, y + gdk_pixbuf_get_height (sb->slider_start),
@@ -1537,7 +1820,7 @@ draw_slider (GtkStyle      *style,
 			   height - (gdk_pixbuf_get_height (sb->slider_start) + gdk_pixbuf_get_height (sb->slider_end)) ,
 			   GDK_RGB_DITHER_NONE,0,0);
 	  gdk_draw_pixbuf (window,			 
-			   NULL,
+			   get_clipping_gc (window, area),
 			   sb->slider_end,
 			   0,0,
 			   x - 1,
@@ -1551,7 +1834,7 @@ draw_slider (GtkStyle      *style,
     {
       GdkPixbuf *button = DETAIL ("hscale") ? rc->scale_h[state_type]->button : rc->scale_v[state_type]->button;
       gdk_draw_pixbuf (window,			 
-		       NULL,
+		       NULL, /* don't clip here as the button is 1 pix larger */
 		       button,
 		       0,0,
 		       x, y,
@@ -1591,8 +1874,8 @@ draw_option (GtkStyle      *style,
   if (shadow_type == GTK_SHADOW_ETCHED_IN) /* insensitive */
     {
       state_type = GTK_STATE_INSENSITIVE;
-      if (GTK_IS_RADIO_MENU_ITEM (widget) && 
-	  gtk_check_menu_item_get_active (GTK_RADIO_MENU_ITEM (widget)))
+      if (GTK_IS_CHECK_MENU_ITEM (widget) && 
+	  gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM (widget)))
 	  image = rc->radio_set;
 
       if (GTK_IS_TOGGLE_BUTTON (widget) && 
@@ -1601,7 +1884,7 @@ draw_option (GtkStyle      *style,
     }
 
   gdk_draw_pixbuf (window,			 
-		   NULL,
+		   get_clipping_gc (window, area),
 		   image[state_type],
 		   0,0,
 		   x,y,
@@ -1655,7 +1938,7 @@ draw_hline (GtkStyle     *style,
 {
   NimbusData *rc = NIMBUS_RC_STYLE (style->rc_style)->data;
 
-  gdk_draw_line (window, nimbus_realize_color (style, rc->hline), x1,y,x2,y);
+  gdk_draw_line (window, nimbus_realize_color (style, rc->hline, area), x1,y,x2,y);
   /* parent_class->draw_hline (style, window, state_type, area, widget, detail, x1, x2, y);   */
   verbose ("draw\t hline \t-%s-\n", detail ? detail : "no detail");
 }
@@ -1678,7 +1961,7 @@ draw_vline (GtkStyle     *style,
   
   if (!get_ancestor_of_type (widget, "GtkComboBox"))
     {
-      GdkGC *color = nimbus_realize_color (style, rc->vline);
+      GdkGC *color = nimbus_realize_color (style, rc->vline, area);
       for (i=0; i <= (y2 - y1); i += 3)
 	  gdk_draw_line (window, color, x, y1+i, x, y1+i);
 	  

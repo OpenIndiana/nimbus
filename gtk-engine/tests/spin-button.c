@@ -10,7 +10,9 @@ void main (int argc, char **argv)
   gtk_init (&argc, &argv);
 
   gtk_settings_set_string_property (gtk_settings_get_default (),
-				    "gtk-theme-name", "Nimbus", "gdm");
+				    "gtk-theme-name", "nimbus", "gdm");
+    
+  gtk_rc_add_default_file ("testgtkrc");
 
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);

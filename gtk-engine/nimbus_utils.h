@@ -77,6 +77,7 @@ void nimbus_gradient_add_segment (NimbusGradient *gradient,
 void 
 nimbus_draw_gradient (GdkWindow	       *window,
 		      GtkStyle	       *style,
+		      GdkRectangle     *clip,
 		      NimbusGradient   *gradient,
 		      int		x,
 		      int		y,
@@ -88,47 +89,14 @@ nimbus_draw_gradient (GdkWindow	       *window,
 		      NimbusTabPosition	tab_position);
 
 
-void 
-nimbus_draw_horizontal_gradient (GdkWindow *window,
-				 GtkStyle  *style,
-				 GdkColor  *from,
-				 GdkColor  *to,
-				 int	    x,
-				 int	    y,
-				 int	    width,
-				 int	    height,
-				 NimbusButtonCorner corners,
-				 gboolean   start_corner,
-				 gboolean   end_corner,
-				 int	    corner_width,
-				 int	    corner_height,
-				 int	    partial_height,
-				 gboolean   draw_partial_from_start);
-
-void 
-nimbus_draw_vertical_gradient (GdkWindow *window,
-			       GtkStyle  *style,
-			       GdkColor  *from,
-			       GdkColor  *to,
-			       int	    x,
-			       int	    y,
-			       int	    width,
-			       int	    height,
-			       NimbusButtonCorner corners,
-			       gboolean   start_corner,
-			       gboolean   end_corner,
-			       int	    corner_width,
-			       int	    corner_height,
-			       int	    partial_height,
-			       gboolean   draw_partial_from_start);
-
 
 GdkColor *
 nimbus_color_cache_get (char *color_name);
 
 GdkGC * 
 nimbus_realize_color (GtkStyle * style,
-	       GdkColor * color);
+		      GdkColor * color,
+		      GdkRectangle *clip);
 
 
 #endif /* __NIMBUS_UTILS_H__ */

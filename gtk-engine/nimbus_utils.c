@@ -1,6 +1,42 @@
 #include <stdio.h>
 #include <strings.h>
 #include "nimbus_utils.h"
+static void 
+nimbus_draw_horizontal_gradient (GdkWindow *window,
+				 GtkStyle  *style,
+				 GdkRectangle *clip,
+				 GdkColor  *from,
+				 GdkColor  *to,
+				 int	    x,
+				 int	    y,
+				 int	    width,
+				 int	    height,
+				 NimbusButtonCorner corners,
+				 gboolean   start_corner,
+				 gboolean   end_corner,
+				 int	    corner_width,
+				 int	    corner_height,
+				 int	    partial_height,
+				 gboolean   draw_partial_from_start);
+
+static void 
+nimbus_draw_vertical_gradient (GdkWindow *window,
+			       GtkStyle  *style,
+			       GdkRectangle *clip,
+			       GdkColor  *from,
+			       GdkColor  *to,
+			       int	    x,
+			       int	    y,
+			       int	    width,
+			       int	    height,
+			       NimbusButtonCorner corners,
+			       gboolean   start_corner,
+			       gboolean   end_corner,
+			       int	    corner_width,
+			       int	    corner_height,
+			       int	    partial_height,
+			       gboolean   draw_partial_from_start);
+
 
 
 NimbusGradient* 
@@ -82,6 +118,7 @@ nimbus_gradient_add_segment (NimbusGradient *gradient,
 static void 
 draw_gradient_segment (GdkWindow	     *window,
 		       GtkStyle		     *style,
+		       GdkRectangle	     *clip,
 		       NimbusGradient	     *gradient,
 		       NimbusGradientSegment *seg,
 		       int		      x,
@@ -124,6 +161,17 @@ draw_gradient_segment (GdkWindow	     *window,
        /* same for partial height ending at the bottom of the gradient */
        if ((end_length <= partial_height) && !draw_partial_from_start)
 	 return;
+	 
+	if (!draw_partial_from_start)
+	  {/* remove the h_start_offset as the partial draw doesn't
+	      beginning at the start of the segment */
+	    if (gradient->h_start_offset)
+	      {
+		y -= gradient->h_start_offset; 
+		if (length == 1)
+		  length++;
+	      }
+	  }
      }
 
    /* determine how many lines should be truncated for this segment */
@@ -147,6 +195,7 @@ draw_gradient_segment (GdkWindow	     *window,
 	 }
        nimbus_draw_horizontal_gradient (window, 
 					style,
+					clip,
 					seg->start_color, seg->end_color, 
 					x,
 					y + start_length, 
@@ -182,6 +231,7 @@ draw_gradient_segment (GdkWindow	     *window,
        
        nimbus_draw_vertical_gradient (window, 
 				      style,
+				      clip,
 				      seg->start_color, seg->end_color, 
 				      x + start_length,
 				      y, 
@@ -200,6 +250,7 @@ draw_gradient_segment (GdkWindow	     *window,
 void 
 nimbus_draw_gradient (GdkWindow*	window,
 		      GtkStyle*		style,
+		      GdkRectangle     *clip,
 		      NimbusGradient*	gradient,
 		      int		x,
 		      int		y,
@@ -228,7 +279,7 @@ nimbus_draw_gradient (GdkWindow*	window,
  
  while (tmp)
    {
-     draw_gradient_segment (window, style, gradient,
+     draw_gradient_segment (window, style, clip, gradient,
 			    (NimbusGradientSegment*) tmp->data,
 			    x + gradient->w_start_offset, 
 			    y + gradient->h_start_offset,
@@ -243,9 +294,10 @@ nimbus_draw_gradient (GdkWindow*	window,
  gradient->corners = corners;
 }
 
-void 
+static void 
 nimbus_draw_horizontal_gradient (GdkWindow *window,
 				 GtkStyle  *style,
+				 GdkRectangle *clip,
 				 GdkColor  *from,
 				 GdkColor  *to,
 				 int	    x,
@@ -291,7 +343,7 @@ nimbus_draw_horizontal_gradient (GdkWindow *window,
 			from->blue + (delta_b * i) / height};
      /* GdkColor color = { 0, 0, 0, 60000};  */
 
-      gc = nimbus_realize_color (style, &color);
+      gc = nimbus_realize_color (style, &color, clip);
 		     
       if (i < corner_height && start_corner) /* troncate start of this gradient */
 	{
@@ -323,8 +375,10 @@ nimbus_draw_horizontal_gradient (GdkWindow *window,
 	  else
 	    {
 	      /* spin button lower part case where a gradient can be drawn partially from the bottom*/
-	      if (y+i >= partial_height) 
-		gdk_draw_line (window, gc, x + offset_x, y+i, x + width - offset_w, y+i);
+	      if (y+i >= partial_height)
+		{
+		  gdk_draw_line (window, gc, x + offset_x, y+i, x + width - offset_w, y+i);
+		}
 	    }
 	}
       /* printf ("color is (%d,%d,%d) x, y, x_end, y_end  = (%d,%d,%d,%d) \n", 
@@ -333,9 +387,10 @@ nimbus_draw_horizontal_gradient (GdkWindow *window,
     }
 }
 
-void 
+static void 
 nimbus_draw_vertical_gradient (GdkWindow *window,
 			       GtkStyle  *style,
+			       GdkRectangle *clip,
 			       GdkColor  *from,
 			       GdkColor  *to,
 			       int	    x,
@@ -380,7 +435,7 @@ nimbus_draw_vertical_gradient (GdkWindow *window,
 			from->blue + (delta_b * i) / width};
      /* GdkColor color = { 0, 0, 0, 60000};  */
 
-      gc = nimbus_realize_color (style, &color);
+      gc = nimbus_realize_color (style, &color, clip);
 		     
       if (i < corner_width && start_corner) /* troncate start of this gradient */
 	{
@@ -413,17 +468,23 @@ nimbus_draw_vertical_gradient (GdkWindow *window,
 
 GdkGC *
 nimbus_realize_color (GtkStyle * style,
-	       GdkColor * color)
+		      GdkColor * color,
+		      GdkRectangle *clip)
 {
   GdkGCValues gc_values;
+  GdkGC *tmp = NULL;
 
   gdk_colormap_alloc_color (style->colormap, color,
 			    FALSE, TRUE);
 
   gc_values.foreground = *color;
 
-  return gtk_gc_get (style->depth, style->colormap,
-		     &gc_values, GDK_GC_FOREGROUND);
+  tmp = gtk_gc_get (style->depth, style->colormap, &gc_values, GDK_GC_FOREGROUND);
+  if (clip) 
+    gdk_gc_set_clip_rectangle (tmp, clip);
+  else
+    gdk_gc_set_clip_rectangle (tmp, NULL);
+    return tmp;
 }
 
 /* modified copy of gdk_pixbuf_nimbus_rotate_simple for compatibility with gtk 2.4

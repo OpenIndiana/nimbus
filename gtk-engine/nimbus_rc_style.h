@@ -35,6 +35,7 @@ typedef struct _NimbusScale	    NimbusScale;
 typedef struct _NimbusProgress	    NimbusProgress;
 typedef struct _NimbusTab	    NimbusTab;
 typedef struct _NimbusMenu	    NimbusMenu;
+typedef struct _NimbusHandlebar	    NimbusHandlebar;
 
 extern GType nimbus_type_rc_style;
 
@@ -132,10 +133,18 @@ struct _NimbusMenu
   GdkColor*	end;
 };
 
+struct _NimbusHandlebar
+{
+  GdkPixbuf*		top;
+  GdkPixbuf*		mid;
+  GdkPixbuf*		bottom;
+};
+
 struct _NimbusData
 {
   NimbusButton*		button[5]; 
   NimbusButton*		button_default[5]; 
+  NimbusButton*		header_button[5]; 
   NimbusButton*		arrow_button[5]; 
   NimbusButton*		combo_entry_button[5]; 
   GdkPixbuf*		drop_shadow[5];
@@ -157,10 +166,10 @@ struct _NimbusData
   NimbusTab*		tab[5];
   GdkColor*		menubar_border;
   NimbusGradient*	menubar;
-  NimbusButton*		handlebar;
   NimbusMenu*		menu;
   GdkColor*		hline;
   GdkColor*		vline;
+  NimbusHandlebar*	handlebar[2];
 };
 
 void nimbus_init_button_drop_shadow (NimbusData* rc, 
@@ -176,6 +185,14 @@ void nimbus_init_scale (NimbusData* rc,
 			GtkStateType state, 
 			int size,
 			gboolean horizontal);
+
+void nimbus_init_progress (NimbusData* rc,
+			   int height,
+			   int width);
+
+void nimbus_init_handle_bar (NimbusData* rc,
+			     int size,
+			     GtkOrientation orientation);
 	
 struct _NimbusRcStyle
 {

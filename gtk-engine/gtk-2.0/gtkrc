@@ -50,7 +50,6 @@ style "PanelFrame"
   ythickness = 1
 }
 
-
 class "Panel*" style "PanelFrame"
 class "GtkMenu*" style "menu"
 class "GtkScale" style "scrollbar"

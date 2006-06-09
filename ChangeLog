@@ -1,3 +1,13 @@
+2006-06-02 Erwann Chenede - <erwann.chenede@sun.com>
+
+  * a lot of fixes :)
+    - Added clipping for all the drawing routines
+    - implemented handlebar 
+    - fixed scrollbar for firefox/thunderbird and SO
+    - fixed pane problems
+    - fixed shadow problems
+    - fixed Range problems
+
 2006-05-26 Erwann Chenede - <erwann.chenede@sun.com>
 
   * gtk-engine/*.[hc] : fixed exported ABI and 6430524
