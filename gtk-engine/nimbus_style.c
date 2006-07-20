@@ -1062,6 +1062,7 @@ draw_flat_box (GtkStyle      *style,
 	    gc = style->white_gc;
 	}
 		     
+      gdk_gc_set_clip_rectangle (gc, NULL);
       if (area) gdk_gc_set_clip_rectangle (gc, area);
       gdk_draw_rectangle (window, gc, TRUE, x, y+1, width, height-1);
       if (area) gdk_gc_set_clip_rectangle (gc, NULL);
@@ -1377,7 +1378,7 @@ draw_box (GtkStyle      *style,
 {
   static gboolean should_draw_defaultbutton = FALSE;
   NimbusData* rc = NIMBUS_RC_STYLE (style->rc_style)->data;
-
+  
   /* printf ("draw box state %s %s\n", state_names [state_type], state_names [GTK_WIDGET_STATE(widget)]); */
   if (DETAIL ("button") || DETAIL ("optionmenu"))
     {
@@ -1538,6 +1539,7 @@ draw_box (GtkStyle      *style,
 	      p_orientation == GTK_PROGRESS_TOP_TO_BOTTOM)
 	    orientation = GTK_ORIENTATION_VERTICAL;
 	 
+	  gdk_gc_set_clip_rectangle (style->bg_gc[state_type], NULL);
 	  if (area) gdk_gc_set_clip_rectangle (style->bg_gc[state_type], area);
 	  gdk_draw_rectangle (window, style->bg_gc[state_type], TRUE,
 			      x, y, width, height);
@@ -1700,10 +1702,19 @@ draw_box (GtkStyle      *style,
       
     }
   else
-    parent_class->draw_box (style, window, state_type, shadow_type, area, widget, detail, x, y, width, height);
+    {
+	/* ensure the clipping area is reset needed of gtkruler in gimp and some progressbar */
+	gdk_gc_set_clip_rectangle (style->bg_gc[state_type], NULL); 
+	if (area) gdk_gc_set_clip_rectangle (style->bg_gc[state_type], area);
+	gdk_draw_rectangle (window, style->bg_gc[state_type], TRUE,
+			      x, y, width, height);
+	if (area) gdk_gc_set_clip_rectangle (style->bg_gc[state_type], NULL);
+    }
+    /* parent_class->draw_box (style, window, state_type, shadow_type, area, widget, detail, x, y, width, height); */
     
   verbose ("draw\t box \t\t-%s-\n", detail ? detail : "no detail");
 }
+
 
 /**************************************************************************/
 static void 

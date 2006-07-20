@@ -1,5 +1,9 @@
 2006-07-20 Erwann Chenede - <erwann.chenede@sun.com>
 
+  * gtk-engine/nimbus_style.c : fix for gimp trashed rulers and progressbar
+
+2006-07-20 Erwann Chenede - <erwann.chenede@sun.com>
+
   * gtk-engine/nimbus_style.c: fix for gaim crash 6446921
 
 2006-06-02 Erwann Chenede - <erwann.chenede@sun.com>
