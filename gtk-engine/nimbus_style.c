@@ -614,8 +614,8 @@ draw_shadow (GtkStyle        *style,
 	gdk_draw_rectangle (window, nimbus_realize_color (style, rc->pane->outline, area),
 			    FALSE, x, y, width-1, height-1);
 							
-      /* parent_class->draw_shadow (style, window, state_type, shadow_type, area, widget, detail, x, y, width, height); */
-      verbose ("draw\t shadow \t-%s-\t shadow_type %s \\n", detail ? detail : "no detail", shadow_names[shadow_type]);
+       /* parent_class->draw_shadow (style, window, state_type, shadow_type, area, widget, detail, x, y, width, height);  */
+      verbose ("draw\t shadow \t-%s-\t shadow_type %s \n", detail ? detail : "no detail", shadow_names[shadow_type]);
     }
 }
 
@@ -1528,7 +1528,8 @@ draw_box (GtkStyle      *style,
 			       GDK_RGB_DITHER_NONE,0,0);
 	    }
 	}
-      else if (GTK_IS_PROGRESS_BAR (widget))
+      else if (GTK_IS_PROGRESS_BAR (widget) || 
+	       get_ancestor_of_type (widget, "GtkTreeView"))/* gaim cell_renderer_progress special case */
 	{
 	  GtkOrientation orientation = GTK_ORIENTATION_HORIZONTAL;
 	  GtkProgressBarOrientation p_orientation = gtk_progress_bar_get_orientation (GTK_PROGRESS_BAR (widget));
@@ -1572,9 +1573,11 @@ draw_box (GtkStyle      *style,
 	    {
 	      /* left */
 	      GtkStateType state = state_type;
-	      if (range->layout->grab_location == MOUSE_STEPPER_A)
+	      if (range->layout && 
+		  range->layout->grab_location == MOUSE_STEPPER_A)
 		state = GTK_STATE_ACTIVE;
-	      else if (range->layout->mouse_location == MOUSE_STEPPER_A)
+	      else if (range->layout && 
+		       range->layout->mouse_location == MOUSE_STEPPER_A)
 		state = GTK_STATE_PRELIGHT;
 	      else if (state != GTK_STATE_INSENSITIVE)
 		state = GTK_STATE_NORMAL;
@@ -1590,9 +1593,11 @@ draw_box (GtkStyle      *style,
 			       GDK_RGB_DITHER_NONE,0,0);
 
 	      /* right */
-	      if (range->layout->grab_location == MOUSE_STEPPER_D)
+	      if (range->layout && 
+		  range->layout->grab_location == MOUSE_STEPPER_D)
 		state = GTK_STATE_ACTIVE;
-	      else if (range->layout->mouse_location == MOUSE_STEPPER_D)
+	      else if (range->layout && 
+		       range->layout->mouse_location == MOUSE_STEPPER_D)
 		state = GTK_STATE_PRELIGHT;
 	      else if (state != GTK_STATE_INSENSITIVE)
 		state = GTK_STATE_NORMAL;
@@ -1611,9 +1616,11 @@ draw_box (GtkStyle      *style,
 	    {
 	      GtkStateType state = state_type;
 	      /* top */
-	      if (range->layout->grab_location == MOUSE_STEPPER_A)
+	      if (range->layout && 
+		  range->layout->grab_location == MOUSE_STEPPER_A)
 		state = GTK_STATE_ACTIVE;
-	      else if (range->layout->mouse_location == MOUSE_STEPPER_A)
+	      else if (range->layout && 
+		       range->layout->mouse_location == MOUSE_STEPPER_A)
 		state = GTK_STATE_PRELIGHT;
 	      else if (state != GTK_STATE_INSENSITIVE)
 		state = GTK_STATE_NORMAL;
@@ -1628,9 +1635,11 @@ draw_box (GtkStyle      *style,
 			       gdk_pixbuf_get_height(rc->scroll_v[state]->button_start),
 			       GDK_RGB_DITHER_NONE,0,0);
 	      /* bottom */
-	      if (range->layout->grab_location == MOUSE_STEPPER_D)
+	      if (range->layout && 
+		  range->layout->grab_location == MOUSE_STEPPER_D)
 		state = GTK_STATE_ACTIVE;
-	      else if (range->layout->mouse_location == MOUSE_STEPPER_D)
+	      else if (range->layout &&
+		       range->layout->mouse_location == MOUSE_STEPPER_D)
 		state = GTK_STATE_PRELIGHT;
 	      else if (state != GTK_STATE_INSENSITIVE)
 		state = GTK_STATE_NORMAL;
