@@ -93,7 +93,13 @@ IMAGES = \
 	progress-shadow-top.png				\
 	handlebar-top.png				\
 	handlebar-mid.png				\
-	handlebar-bottom.png				
+	handlebar-bottom.png				\
+	check-menu-disable-set.png			\
+	check-menu-normal-set.png			\
+	check-menu-prelight-set.png			\
+	radio-menu-disable-set.png			\
+	radio-menu-normal-set.png			\
+	radio-menu-prelight-set.png
 
 noinst_DATA = images.h
 CLEANFILES = $(noinst_DATA)

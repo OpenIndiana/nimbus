@@ -13,6 +13,7 @@ void main (int argc, char **argv)
 {
   GtkWidget *window,  *hbox, *vbox, *label, *label2, *l3, *l4, *la;
   GtkWidget *menubar, *menuitem, *menuitem2, *menu;
+  GSList *group = NULL;
   int i,j;
 
   gtk_init (&argc, &argv);
@@ -35,11 +36,14 @@ void main (int argc, char **argv)
   gtk_menu_shell_append (GTK_MENU_SHELL (menubar), menuitem);
 
   menu = gtk_menu_new ();
-  menuitem2 = gtk_image_menu_item_new_with_label ("item");
-  gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem2);
   gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), menu);
-
   
+  menuitem2 = gtk_radio_menu_item_new_with_label(group, "radio item");
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem2);
+
+  menuitem2 = gtk_check_menu_item_new_with_label ( "check item");
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem2);
+ 
   /* gtk_widget_set_sensitive (progress, FALSE);   */
       
   hbox = gtk_hbox_new (FALSE, 10);

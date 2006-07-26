@@ -1745,14 +1745,23 @@ draw_check (GtkStyle      *style,
 	  image = rc->radio_set;
     }
 
-  gdk_draw_pixbuf (window,			 
-		   get_clipping_gc (window, area),
-		   image[state_type],
-		   0,0,
-		   x,y,
-		   gdk_pixbuf_get_width (image[state_type]),
-		   gdk_pixbuf_get_height (image[state_type]),
-		   GDK_RGB_DITHER_NONE,0,0);
+  if (GTK_IS_MENU_ITEM (widget))
+    {
+      if (shadow_type != GTK_SHADOW_IN)
+	image = NULL;
+      else
+	image = rc->check_menu_set;
+    }
+      
+  if (image)
+    gdk_draw_pixbuf (window,			 
+		     get_clipping_gc (window, area),
+		     image[state_type],
+		     0,0,
+		     x,y,
+		     gdk_pixbuf_get_width (image[state_type]),
+		     gdk_pixbuf_get_height (image[state_type]),
+		     GDK_RGB_DITHER_NONE,0,0);
   
   /* parent_class->draw_check (style, window, state_type, shadow_type, area, widget, detail, x, y, width, height); */
 
@@ -1903,17 +1912,25 @@ draw_option (GtkStyle      *style,
 	  image = rc->radio_set;
     }
 
-  gdk_draw_pixbuf (window,			 
-		   get_clipping_gc (window, area),
-		   image[state_type],
-		   0,0,
-		   x,y,
-		   gdk_pixbuf_get_width (image[state_type]),
-		   gdk_pixbuf_get_height (image[state_type]),
-		   GDK_RGB_DITHER_NONE,0,0);
-  /* parent_class->draw_option (style, window, state_type, shadow_type, area, widget, detail, x, y, width, height); */
+  if (GTK_IS_MENU_ITEM (widget))
+    {
+      if (shadow_type != GTK_SHADOW_IN)
+	image = NULL;
+      else
+	image = rc->radio_menu_set;
+    }
 
-  verbose ("draw\t option \t-%s-\n", detail ? detail : "no detail");
+  if (image)
+    gdk_draw_pixbuf (window,			 
+		     get_clipping_gc (window, area),
+		     image[state_type],
+		     0,0,
+		     x,y,
+		     gdk_pixbuf_get_width (image[state_type]),
+		     gdk_pixbuf_get_height (image[state_type]),
+		     GDK_RGB_DITHER_NONE,0,0);
+  /* parent_class->draw_option (style, window, state_type, shadow_type, area, widget, detail, x, y, width, height); */
+    verbose ("draw\t option \t-%s-\n", detail ? detail : "no detail");
 }
 
 /**************************************************************************/
