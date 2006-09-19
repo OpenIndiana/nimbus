@@ -1,0 +1,258 @@
+<?xml version="1.0" ?>
+<!DOCTYPE mapping SYSTEM "legacy-icon-mapping.dtd">
+
+<mapping>
+    <context dir="actions">
+	<icon name="execute">
+	  <link>gnome-run</link>
+	</icon>
+    	<icon name="preferences">
+	    <link>gnome-control-center</link>
+	    <link>gnome-settings</link>
+	    <link>gtk-preferences</link>
+	    <link>redhat-preferences</link>
+	    <link>kcontrol</link>
+	</icon>
+    </context>
+     <context dir="apps">
+	<icon name="office-envince">
+	<link>postscript-viewer</link>
+	<link>postscript-viewer</link>
+	</icon>
+	<icon name="graphics-image-viewer">
+	<link>image-viewer</link>
+	</icon>
+	<icon name="sound-java-multimedia-player">
+	<link>jmplay.48</link>
+	</icon>
+	<icon name="sound-totem-movie-player">
+	<link>media-player-48</link>
+	</icon>
+	<icon name="preferences-desktop-preferred-applications">
+	<link>gnome-settings-default-applications</link>
+	</icon>
+	<icon name="preferences-desktop-screen-resolution">
+	<link>display-capplet</link>
+	</icon>
+	<icon name="preferences-settings-sound">
+	<link>gnome-mixer</link>
+	</icon>
+	<icon name="system-about">
+	<link>stock_about</link>
+	</icon>
+	<icon name="administration-login-screen-setup">
+	<link>gdm-setup</link>
+	</icon>
+	<icon name="system-new-login-in-a-window">
+	<link>gdm-xnest</link>
+	</icon>
+	<icon name="realplayer">
+	<link>realplay</link>
+	</icon>
+	<icon name="universal-access-gok">
+	<link>gok</link>
+	</icon>
+	<icon name="system-performance-monitor">
+	<link>perfmeter</link>
+	</icon>
+	<icon name="administration-power-management">
+	<link>SDtpower</link>
+	</icon>
+	<icon name="administration-software-update">
+	<link>update-manager-icon</link>
+	</icon>
+	<icon name="system-log-file-viewer">
+	<link>logviewer</link>
+	</icon>
+	<icon name="preferences-desktop-window-behavior">
+	<link>gnome-window-manager</link>
+	</icon>
+
+	<icon name="sound-recorder">
+	<link>gnome-grecord</link>
+	</icon>
+
+	<icon name="administration-printers">
+	<link>print-manager</link>
+	</icon>
+	<icon name="preferences-palmosdevices">
+	    <link>gnome-palm</link>
+	</icon>
+	<icon name="preferences-desktop-keyboard-accessibility">
+	    <link>gnome-settings-accessibility-keyboard</link>
+	</icon>
+	<icon name="internet-firefox">
+	    <link>firefox-icon</link>
+	</icon>
+	<icon name="thunderbird">
+	    <link>thunderbird-icon</link>
+	</icon>
+	<icon name="accessories-dictionary">
+	    <link>gnome-dictionary</link>
+	</icon>
+	<icon name="accessories-pda-sync">
+	    <link>SDtpdasync</link>
+	</icon>
+
+	<icon name="accessories-archive-manager">
+	    <link>file-roller</link>
+	</icon>
+	<icon name="run">
+	    <link>gnome-run</link>
+	</icon>
+
+	<icon name="system-log-out">
+	    <link>gnome-logout</link>
+	    <link>exit</link>
+	</icon>
+
+	<icon name="system-lock-screen">
+	    <link>gnome-lockscreen</link>
+	    <link>lock</link>
+	</icon>
+
+    	<icon name="searchtool">
+	    <link>gnome-searchtool</link>
+	    <link>search</link>
+	    <link>gnopernicus</link>
+	</icon>
+ 	<icon name="preferences-desktop-accessibility">
+	    <link>gnome-settings-accessibility-technologies</link>
+ 	</icon>
+ 	<icon name="preferences-desktop-remote-desktop">
+	    <link>gdm</link>
+ 	</icon>
+ 	<icon name="preferences-desktop-screensaver">
+	    <link>gnome-ccscreensaver</link>
+	</icon>
+	<icon name="preferences-settings-sound">
+	    <link>gnome-settings-sound</link>
+	    <link>knotify</link>
+	</icon>
+	<icon name="preferences-desktop-sound">
+	    <link>gnome-mixer</link>
+	</icon>
+	<icon name="preferences-desktop-menus-and-toolbars">
+	    <link>gnome-settings-ui-behavior</link>
+	</icon>
+	<icon name="gnome-session-apps">
+	    <link>gnome-session</link>
+ 	</icon>
+ 	<icon name="system-software-update">
+	    <link>update-manager-icon</link>
+	</icon>
+     </context>
+     <context dir="categories">
+	<icon name="applications-universal-access">
+	    <link>gnome-settings-accessibility-technologies</link>
+	    <link>accessibility-directory</link>
+	    <link>access</link>
+	</icon>
+	<icon name="applications-developer-tools">
+	    <link>gnome-devel</link>
+	    <link>package_development</link>
+	    <link>redhat-programming</link>
+	</icon>
+	<icon name="applications-sound-and-video">
+	    <link>gnome-multimedia</link>
+	    <link>package_multimedia</link>
+	    <link>redhat-sound_video</link>
+	</icon>
+    </context>
+    <context dir="devices">
+	<icon name="media-cdrom">
+	    <link>gnome-dev-cdrom</link>
+	    <link>gnome-dev-dvd</link>
+	</icon>
+     
+     </context>
+     <context dir="mimetypes">
+	<icon name="stock_generic-mimetype">
+	    <link>gnome-mime-generic-mimetype</link>
+	    <link>text-x-preview</link>
+	</icon>
+	<icon name="text-x-preview">
+	    <link>gnome-fs-regular</link>
+	    <link>gnome-fs-loading-icon</link>
+	    <link>gtk-file</link>
+	    <link>text-x-generic</link>
+	</icon>	
+	<icon name="gnome-mime-application-x-object-file">
+	    <link>gnome-mime-application-x-object</link>
+	    <link>gnome-mime-application-x-sharedlib</link>
+	</icon>
+	<icon name="gnome-mime-application-x-ogg">
+	    <link>gnome-mime-application-ogg</link>
+	</icon>
+	<icon name="gnome-mime-text-x-perl">
+	    <link>gnome-mime-application-x-perl</link>
+	</icon>
+	<icon name="gnome-mime-application-x-java-byte-code">
+	    <link>gnome-mime-application-x-class-file</link>
+	</icon>
+	<icon name="gnome-mime-application-x-jar">
+	    <link>gnome-mime-application-x-java-archive</link>
+	</icon>
+	<icon name="gnome-mime-application">
+	    <link>gnome-mime-application-x-python-bytecode</link>
+	    <link>gnome-mime-application-x-shellscript</link>
+	    <link>gnome-mime-text-x-csh</link>
+	    <link>gnome-mime-text-x-python</link>
+	    <link>gnome-mime-text-x-sh</link>
+	    <link>gnome-mime-text-x-zsh</link>
+	    <link>stock_script</link>
+	    <link>shellscript</link>
+	</icon>	
+	<icon name="x-office-document">
+	    <link>gnome-mime-application-vnd.sun.xml.draw</link>
+	</icon>
+      </context>
+      <context dir="places">
+	<icon name="folder-drag-accept">
+	    <link>gnome-fs-directory-accept</link>
+   	    <link>stock_open</link>
+	    <link>folder_open</link>
+	</icon>
+	<icon name="web">
+	    <link>stock_proxy</link>
+	</icon>
+	<icon name="user-trash_empty">
+	    <link>gnome-fs-trash-empty</link>
+	    <link>emptytrash</link>
+	    <link>trashcan_empty</link>
+	    <link>gnome-stock-trash</link>
+	</icon>
+	<icon name="user-trash_full">
+	    <link>gnome-fs-trash-full</link>
+	    <link>edittrash</link>
+	    <link>trashcan_full</link>
+	    <link>gnome-stock-trash-full</link>
+	    <link>stock_trash_full</link>
+	</icon>
+	<icon name="executable">
+	    <link>gnome-fs-executable</link>
+	    <link>gnome-mime-application-x-executable</link>
+	    <link>gnome-mime-application-x-ms-dos-executable</link>
+	    <link>binary</link>
+	    <link>exec</link>
+	</icon>
+	<icon name="server">
+	    <link>gnome-fs-server</link>
+	    <link>gnome-mime-x-directory-smb-server</link>
+	    <link>gnome-mime-x-directory-nfs-server</link>
+	    <link>server</link>
+	    <link>redhat-network-server</link>
+	</icon>
+	<icon name="network">
+	    <link>gnome-fs-network</link>
+	    <link>gnome-mime-x-directory-smb-workgroup</link>
+	    <link>gtk-network</link>
+	    <link>network_local</link>
+	</icon>
+      </context>
+</mapping>   
+
+    
+    
+    
+
