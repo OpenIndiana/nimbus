@@ -6,5 +6,5 @@ Encoding=UTF-8
 
 [X-GNOME-Metatheme]
 GtkTheme=nimbus
-IconTheme=blueprint
+IconTheme=nimbus
 MetacityTheme=nimbus

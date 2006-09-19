@@ -2,7 +2,7 @@
 
 AUTOMAKE_OPTIONS = dist-bzip2
 
-SUBDIRS=gtk-engine metacity po
+SUBDIRS=gtk-engine metacity icons po
 
 themedir = $(datadir)/themes/$(PACKAGE)/
 theme_in_files = index.theme.in

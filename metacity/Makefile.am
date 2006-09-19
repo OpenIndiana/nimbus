@@ -29,17 +29,12 @@ EXTRA_DIST =$(THEME_IMAGES)     \
 	    metacity-theme-1.xml  
 		
 install-data-local:
-	$(mkinstalldirs) $(DESTDIR)$(THEME_DIR);					     \
-		echo 'THEME_NAME =' $(THEME_NAME) ; \
-		echo 'THEME_SUBDIR =' $(THEME_SUBDIR) ; \
-		echo 'THEME_DIR =' $(THEME_DIR) ; \
-		echo 'DESTDIR =' $(DESTDIR) ; \
-		echo 'top_srcdir =' $(top_srcdir) ; \
-		echo '-- Installing theme '$(THEME_NAME);				     \
-		$(mkinstalldirs) $(DESTDIR)$(THEME_DIR)/$(THEME_NAME);			     \
-		$(mkinstalldirs) $(DESTDIR)$(THEME_DIR)/$(THEME_NAME)/$(THEME_SUBDIR);	     \
-		$(INSTALL_DATA) metacity-theme-1.xml $(DESTDIR)$(THEME_DIR)/$(THEME_NAME)/$(THEME_SUBDIR); \
+	$(mkinstalldirs) $(DESTDIR)$(THEME_DIR);					     
+		$(mkinstalldirs) $(DESTDIR)$(THEME_DIR)/$(THEME_NAME)/$(THEME_SUBDIR);	     
+		$(INSTALL_DATA) metacity-theme-1.xml $(DESTDIR)$(THEME_DIR)/$(THEME_NAME)/$(THEME_SUBDIR); 
 		 for i in $(THEME_IMAGES); do						     \
-			echo '-- Installing '$$i ;					     \
 		    	$(INSTALL_DATA)  $$i $(DESTDIR)$(THEME_DIR)/$(THEME_NAME)/$(THEME_SUBDIR) ;\
 		 done
+uninstall-local:
+	rm -Rf $(DESTDIR)$(THEME_DIR)/$(THEME_NAME)/$(THEME_SUBDIR)
+        

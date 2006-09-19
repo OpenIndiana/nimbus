@@ -1,3 +1,14 @@
+2006-09-19 Erwann Chenede - <erwann.chenede@sun.com>
+
+  * icons/* : initial implementation of the icon theme.
+  * configure.in : added dependency on icon-name-mapping
+                   bumped release.
+
+2006-07-26 Erwann Chenede - <erwann.chenede@sun.com>
+
+  * gtk-engine/* : implemented radio and check widget for menu item
+    and fixed java radio/check menu button cropping issue.
+
 2006-07-20 Erwann Chenede - <erwann.chenede@sun.com>
 
   * gtk-engine/nimbus_style.c : fix for gimp trashed rulers and progressbar
