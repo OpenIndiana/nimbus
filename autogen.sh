@@ -9,7 +9,7 @@ PKG_NAME=Nimbus
 
 REQUIRED_AUTOMAKE_VERSION=1.9
 
-if [ ! -f "$srcdir/metacity/metacity-theme-1.xml.in" ]; then
+if [ ! -f "$srcdir/metacity/metacity-theme-1.xml" ]; then
  echo "$srcdir doesn't look like source directory for $PKG_NAME" >&2
  exit 1
 fi
