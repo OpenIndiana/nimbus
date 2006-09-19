@@ -1326,13 +1326,6 @@ typedef enum {
   MOUSE_WIDGET /* inside widget but not in any of the above GUI elements */
 } MouseLocation;
 
-typedef enum
-{
-  GTK_SENSITIVITY_AUTO,
-  GTK_SENSITIVITY_ON,
-  GTK_SENSITIVITY_OFF
-} GtkSensitivityType;
-
 /* typedef struct GtkRangeLayout NimbusGtkRangeLayout; */
 
 struct _GtkRangeLayout
