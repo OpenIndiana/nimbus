@@ -1,3 +1,9 @@
+2006-10-11 Erwann Chenede - <erwann.chenede@sun.com>
+
+  * gtk-engine/gtk-2.0/dialog* : changed image size
+  * gtk-engine/nimbus_style.c : fix for 6372959
+  * configure.in : bumped release.
+
 2006-09-19 Erwann Chenede - <erwann.chenede@sun.com>
 
   * icons/* : initial implementation of the icon theme.

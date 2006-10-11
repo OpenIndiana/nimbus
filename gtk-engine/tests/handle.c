@@ -13,6 +13,7 @@ void main (int argc, char **argv)
 {
   GtkWidget *window,  *hbox, *vbox, *label, *label2, *l3, *l4, *la;
   GtkWidget *menubar, *menuitem, *menuitem2, *menu;
+  GtkWidget *handle;
   int i,j;
 
   gtk_init (&argc, &argv);
@@ -30,6 +31,11 @@ void main (int argc, char **argv)
                     G_CALLBACK (gtk_main_quit),
                     NULL);
 
+  handle = gtk_handle_box_new ();
+
+  gtk_handle_box_set_handle_position (GTK_HANDLE_BOX (handle),
+				      GTK_POS_TOP);
+
   menubar = gtk_menu_bar_new ();
   menuitem = gtk_menu_item_new_with_label ("test");
   gtk_menu_shell_append (GTK_MENU_SHELL (menubar), menuitem);
@@ -38,6 +44,8 @@ void main (int argc, char **argv)
   menuitem2 = gtk_image_menu_item_new_with_label ("item");
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem2);
   gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), menu);
+
+  gtk_container_add (GTK_CONTAINER (handle), menubar);
 
   
   /* gtk_widget_set_sensitive (progress, FALSE);   */
@@ -57,7 +65,7 @@ void main (int argc, char **argv)
   gtk_container_add (GTK_CONTAINER (vbox), label2);
   
   gtk_container_add (GTK_CONTAINER (hbox), l3);
-  gtk_container_add (GTK_CONTAINER (hbox), menubar);
+  gtk_container_add (GTK_CONTAINER (hbox), handle);
   gtk_container_add (GTK_CONTAINER (hbox), l4);
 
   gtk_widget_show_all (window);

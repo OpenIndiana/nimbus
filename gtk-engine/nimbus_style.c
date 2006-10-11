@@ -558,14 +558,6 @@ draw_shadow (GtkStyle        *style,
 
       /* third gradient line end points as they can't be drawn in draw_flat_box */
       
-      gdk_draw_line (window, 
-		     nimbus_realize_color (style,rc->textfield_color[state_type]->gradient_line3, area), 
-		     x+1, y+2, x+1, y+2);
-
-      gdk_draw_line (window, 
-		     nimbus_realize_color (style,rc->textfield_color[state_type]->gradient_line3, area), 
-		     x+width-2, y+2, x+width-2, y+2);
-
       /* horizontal gradient */
       gdk_draw_line (window, 
 		     nimbus_realize_color (style,rc->textfield_color[state_type]->gradient_line1, area), 
@@ -906,72 +898,73 @@ draw_handle (GtkStyle      *style,
     {
       height--;
       if (get_ancestor_of_type (widget, "GtkFixed")) /* heuristic for soffice */
-        height--;
+	height--;
 
       if (orientation == GTK_ORIENTATION_VERTICAL)
-        {
-          nimbus_init_handle_bar (rc, height, orientation);
-          
-          gdk_draw_pixbuf (window,
-            	       NULL,
-            	       rc->handlebar[orientation]->top,
-            	       0, 0,
-            	       x, y,
-            	       gdk_pixbuf_get_width (rc->handlebar[orientation]->top),
-            	       gdk_pixbuf_get_height (rc->handlebar[orientation]->top),
-            	       GDK_RGB_DITHER_NONE,0,0);
-          gdk_draw_pixbuf (window,
-            	       NULL,
-            	       rc->handlebar[orientation]->mid,
-            	       0, 0,
-            	       x, y + gdk_pixbuf_get_height (rc->handlebar[orientation]->top),
-            	       gdk_pixbuf_get_width (rc->handlebar[orientation]->mid),
-            	       gdk_pixbuf_get_height (rc->handlebar[orientation]->mid),
-            	       GDK_RGB_DITHER_NONE,0,0);	  
-          gdk_draw_pixbuf (window,
-            	       NULL,
-            	       rc->handlebar[orientation]->bottom,
-            	       0, 0,
-            	       x, 
-            	       y + gdk_pixbuf_get_height (rc->handlebar[orientation]->top) + gdk_pixbuf_get_height (rc->handlebar[orientation]->mid),
-            	       gdk_pixbuf_get_width (rc->handlebar[orientation]->bottom),
-            	       gdk_pixbuf_get_height (rc->handlebar[orientation]->bottom),
-            	       GDK_RGB_DITHER_NONE,0,0);
-          draw_box (style, window, state_type, shadow_type, area, widget, "toolbar", x, 
-            	y + height, width, 1);
-        }
+	{
+	  nimbus_init_handle_bar (rc, height, orientation);
+
+	  gdk_draw_pixbuf (window,
+			   NULL,
+			   rc->handlebar[orientation]->top,
+			   0, 0,
+			   x, y,
+			   gdk_pixbuf_get_width (rc->handlebar[orientation]->top),
+			   gdk_pixbuf_get_height (rc->handlebar[orientation]->top),
+			   GDK_RGB_DITHER_NONE,0,0);
+	  gdk_draw_pixbuf (window,
+			   NULL,
+			   rc->handlebar[orientation]->mid,
+			   0, 0,
+			   x, y + gdk_pixbuf_get_height (rc->handlebar[orientation]->top),
+			   gdk_pixbuf_get_width (rc->handlebar[orientation]->mid),
+			   gdk_pixbuf_get_height (rc->handlebar[orientation]->mid),
+			   GDK_RGB_DITHER_NONE,0,0);	  
+	  gdk_draw_pixbuf (window,
+			   NULL,
+			   rc->handlebar[orientation]->bottom,
+			   0, 0,
+			   x, 
+			   y + gdk_pixbuf_get_height (rc->handlebar[orientation]->top) + gdk_pixbuf_get_height (rc->handlebar[orientation]->mid),
+			   gdk_pixbuf_get_width (rc->handlebar[orientation]->bottom),
+			   gdk_pixbuf_get_height (rc->handlebar[orientation]->bottom),
+			   GDK_RGB_DITHER_NONE,0,0);
+	  draw_box (style, window, state_type, shadow_type, area, widget, "toolbar", x, 
+		    y + height, width, 1);
+
+	}
       else
-        {
-          nimbus_init_handle_bar (rc, width, orientation);
-          
-          gdk_draw_pixbuf (window,
-            	       NULL,
-            	       rc->handlebar[orientation]->top,
-            	       0, 0,
-            	       x, y,
-            	       gdk_pixbuf_get_width (rc->handlebar[orientation]->top),
-            	       gdk_pixbuf_get_height (rc->handlebar[orientation]->top),
-            	       GDK_RGB_DITHER_NONE,0,0);
-          gdk_draw_pixbuf (window,
-            	       NULL,
-            	       rc->handlebar[orientation]->mid,
-            	       0, 0,
-            	       x + gdk_pixbuf_get_width (rc->handlebar[orientation]->top), y,
-            	       gdk_pixbuf_get_width (rc->handlebar[orientation]->mid),
-            	       gdk_pixbuf_get_height (rc->handlebar[orientation]->mid),
-            	       GDK_RGB_DITHER_NONE,0,0);	  
-          gdk_draw_pixbuf (window,
-            	       NULL,
-            	       rc->handlebar[orientation]->bottom,
-            	       0, 0,
-            	       x + gdk_pixbuf_get_width (rc->handlebar[orientation]->top) + gdk_pixbuf_get_width (rc->handlebar[orientation]->mid), 
-            	       y,
-            	       gdk_pixbuf_get_width (rc->handlebar[orientation]->bottom),
-            	       gdk_pixbuf_get_height (rc->handlebar[orientation]->bottom),
-            	       GDK_RGB_DITHER_NONE,0,0);
-          draw_box (style, window, state_type, shadow_type, area, widget, "toolbar", x, 
-            	y + height, width, 1);
-        }
+	{
+	  nimbus_init_handle_bar (rc, width, orientation);
+
+	  gdk_draw_pixbuf (window,
+			   NULL,
+			   rc->handlebar[orientation]->top,
+			   0, 0,
+			   x, y,
+			   gdk_pixbuf_get_width (rc->handlebar[orientation]->top),
+			   gdk_pixbuf_get_height (rc->handlebar[orientation]->top),
+			   GDK_RGB_DITHER_NONE,0,0);
+	  gdk_draw_pixbuf (window,
+			   NULL,
+			   rc->handlebar[orientation]->mid,
+			   0, 0,
+			   x + gdk_pixbuf_get_width (rc->handlebar[orientation]->top), y,
+			   gdk_pixbuf_get_width (rc->handlebar[orientation]->mid),
+			   gdk_pixbuf_get_height (rc->handlebar[orientation]->mid),
+			   GDK_RGB_DITHER_NONE,0,0);	  
+	  gdk_draw_pixbuf (window,
+			   NULL,
+			   rc->handlebar[orientation]->bottom,
+			   0, 0,
+			   x + gdk_pixbuf_get_width (rc->handlebar[orientation]->top) + gdk_pixbuf_get_width (rc->handlebar[orientation]->mid), 
+			   y,
+			   gdk_pixbuf_get_width (rc->handlebar[orientation]->bottom),
+			   gdk_pixbuf_get_height (rc->handlebar[orientation]->bottom),
+			   GDK_RGB_DITHER_NONE,0,0);
+	  draw_box (style, window, state_type, shadow_type, area, widget, "toolbar", x, 
+		    y + height, width, 1);
+	}
     }
   else
     {
@@ -1046,30 +1039,8 @@ draw_flat_box (GtkStyle      *style,
 	       gint           width,
 	       gint           height)
 {
-  if (DETAIL ("entry_bg"))
-    {
-      GdkGC *gc = style->bg_gc[state_type];
-      NimbusData *rc = NIMBUS_RC_STYLE (style->rc_style)->data;
-
-      gdk_draw_line (window, nimbus_realize_color (style, 
-						   rc->textfield_color[state_type]->gradient_line3, 
-						   area),
-		     x, y, x+width, y);
-
-      if (widget && !GTK_IS_ENTRY (widget)) /* soffice special case */
-	{    
-	  if (state_type == GTK_STATE_NORMAL)
-	    gc = style->white_gc;
-	}
-		     
-      gdk_gc_set_clip_rectangle (gc, NULL);
-      if (area) gdk_gc_set_clip_rectangle (gc, area);
-      gdk_draw_rectangle (window, gc, TRUE, x, y+1, width, height-1);
-      if (area) gdk_gc_set_clip_rectangle (gc, NULL);
-    }
-  else
-    parent_class->draw_flat_box (style, window, state_type, shadow_type, area,
-				 widget, detail, x, y, width, height);
+  parent_class->draw_flat_box (style, window, state_type, shadow_type, area,
+			       widget, detail, x, y, width, height);
 
   verbose ("draw\t flat box \t-%s-\n", detail ? detail : "no detail");
 }
