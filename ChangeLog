@@ -1,3 +1,9 @@
+2007-03-14 Erwann Chenede - <erwann.chenede@sun.com>
+
+  * gtk-engine/nimbus_style.c : added sanity checks to fix : 6514195, 6530991.
+    I've rewritten to caching routine for clipping GC's as it wasn't 
+    multihead proof. it fixes 6453340
+
 2006-10-11 Erwann Chenede - <erwann.chenede@sun.com>
 
   * gtk-engine/gtk-2.0/dialog* : changed image size

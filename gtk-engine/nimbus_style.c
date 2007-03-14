@@ -104,21 +104,51 @@ static void draw_nimbus_box	   (GtkStyle      *style,
 
 static GtkStyleClass *parent_class;
 
+static gboolean check_sane_pixbuf_value (int src_x, int src_y, int width, int height, GdkPixbuf *pixbuf)
+{
+  /*printf ("checking src_x = %d, int src_y = %d, int width = %d, int height = %d , pixbuf->height = %d, pixbuf->width = %d\n",
+	  src_x, src_y, width, height, gdk_pixbuf_get_width (pixbuf), gdk_pixbuf_get_height (pixbuf));*/
+
+  if (!(width >= 0 && height >= 0))
+    {
+      /* printf (" (%d >= 0 && %d >= 0) is false\n", width, height); */
+      return FALSE;
+    }
+  if (!(src_x >= 0 && src_x + width <= gdk_pixbuf_get_width (pixbuf)))
+    {
+      /* printf (" (%d >= 0 && %d + %d <= %d) is false\n", src_x , src_x,  width , gdk_pixbuf_get_width (pixbuf)); */
+      return FALSE;
+    }
+  if (!(src_y >= 0 && src_y + height <= gdk_pixbuf_get_height (pixbuf)))
+    {
+      /* printf (" (%d >= 0 && %d + %d <= %d) is false\n", src_y, src_y,  height, gdk_pixbuf_get_height (pixbuf)); */
+      return FALSE;
+    }
+  return TRUE;
+}
 static GdkGC *
 get_clipping_gc (GdkWindow* window, GdkRectangle *clip)
 {
-  static GdkGC *clipping_gc = NULL;
-  if (clip)
-    {
-      if (!clipping_gc)
-	clipping_gc = gdk_gc_new (window);
-      
-      gdk_gc_set_clip_rectangle (clipping_gc, clip);
-      return clipping_gc;
-    }
-  return NULL;
-}
+  GdkGC *gc;
+  static GSList *clipping_gc_list = NULL;
+  GSList* tmp = clipping_gc_list;
   
+  while (tmp)
+    {
+      gc = (GdkGC *) tmp->data;
+      if (gdk_gc_get_screen (gc) == 
+	  gdk_drawable_get_screen (GDK_DRAWABLE (window)))
+	{
+	  gdk_gc_set_clip_rectangle (gc, clip);
+	  return gc;
+	}
+      tmp = tmp->next;
+    }
+  gc =  gdk_gc_new (window);
+  gdk_gc_set_clip_rectangle (gc, clip);
+  clipping_gc_list = g_slist_append (clipping_gc_list, gc);
+  return gc;
+}
 
 static GtkWidget *print_ancestors (GtkWidget *widget)
 {
@@ -1143,15 +1173,17 @@ draw_nimbus_box (GtkStyle      *style,
   if ((state_type != GTK_STATE_INSENSITIVE) && drop_shadow && draw_bottom)
     {
       nimbus_init_button_drop_shadow (rc, state_type, width);
-      gdk_draw_pixbuf (window,
-		       get_clipping_gc (window, area),
-		       rc->drop_shadow[state_type],
-		       0,0,
-		       x + bottom_left_c_w, 
-		       y + height-1,
-		       width - (bottom_left_c_w + bottom_right_c_w),
-		       gdk_pixbuf_get_height (rc->drop_shadow[state_type]),
-		       GDK_RGB_DITHER_NONE,0,0);
+
+      if (check_sane_pixbuf_value (0, 0, width - (bottom_left_c_w + bottom_right_c_w),  gdk_pixbuf_get_height (rc->drop_shadow[state_type]), rc->drop_shadow[state_type]))
+	gdk_draw_pixbuf (window,
+			 get_clipping_gc (window, area),
+			 rc->drop_shadow[state_type],
+			 0,0,
+			 x + bottom_left_c_w, 
+			 y + height-1,
+			 width - (bottom_left_c_w + bottom_right_c_w),
+			 gdk_pixbuf_get_height (rc->drop_shadow[state_type]),
+			 GDK_RGB_DITHER_NONE,0,0);
     }
 }
 
@@ -1218,7 +1250,6 @@ draw_progress (GtkStyle      *style,
 		   gdk_pixbuf_get_width (progress->corner_bottom_left),
 		   gdk_pixbuf_get_height (progress->corner_bottom_left),
 		   GDK_RGB_DITHER_NONE,0,0);
-
   gdk_draw_pixbuf (window,			 
 		   get_clipping_gc (window, area),
 		   progress->corner_bottom_right,
@@ -1229,46 +1260,52 @@ draw_progress (GtkStyle      *style,
 		   gdk_pixbuf_get_height (progress->corner_bottom_right),
 		   GDK_RGB_DITHER_NONE,0,0);
   /* lines */
-  
-  gdk_draw_pixbuf (window,			 
-		   get_clipping_gc (window, area),
-		   progress->border_left,
-		   0,0,
-		   x - gdk_pixbuf_get_width (progress->border_left), 
-		   y,
-		   gdk_pixbuf_get_width (progress->border_left),
-		   height - 1,
-		   GDK_RGB_DITHER_NONE,0,0);
 
-  gdk_draw_pixbuf (window,			 
-		   get_clipping_gc (window, area),
-		   progress->border_right,
-		   0,0,
-		   x + width + 1,
-		   y,
-		   gdk_pixbuf_get_width (progress->border_right),
-		   height - 1,
-		   GDK_RGB_DITHER_NONE,0,0);
- 
-  gdk_draw_pixbuf (window,			 
-		   get_clipping_gc (window, area),
-		   progress->border_top,
-		   0,0,
-		   x, 
-		   y - gdk_pixbuf_get_height (progress->border_top),
-		   width + 1,
-		   gdk_pixbuf_get_height (progress->border_top),
-		   GDK_RGB_DITHER_NONE,0,0);
+  if (check_sane_pixbuf_value (0, 0, gdk_pixbuf_get_width (progress->border_left), height - 1, progress->border_left))
+    gdk_draw_pixbuf (window,			 
+		     get_clipping_gc (window, area),
+		     progress->border_left,
+		     0,0,
+		     x - gdk_pixbuf_get_width (progress->border_left), 
+		     y,
+		     gdk_pixbuf_get_width (progress->border_left),
+		     height - 1,
+		     GDK_RGB_DITHER_NONE,0,0);
 
-  gdk_draw_pixbuf (window,			 
-		   get_clipping_gc (window, area),
-		   progress->border_bottom,
-		   0,0,
-		   x, 
-		   y + height - gdk_pixbuf_get_height (progress->border_bottom) + 1,
-		   width + 1,
-		   gdk_pixbuf_get_height (progress->border_bottom),
-		   GDK_RGB_DITHER_NONE,0,0);
+  if (check_sane_pixbuf_value (0,0, gdk_pixbuf_get_width (progress->border_right), height - 1, progress->border_right))
+
+    gdk_draw_pixbuf (window,			 
+		     get_clipping_gc (window, area),
+		     progress->border_right,
+		     0,0,
+		     x + width + 1,
+		     y,
+		     gdk_pixbuf_get_width (progress->border_right),
+		     height - 1,
+		     GDK_RGB_DITHER_NONE,0,0);
+
+
+  if (check_sane_pixbuf_value (0,0,width + 1,  gdk_pixbuf_get_height (progress->border_top),  progress->border_top))
+    gdk_draw_pixbuf (window,			 
+		     get_clipping_gc (window, area),
+		     progress->border_top,
+		     0,0,
+		     x, 
+		     y - gdk_pixbuf_get_height (progress->border_top),
+		     width + 1,
+		     gdk_pixbuf_get_height (progress->border_top),
+		     GDK_RGB_DITHER_NONE,0,0);
+
+  if (check_sane_pixbuf_value (0,0, width + 1,   gdk_pixbuf_get_height (progress->border_bottom), progress->border_bottom))
+    gdk_draw_pixbuf (window,			 
+		     get_clipping_gc (window, area),
+		     progress->border_bottom,
+		     0,0,
+		     x, 
+		     y + height - gdk_pixbuf_get_height (progress->border_bottom) + 1,
+		     width + 1,
+		     gdk_pixbuf_get_height (progress->border_bottom),
+		     GDK_RGB_DITHER_NONE,0,0);
 }
 
 
@@ -1343,7 +1380,7 @@ draw_box (GtkStyle      *style,
   static gboolean should_draw_defaultbutton = FALSE;
   NimbusData* rc = NIMBUS_RC_STYLE (style->rc_style)->data;
   
-  /* printf ("draw box state %s %s\n", state_names [state_type], state_names [GTK_WIDGET_STATE(widget)]); */
+  /* printf ("draw box state %s %s\n", state_names [state_type], state_names [GTK_WIDGET_STATE(widget)]);  */
   if (DETAIL ("button") || DETAIL ("optionmenu"))
     {
       NimbusButton *button_type = rc->button[state_type];
