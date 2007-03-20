@@ -1,3 +1,8 @@
+2007-03-20 Erwann Chenede - <erwann.chenede@sun.com>
+
+  * gtk-engine/nimbus_style.c : added sanity checks to fix warning 
+    in acroread and firefox
+
 2007-03-14 Erwann Chenede - <erwann.chenede@sun.com>
 
   * gtk-engine/nimbus_style.c : added sanity checks to fix : 6514195, 6530991.

@@ -276,7 +276,7 @@ draw_arrow (GtkStyle      *style,
 	  scroll_button_x = (scroll_trough_x + scroll_trough_width) - gdk_pixbuf_get_width (tmp_pb);
 	}
 
-      if (tmp_pb)
+      if (tmp_pb && check_sane_pixbuf_value (0,0, scroll_button_width + offset_width, scroll_button_height + offset_height, tmp_pb))
  	gdk_draw_pixbuf (window,
 			 NULL, /* don't clip as we're drawing outside the boundary one purpose */
 			 tmp_pb,
@@ -330,7 +330,11 @@ draw_arrow (GtkStyle      *style,
 	    }
 	}
 
-      if (tmp_pb && !firefox_hack)   
+      if (tmp_pb && !firefox_hack && 
+	  check_sane_pixbuf_value ((arrow_type == GTK_ARROW_DOWN || arrow_type == GTK_ARROW_UP) ? 1 : 0,
+				   (arrow_type == GTK_ARROW_LEFT || arrow_type == GTK_ARROW_RIGHT) ? 1 : 0,
+				   gdk_pixbuf_get_width (tmp_pb) + offset_width,
+				   gdk_pixbuf_get_height (tmp_pb) + offset_height, tmp_pb))   
 	  gdk_draw_pixbuf (window,
 			   NULL, /* don't clip as we're drawing outside the boundary one purpose */
 			   tmp_pb,
@@ -1801,31 +1805,36 @@ draw_slider (GtkStyle      *style,
 	  sb = rc->scroll_h[state_type];
 	  if (area)
 	    area->height++; /* grow clip area for the slider shadow */
-	  gdk_draw_pixbuf (window,			 
-			   get_clipping_gc (window, area),
-			   sb->slider_start,
-			   0,0,
-			   x,y-1,
-			   gdk_pixbuf_get_width (sb->slider_start),
-			   gdk_pixbuf_get_height (sb->slider_start),
-			   GDK_RGB_DITHER_NONE,0,0);
-	  gdk_draw_pixbuf (window,			 
-			   get_clipping_gc (window, area),
-			   sb->slider_mid,
-			   0,0,
-			   x+gdk_pixbuf_get_width (sb->slider_start), y -1,
-			   width - (gdk_pixbuf_get_width (sb->slider_start) + gdk_pixbuf_get_width (sb->slider_end)),
-			   gdk_pixbuf_get_height (sb->slider_mid),
-			   GDK_RGB_DITHER_NONE,0,0);
-	  gdk_draw_pixbuf (window,			 
-			   get_clipping_gc (window, area),
-			   sb->slider_end,
-			   0,0,
-			   x+gdk_pixbuf_get_width (sb->slider_start)+ (width - (gdk_pixbuf_get_width (sb->slider_start) + gdk_pixbuf_get_width (sb->slider_end))),
-			   y - 1,
-			   gdk_pixbuf_get_width (sb->slider_end),
-			   gdk_pixbuf_get_height (sb->slider_end),
-			   GDK_RGB_DITHER_NONE,0,0);
+	    gdk_draw_pixbuf (window,			 
+			     get_clipping_gc (window, area),
+			     sb->slider_start,
+			     0,0,
+			     x,y-1,
+			     gdk_pixbuf_get_width (sb->slider_start),
+			     gdk_pixbuf_get_height (sb->slider_start),
+			     GDK_RGB_DITHER_NONE,0,0);
+
+	  if (check_sane_pixbuf_value (0,0, 
+				       width - (gdk_pixbuf_get_width (sb->slider_start) + gdk_pixbuf_get_width (sb->slider_end)),
+				       gdk_pixbuf_get_height (sb->slider_mid), sb->slider_mid))
+	    gdk_draw_pixbuf (window,			 
+			     get_clipping_gc (window, area),
+			     sb->slider_mid,
+			     0,0,
+			     x+gdk_pixbuf_get_width (sb->slider_start), y -1,
+			     width - (gdk_pixbuf_get_width (sb->slider_start) + gdk_pixbuf_get_width (sb->slider_end)),
+			     gdk_pixbuf_get_height (sb->slider_mid),
+			     GDK_RGB_DITHER_NONE,0,0);
+
+	    gdk_draw_pixbuf (window,			 
+			     get_clipping_gc (window, area),
+			     sb->slider_end,
+			     0,0,
+			     x+gdk_pixbuf_get_width (sb->slider_start)+ (width - (gdk_pixbuf_get_width (sb->slider_start) + gdk_pixbuf_get_width (sb->slider_end))),
+			     y - 1,
+			     gdk_pixbuf_get_width (sb->slider_end),
+			     gdk_pixbuf_get_height (sb->slider_end),
+			     GDK_RGB_DITHER_NONE,0,0);
 	}
       else
 	{
@@ -1833,50 +1842,53 @@ draw_slider (GtkStyle      *style,
 	  sb = rc->scroll_v[state_type]; 
 	  if (area)
 	    area->width++; /* grow clip area for the slider shadow */
-	  gdk_draw_pixbuf (window,			 
-			   get_clipping_gc (window, area),
-			   sb->slider_start,
-			   0,0,
-			   x - 1,y,
-			   gdk_pixbuf_get_width (sb->slider_start),
-			   gdk_pixbuf_get_height (sb->slider_start),
-			   GDK_RGB_DITHER_NONE,0,0);
-	  gdk_draw_pixbuf (window,			 
-			   get_clipping_gc (window, area),
-			   sb->slider_mid,
-			   0,0,
-			   x - 1, y + gdk_pixbuf_get_height (sb->slider_start),
-			   gdk_pixbuf_get_width (sb->slider_mid),
-			   height - (gdk_pixbuf_get_height (sb->slider_start) + gdk_pixbuf_get_height (sb->slider_end)) ,
-			   GDK_RGB_DITHER_NONE,0,0);
-	  gdk_draw_pixbuf (window,			 
-			   get_clipping_gc (window, area),
-			   sb->slider_end,
-			   0,0,
-			   x - 1,
-			   y + gdk_pixbuf_get_height (sb->slider_start) + (height - (gdk_pixbuf_get_height (sb->slider_start) + gdk_pixbuf_get_height (sb->slider_end))),
-			   gdk_pixbuf_get_width (sb->slider_end),
-			   gdk_pixbuf_get_height (sb->slider_end),
-			   GDK_RGB_DITHER_NONE,0,0);
+	    gdk_draw_pixbuf (window,			 
+			     get_clipping_gc (window, area),
+			     sb->slider_start,
+			     0,0,
+			     x - 1,y,
+			     gdk_pixbuf_get_width (sb->slider_start),
+			     gdk_pixbuf_get_height (sb->slider_start),
+			     GDK_RGB_DITHER_NONE,0,0);
+
+	  if (check_sane_pixbuf_value (0,0, gdk_pixbuf_get_width (sb->slider_mid),
+				       height - (gdk_pixbuf_get_height (sb->slider_start) + gdk_pixbuf_get_height (sb->slider_end)) ,sb->slider_mid))
+	    gdk_draw_pixbuf (window,			 
+			     get_clipping_gc (window, area),
+			     sb->slider_mid,
+			     0,0,
+			     x - 1, y + gdk_pixbuf_get_height (sb->slider_start),
+			     gdk_pixbuf_get_width (sb->slider_mid),
+			     height - (gdk_pixbuf_get_height (sb->slider_start) + gdk_pixbuf_get_height (sb->slider_end)) ,
+			     GDK_RGB_DITHER_NONE,0,0);
+	    gdk_draw_pixbuf (window,			 
+			     get_clipping_gc (window, area),
+			     sb->slider_end,
+			     0,0,
+			     x - 1,
+			     y + gdk_pixbuf_get_height (sb->slider_start) + (height - (gdk_pixbuf_get_height (sb->slider_start) + gdk_pixbuf_get_height (sb->slider_end))),
+			     gdk_pixbuf_get_width (sb->slider_end),
+			     gdk_pixbuf_get_height (sb->slider_end),
+			     GDK_RGB_DITHER_NONE,0,0);
 	}
     }
   else if (DETAIL ("hscale") || DETAIL ("vscale"))
     {
       GdkPixbuf *button = DETAIL ("hscale") ? rc->scale_h[state_type]->button : rc->scale_v[state_type]->button;
-      gdk_draw_pixbuf (window,			 
-		       NULL, /* don't clip here as the button is 1 pix larger */
-		       button,
-		       0,0,
-		       x, y,
-		       gdk_pixbuf_get_width (button),
-		       gdk_pixbuf_get_height (button),
-		       GDK_RGB_DITHER_NONE,0,0);     
+	gdk_draw_pixbuf (window,			 
+			 NULL, /* don't clip here as the button is 1 pix larger */
+			 button,
+			 0,0,
+			 x, y,
+			 gdk_pixbuf_get_width (button),
+			 gdk_pixbuf_get_height (button),
+			 GDK_RGB_DITHER_NONE,0,0);     
     }
   else
     parent_class->draw_slider (style, window, state_type, shadow_type, area, widget, detail, x, y, width, height, orientation);
 
   verbose ("draw\t slider \t-%s-\n", detail ? detail : "no detail");
-  
+
 }
 
 /**************************************************************************/
