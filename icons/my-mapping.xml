@@ -15,6 +15,16 @@
 	</icon>
     </context>
      <context dir="apps">
+	<icon name="administration">
+	<link>services</link>
+	</icon>
+	<icon name="administration-users-and-groups">
+	<link>users</link>
+	<link>user-info</link>
+	</icon>
+	<icon name="administration-time-and-date">
+	<link>time</link>
+	</icon>
 	<icon name="office-envince">
 	<link>postscript-viewer</link>
 	<link>postscript-viewer</link>
@@ -208,6 +218,15 @@
 	</icon>
       </context>
       <context dir="places">
+      	<icon name="nfs">
+	    <link>gnome-fs-nfs</link>
+	</icon>
+      	<icon name="smb">
+	    <link>gnome-fs-smb</link>
+	</icon>
+      	<icon name="share">
+	    <link>shares</link>
+	</icon>
 	<icon name="folder-drag-accept">
 	    <link>gnome-fs-directory-accept</link>
    	    <link>stock_open</link>

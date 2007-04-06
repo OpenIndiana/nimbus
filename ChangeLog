@@ -1,3 +1,11 @@
+2007-04-06 Erwann Chenede - <erwann.chenede@sun.com>
+
+  * icons/my-mapping.xml : added icon alias fix for 6508241
+  * icons/*/*.png :
+  * metacity/*.png :
+  * gtk-engine/*/*.png : svn surgery, removed and added the binary 
+    files as the initial svn import truncated every files
+
 2007-03-20 Erwann Chenede - <erwann.chenede@sun.com>
 
   * gtk-engine/nimbus_style.c : added sanity checks to fix warning 
