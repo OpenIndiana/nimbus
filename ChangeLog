@@ -1,3 +1,23 @@
+2007-06-11 Erwann Chenede - <erwann.chenede@sun.com>
+
+  * gtk-engine/nimbus_rc_style.c  
+  * gtk-engine/images/check-disable-inconsistent.png
+  * gtk-engine/images/check-prelight-inconsistent.png
+  * gtk-engine/images/radio-disable-inconsistent.png
+  * gtk-engine/images/radio-prelight-inconsistent.png
+  * gtk-engine/images/radio-normal-inconsistent.png
+  * gtk-engine/images/check-normal-inconsistent.png
+  * gtk-engine/images/radio-active-inconsistent.png
+  * gtk-engine/images/check-active-inconsistent.png
+  * gtk-engine/images/Makefile.am
+  * gtk-engine/nimbus_rc_style.h
+  * gtk-engine/nimbus_style.c : implemented missing 
+    inconsistent state for check and radio buttons. fixes 6541420.
+    Stopped assuming draw_progress only draw progress bars
+    as custom progress exist in the wild. See ekiga
+    GtkLevelMeter for example.
+
+
 2007-04-06 Erwann Chenede - <erwann.chenede@sun.com>
 
   * icons/my-mapping.xml : added icon alias fix for 6508241

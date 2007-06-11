@@ -1208,7 +1208,10 @@ draw_progress (GtkStyle      *style,
 	       gint           height)
 {	  
   GtkOrientation orientation = GTK_ORIENTATION_HORIZONTAL;
-  GtkProgressBarOrientation p_orientation = gtk_progress_bar_get_orientation (GTK_PROGRESS_BAR (widget));
+  GtkProgressBarOrientation p_orientation = GTK_PROGRESS_LEFT_TO_RIGHT; /*assuming horizontal by default */
+
+  if (GTK_IS_PROGRESS_BAR (widget)) 
+    p_orientation = gtk_progress_bar_get_orientation (GTK_PROGRESS_BAR (widget));
 
   nimbus_init_progress (NIMBUS_RC_STYLE (style->rc_style)->data, height, width + 1);
   
@@ -1745,9 +1748,14 @@ draw_check (GtkStyle      *style,
 
   if (shadow_type == GTK_SHADOW_ETCHED_IN) /* insensitive */
     {
-      state_type = GTK_STATE_INSENSITIVE;
-      if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)))
-	  image = rc->radio_set;
+      if (GTK_IS_TOGGLE_BUTTON (widget))
+	{
+	  if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)))
+	    image = rc->check_inconsistent;
+	}
+      if (GTK_IS_TREE_VIEW (widget)) 
+	    image = rc->check_inconsistent;
+
     }
 
   if (GTK_IS_MENU_ITEM (widget))
@@ -1915,14 +1923,15 @@ draw_option (GtkStyle      *style,
   
   if (shadow_type == GTK_SHADOW_ETCHED_IN) /* insensitive */
     {
-      state_type = GTK_STATE_INSENSITIVE;
       if (GTK_IS_CHECK_MENU_ITEM (widget) && 
 	  gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM (widget)))
-	  image = rc->radio_set;
+	  image = rc->radio_inconsistent;
 
       if (GTK_IS_TOGGLE_BUTTON (widget) && 
 	  gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)))
-	  image = rc->radio_set;
+	  image = rc->radio_inconsistent;
+      if (GTK_IS_TREE_VIEW (widget))
+	  image = rc->radio_inconsistent;
     }
 
   if (GTK_IS_MENU_ITEM (widget))

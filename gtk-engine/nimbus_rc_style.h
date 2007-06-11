@@ -155,9 +155,11 @@ struct _NimbusData
   GdkPixbuf*		arrow_down[5];
   GdkPixbuf*		check_not_set[5];
   GdkPixbuf*		check_set[5];
+  GdkPixbuf*		check_inconsistent[5];
   GdkPixbuf*		check_menu_set[5];
   GdkPixbuf*		radio_not_set[5];
   GdkPixbuf*		radio_set[5];
+  GdkPixbuf*		radio_inconsistent[5];
   GdkPixbuf*		radio_menu_set[5];
   NimbusScrollbar*	scroll_h[5];
   NimbusScrollbar*	scroll_v[5];

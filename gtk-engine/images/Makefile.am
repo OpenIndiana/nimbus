@@ -40,20 +40,28 @@ IMAGES = \
 	arrow-top-normal.png				\
 	check-active-not-set.png			\
 	check-active-set.png				\
+	check-active-inconsistent.png			\
 	check-disable-not-set.png			\
 	check-disable-set.png				\
+	check-disable-inconsistent.png			\
 	check-normal-not-set.png			\
 	check-normal-set.png				\
+	check-normal-inconsistent.png			\
 	check-prelight-not-set.png			\
 	check-prelight-set.png				\
+	check-prelight-inconsistent.png			\
 	radio-active-not-set.png			\
 	radio-active-set.png				\
+	radio-active-inconsistent.png			\
 	radio-disable-not-set.png			\
 	radio-disable-set.png				\
+	radio-disable-inconsistent.png			\
 	radio-normal-not-set.png			\
 	radio-normal-set.png				\
+	radio-normal-inconsistent.png			\
 	radio-prelight-not-set.png			\
 	radio-prelight-set.png				\
+	radio-prelight-inconsistent.png			\
 	scroll-bar-h-bkg-disable.png			\
 	scroll-bar-h-bkg-normal.png			\
 	scroll-bar-h-left-active.png			\

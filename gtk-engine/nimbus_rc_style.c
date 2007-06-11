@@ -1087,6 +1087,12 @@ static void nimbus_data_rc_style_init (NimbusRcStyle* nimbus_rc)
   rc->check_set[GTK_STATE_SELECTED] = rc->check_set[GTK_STATE_ACTIVE];
   rc->check_set[GTK_STATE_INSENSITIVE] = gdk_pixbuf_new_from_inline (-1, check_disable_set, FALSE, error);
 
+  rc->check_inconsistent[GTK_STATE_NORMAL] = gdk_pixbuf_new_from_inline (-1, check_normal_inconsistent, FALSE, error);
+  rc->check_inconsistent[GTK_STATE_PRELIGHT] = gdk_pixbuf_new_from_inline (-1, check_prelight_inconsistent, FALSE, error);
+  rc->check_inconsistent[GTK_STATE_ACTIVE] = gdk_pixbuf_new_from_inline (-1, check_active_inconsistent, FALSE, error);
+  rc->check_inconsistent[GTK_STATE_SELECTED] = rc->check_inconsistent[GTK_STATE_ACTIVE];
+  rc->check_inconsistent[GTK_STATE_INSENSITIVE] = gdk_pixbuf_new_from_inline (-1, check_disable_inconsistent, FALSE, error);
+
   rc->check_menu_set[GTK_STATE_NORMAL] = gdk_pixbuf_new_from_inline (-1, check_menu_normal_set, FALSE, error);
   rc->check_menu_set[GTK_STATE_PRELIGHT] = gdk_pixbuf_new_from_inline (-1, check_menu_prelight_set, FALSE, error);
   rc->check_menu_set[GTK_STATE_ACTIVE] = rc->check_set[GTK_STATE_PRELIGHT];
@@ -1104,6 +1110,12 @@ static void nimbus_data_rc_style_init (NimbusRcStyle* nimbus_rc)
   rc->radio_set[GTK_STATE_ACTIVE] = gdk_pixbuf_new_from_inline (-1, radio_active_set, FALSE, error);
   rc->radio_set[GTK_STATE_SELECTED] = rc->radio_set[GTK_STATE_ACTIVE];
   rc->radio_set[GTK_STATE_INSENSITIVE] = gdk_pixbuf_new_from_inline (-1, radio_disable_set, FALSE, error);
+
+  rc->radio_inconsistent[GTK_STATE_NORMAL] = gdk_pixbuf_new_from_inline (-1, radio_normal_inconsistent, FALSE, error);
+  rc->radio_inconsistent[GTK_STATE_PRELIGHT] = gdk_pixbuf_new_from_inline (-1, radio_prelight_inconsistent, FALSE, error);
+  rc->radio_inconsistent[GTK_STATE_ACTIVE] = gdk_pixbuf_new_from_inline (-1, radio_active_inconsistent, FALSE, error);
+  rc->radio_inconsistent[GTK_STATE_SELECTED] = rc->radio_inconsistent[GTK_STATE_ACTIVE];
+  rc->radio_inconsistent[GTK_STATE_INSENSITIVE] = gdk_pixbuf_new_from_inline (-1, radio_disable_inconsistent, FALSE, error);
 
   rc->radio_menu_set[GTK_STATE_NORMAL] = gdk_pixbuf_new_from_inline (-1, radio_menu_normal_set, FALSE, error);
   rc->radio_menu_set[GTK_STATE_PRELIGHT] = gdk_pixbuf_new_from_inline (-1, radio_menu_prelight_set, FALSE, error);
