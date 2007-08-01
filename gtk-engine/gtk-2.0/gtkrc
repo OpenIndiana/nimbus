@@ -19,6 +19,7 @@ style "entry"  = "default"
   bg[NORMAL] = "white"
   bg[INSENSITIVE] = "#dee0e5"
   base[INSENSITIVE] = "#dee0e5"
+  base[SELECTED] = "#0e5a8f"
   engine "nimbus"
   {
   }

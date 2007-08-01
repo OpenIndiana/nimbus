@@ -1,3 +1,9 @@
+2007-08-01 Erwann Chenede - <erwann.chenede@sun.com>
+
+  * gtk-engine/gtk-2.0/gtkrc: added a different selected color 
+    to fix second part of the nimbus problem described in 6372959
+  * configure.in : bumped release.
+
 2007-06-11 Erwann Chenede - <erwann.chenede@sun.com>
 
   * gtk-engine/nimbus_rc_style.c  
