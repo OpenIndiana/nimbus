@@ -6,7 +6,7 @@ style "default"
   bg[PRELIGHT]      = "#e9ecf2" 
   bg[SELECTED]	    = "#39698a" 
   bg[INSENSITIVE]   = "#efebe5" 
-  bg[ACTIVE]        = "#d6d9df" 
+  bg[ACTIVE]        = "#bec1c7" 
 
   engine "nimbus" 
     {

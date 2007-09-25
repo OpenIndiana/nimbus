@@ -1,3 +1,9 @@
+2007-09-25 Erwann Chenede - <erwann.chenede@sun.com>
+
+  * gtk-engine/gtk-2.0/gtkrc: changed the bg[ACTIVE] to another 
+    color to avoid OO tarball selected item to look the same as 
+    unselected. Bug report and original patch by Thierry Thévoz.
+
 2007-08-01 Erwann Chenede - <erwann.chenede@sun.com>
 
   * gtk-engine/gtk-2.0/gtkrc: added a different selected color 
