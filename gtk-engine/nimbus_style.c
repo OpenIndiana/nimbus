@@ -1073,7 +1073,11 @@ draw_flat_box (GtkStyle      *style,
 	       gint           width,
 	       gint           height)
 {
-  parent_class->draw_flat_box (style, window, state_type, shadow_type, area,
+if (DETAIL ("entry_bg"))
+    gdk_draw_rectangle (window, style->white_gc, TRUE,
+			x, y, width, height);
+
+ parent_class->draw_flat_box (style, window, state_type, shadow_type, area,
 			       widget, detail, x, y, width, height);
 
   verbose ("draw\t flat box \t-%s-\n", detail ? detail : "no detail");

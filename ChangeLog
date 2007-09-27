@@ -1,3 +1,10 @@
+2007-09-27 Erwann Chenede - <erwann.chenede@sun.com>
+
+  * gtk-engine/nimbus_style.c: explicitly draw the flat box 
+    as white when the details string is entry_bg. This is a 
+    special case for OpenOffice text entry with spinner.
+    Bug reported by Thierry Thévoz.
+
 2007-09-25 Erwann Chenede - <erwann.chenede@sun.com>
 
   * gtk-engine/gtk-2.0/gtkrc: changed the bg[ACTIVE] to another 
