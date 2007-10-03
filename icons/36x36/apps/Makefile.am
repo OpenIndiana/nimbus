@@ -4,8 +4,6 @@ iconsdir = $(themedir)/$(size)/$(context)
 icons_DATA = 				 		\
 		accessories-calculator.png 		\
 		advanced-directory.png 		\
-		gnome-spinner-rest.png 		\
-		gnome-spinner.png 		\
 		preferences-desktop-display.png 		\
 		preferences-desktop-screen-resolution.png 		\
 		searchtool.png 		\

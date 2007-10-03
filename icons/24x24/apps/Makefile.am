@@ -33,7 +33,6 @@ icons_DATA = 				 		\
 		preferences-palmosdevices.png 		\
 		preferences-settings-sound.png 		\
 		preferences-system.png 		\
-		process-working.png 		\
 		programs.png 		\
 		searchtool.png 		\
 		sound-java-multimedia-player.png 		\

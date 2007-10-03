@@ -1,4 +1,5 @@
 #! /bin/bash
+# $1 is the searched pattern $2 is the pattern to be changed $3 is the replacement pattern
 
 for file in `find . -name "$1*"`
 #for file in `find . -name "network.*"  | grep -v actions`
@@ -7,5 +8,3 @@ do
   echo "moving $file to $new_name"
   mv $file $new_name
 done
-
-

@@ -12,7 +12,9 @@ icons_DATA = 				 		\
 		smb.png 		\
 		ssh.png 		\
 		user-desktop.png 		\
-		user-home.png
+		user-home.png 		\
+		user-trash-full.png 		\
+		user-trash.png
 EXTRA_DIST = $(icons_DATA)
 
 install-data-local: install-iconsDATA

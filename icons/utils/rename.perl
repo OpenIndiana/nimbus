@@ -1,4 +1,5 @@
 #!/usr/bin/perl
+#generate a partial index.theme based on a directory list provided as an argument
 
 
 ($filename) = @ARGV;

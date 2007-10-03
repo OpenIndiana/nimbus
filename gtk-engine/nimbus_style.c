@@ -329,7 +329,6 @@ draw_arrow (GtkStyle      *style,
 	      offset_height -=2;
 	    }
 	}
-
       if (tmp_pb && !firefox_hack && 
 	  check_sane_pixbuf_value ((arrow_type == GTK_ARROW_DOWN || arrow_type == GTK_ARROW_UP) ? 1 : 0,
 				   (arrow_type == GTK_ARROW_LEFT || arrow_type == GTK_ARROW_RIGHT) ? 1 : 0,
@@ -562,7 +561,12 @@ draw_shadow (GtkStyle        *style,
 	  get_ancestor_of_type (widget, "GtkSpinButton") ||
 	  get_ancestor_of_type (widget, "GnomeEntry"))
 	general_case = FALSE; /*combo case */
-      
+
+      /* Special case for Star/OpenOffice Spinbutton redraw problem */
+      if (get_ancestor_of_type (widget, "GtkSpinButton") && get_ancestor_of_type (widget, "GtkFixed"))
+	gdk_draw_rectangle (window, style->white_gc, TRUE,
+			    x+2, y+2, width-4, height-4);
+
       /* work around for a bug in gtkentry were the state isn't set */
       if (widget)
 	state_type = GTK_WIDGET_STATE(widget);
@@ -931,8 +935,8 @@ draw_handle (GtkStyle      *style,
   if ((DETAIL ("handlebox") || DETAIL ("dockitem")) && (get_ancestor_of_type (widget, "PanelToplevel") == NULL))
     {
       height--;
-      if (get_ancestor_of_type (widget, "GtkFixed")) /* heuristic for soffice */
-	height--;
+      if (get_ancestor_of_type (widget, "GtkFixed") && get_ancestor_of_type (widget,"GtkHandleBox")) /* heuristic for soffice */
+	  height--;
 
       if (orientation == GTK_ORIENTATION_VERTICAL)
 	{
@@ -1073,10 +1077,6 @@ draw_flat_box (GtkStyle      *style,
 	       gint           width,
 	       gint           height)
 {
-if (DETAIL ("entry_bg"))
-    gdk_draw_rectangle (window, style->white_gc, TRUE,
-			x, y, width, height);
-
  parent_class->draw_flat_box (style, window, state_type, shadow_type, area,
 			       widget, detail, x, y, width, height);
 
@@ -1680,7 +1680,19 @@ draw_box (GtkStyle      *style,
   else if (DETAIL ("bar"))
     draw_progress (style, window, state_type, shadow_type, area, widget, detail, x, y, width, height);
   else if (DETAIL ("toolbar") || DETAIL ("dockitem_bin") || DETAIL ("handlebox_bin"))
-      gdk_draw_line (window, nimbus_realize_color (style, rc->menubar_border, area), x,y+height-1,x+width-1,y+height-1);
+    {
+      GtkOrientation orientation = GTK_ORIENTATION_HORIZONTAL;
+      if (GTK_IS_TOOLBAR (widget))
+	  orientation = gtk_toolbar_get_orientation (widget);
+
+      if (orientation == GTK_ORIENTATION_HORIZONTAL)
+	  gdk_draw_line (window, nimbus_realize_color (style, rc->menubar_border, area), x,y+height-1,x+width-1,y+height-1); 
+      else
+	  {
+	    gdk_draw_line (window, nimbus_realize_color (style, rc->menubar_border, area), x,y,x,y+height-1); 
+	    gdk_draw_line (window, nimbus_realize_color (style, rc->menubar_border, area), x+width-1,y,x+width-1,y+height-1); 
+	  }
+    }
   else if (DETAIL ("menu"))
     {
       GdkGC *start, *mid_start, *mid_end, *end;
@@ -2002,7 +2014,7 @@ draw_hline (GtkStyle     *style,
   NimbusData *rc = NIMBUS_RC_STYLE (style->rc_style)->data;
 
   gdk_draw_line (window, nimbus_realize_color (style, rc->hline, area), x1,y,x2,y);
-  /* parent_class->draw_hline (style, window, state_type, area, widget, detail, x1, x2, y);   */
+  
   verbose ("draw\t hline \t-%s-\n", detail ? detail : "no detail");
 }
 
@@ -2019,17 +2031,10 @@ draw_vline (GtkStyle     *style,
 	    gint          y2,
 	    gint          x)
 {
-  int i;
   NimbusData *rc = NIMBUS_RC_STYLE (style->rc_style)->data;
   
-  if (!get_ancestor_of_type (widget, "GtkComboBox"))
-    {
-      GdkGC *color = nimbus_realize_color (style, rc->vline, area);
-      for (i=0; i <= (y2 - y1); i += 3)
-	  gdk_draw_line (window, color, x, y1+i, x, y1+i);
-	  
-      /* parent_class->draw_vline (style, window, state_type, area, widget, detail, y1, y2, x); */
-    }
+  gdk_draw_line (window, nimbus_realize_color (style, rc->hline, area), x,y1,x,y2);
+
   verbose ("draw\t vline \t-%s-\n", detail ? detail : "no detail");
 }
 

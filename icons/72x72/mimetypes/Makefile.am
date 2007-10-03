@@ -26,6 +26,7 @@ icons_DATA = 				 		\
 		gnome-mime-application-x-class-file.png 		\
 		gnome-mime-application-x-compress.png 		\
 		gnome-mime-application-x-compressed-tar.png 		\
+		gnome-mime-application-x-core.png 		\
 		gnome-mime-application-x-cpio.png 		\
 		gnome-mime-application-x-deb.png 		\
 		gnome-mime-application-x-font-afm.png 		\

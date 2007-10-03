@@ -14,6 +14,11 @@
 	    <link>kcontrol</link>
 	</icon>
     </context>
+    <context dir="animations">
+      <icon name="process-working">
+	<link>gnome-spinner</link>
+      </icon>
+    </context>
      <context dir="apps">
 	<icon name="administration">
 	<link>services</link>
@@ -194,6 +199,9 @@
 	<icon name="gnome-mime-application-x-ogg">
 	    <link>gnome-mime-application-ogg</link>
 	</icon>
+	<icon name="gnome-mime-application-x-backup">
+	    <link>gnome-mime-application-x-trash</link>
+	</icon>	
 	<icon name="gnome-mime-text-x-perl">
 	    <link>gnome-mime-application-x-perl</link>
 	</icon>
@@ -235,13 +243,13 @@
 	<icon name="web">
 	    <link>stock_proxy</link>
 	</icon>
-	<icon name="user-trash_empty">
+	<icon name="user-trash">
 	    <link>gnome-fs-trash-empty</link>
 	    <link>emptytrash</link>
 	    <link>trashcan_empty</link>
 	    <link>gnome-stock-trash</link>
 	</icon>
-	<icon name="user-trash_full">
+	<icon name="user-trash-full">
 	    <link>gnome-fs-trash-full</link>
 	    <link>edittrash</link>
 	    <link>trashcan_full</link>

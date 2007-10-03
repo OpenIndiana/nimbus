@@ -1,3 +1,17 @@
+2007-10-03 Erwann Chenede - <erwann.chenede@sun.com>
+
+  * icons/[1-9].* : added new icons (backup, core, trash)
+    and fixed 6590093
+  * utils/* : added doc about the helper scripts
+  * icons/index.theme.in : added new categories for 6590093
+  * icons/my-mapping.xml : added aliases for the new icons
+  * configure.in : bumped version and added new makefiles
+  * gtk-engine/images/handlebar-* : resized to 10 pix witdh for 6479354
+  * gtk-engine/nimbus_style.c : fixes for 6479354, 6479362
+    new fix for the OOo spinner issue. Use the draw_shadow instead
+    of draw flat box as we can determine the widget type in that 
+    function.
+
 2007-09-27 Erwann Chenede - <erwann.chenede@sun.com>
 
   * gtk-engine/nimbus_style.c: explicitly draw the flat box 

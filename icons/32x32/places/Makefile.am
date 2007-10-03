@@ -14,6 +14,8 @@ icons_DATA = 				 		\
 		smb.png 		\
 		ssh.png 		\
 		start-here.png 		\
+		user-trash-full.png 		\
+		user-trash.png 		\
 		web.png
 EXTRA_DIST = $(icons_DATA)
 

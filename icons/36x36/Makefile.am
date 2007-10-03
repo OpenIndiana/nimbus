@@ -1,1 +1,1 @@
-SUBDIRS=actions apps categories devices places mimetypes 
+SUBDIRS=actions apps categories devices places mimetypes animations
