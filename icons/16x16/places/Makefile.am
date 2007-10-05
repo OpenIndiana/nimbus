@@ -8,9 +8,9 @@ icons_DATA = 				 		\
 		file.png 		\
 		folder-drag-accept.png 		\
 		folder.png 		\
+		gnome-fs-share.png 		\
 		network-server.png 		\
 		network-workgroup.png 		\
-		share.png 		\
 		user-desktop.png 		\
 		user-home.png 		\
 		user-trash-full.png 		\

@@ -7,12 +7,12 @@ icons_DATA = 				 		\
 		file.png 		\
 		folder-drag-accept.png 		\
 		folder.png 		\
-		ftp.png 		\
+		gnome-fs-ftp.png 		\
+		gnome-fs-nfs.png 		\
+		gnome-fs-share.png 		\
+		gnome-fs-smb.png 		\
+		gnome-fs-ssh.png 		\
 		network-workgroup.png 		\
-		nfs.png 		\
-		share.png 		\
-		smb.png 		\
-		ssh.png 		\
 		start-here.png 		\
 		user-trash-full.png 		\
 		user-trash.png 		\

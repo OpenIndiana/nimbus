@@ -1,3 +1,10 @@
+2007-10-05 Erwann Chenede - <erwann.chenede@sun.com>
+
+  * icons/[1-9].* : renamed icons.
+  * icons/..x../places/Makefile.am : fixed shared folders issue 
+    6590041
+  * icons/index.theme.in : fallback theme is now Tango
+
 2007-10-03 Erwann Chenede - <erwann.chenede@sun.com>
 
   * icons/[1-9].* : added new icons (backup, core, trash)
