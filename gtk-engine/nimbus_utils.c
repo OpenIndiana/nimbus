@@ -381,6 +381,8 @@ nimbus_draw_horizontal_gradient (GdkWindow *window,
 		}
 	    }
 	}
+      gdk_gc_set_clip_rectangle (gc, NULL);
+
       /* printf ("color is (%d,%d,%d) x, y, x_end, y_end  = (%d,%d,%d,%d) \n", 
 	      color.red >> 8, color.green >> 8 , color.blue >> 8,
 	       x, y+i, x+width, y+i); */
@@ -459,6 +461,8 @@ nimbus_draw_vertical_gradient (GdkWindow *window,
 	{
 	  /* partial_height not implemented for vertical gradient */
 	}
+      gdk_gc_set_clip_rectangle (gc, NULL);
+
 /*      printf ("color is (%d,%d,%d) x, y, x_end, y_end  = (%d,%d,%d,%d) \n", 
 	      color.red >> 8, color.green >> 8 , color.blue >> 8,
 	       x+i, y+offset_y, x+i, y+ height - offset_h);*/
@@ -484,7 +488,8 @@ nimbus_realize_color (GtkStyle * style,
     gdk_gc_set_clip_rectangle (tmp, clip);
   else
     gdk_gc_set_clip_rectangle (tmp, NULL);
-    return tmp;
+
+  return tmp;
 }
 
 /* modified copy of gdk_pixbuf_nimbus_rotate_simple for compatibility with gtk 2.4

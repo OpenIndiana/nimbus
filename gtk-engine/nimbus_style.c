@@ -1683,7 +1683,7 @@ draw_box (GtkStyle      *style,
     {
       GtkOrientation orientation = GTK_ORIENTATION_HORIZONTAL;
       if (GTK_IS_TOOLBAR (widget))
-	  orientation = gtk_toolbar_get_orientation (widget);
+	  orientation = gtk_toolbar_get_orientation (GTK_TOOLBAR (widget));
 
       if (orientation == GTK_ORIENTATION_HORIZONTAL)
 	  gdk_draw_line (window, nimbus_realize_color (style, rc->menubar_border, area), x,y+height-1,x+width-1,y+height-1); 
