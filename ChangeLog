@@ -1,5 +1,11 @@
 2007-11-21 Erwann Chenede - <erwann.chenede@sun.com>
 
+  * gtk-engine/gtk-2.0/gtkrc : assign tips style to all gtk-toolip*
+    widgets. Bug report by Thierry Thévoz.
+  * configure.in : bumped release
+
+2007-11-21 Erwann Chenede - <erwann.chenede@sun.com>
+
   * icons/..x../devices/network-wire.*.png : added NWAM icons
   * icons/..x../devices/Makefile.amd : added icons
 

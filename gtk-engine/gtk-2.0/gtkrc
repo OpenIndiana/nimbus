@@ -65,4 +65,4 @@ style "tips"
   bg[NORMAL] = "#ffffcc"
 }
 
-widget "gtk-tooltips" style "tips"
+widget "gtk-tooltip*" style "tips"
