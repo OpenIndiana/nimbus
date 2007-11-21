@@ -16,6 +16,8 @@ icons_DATA = 				 		\
 		memory.png 		\
 		modem.png 		\
 		mouse-ball.png 		\
+		network-wired.png 		\
+		network-wireless.png 		\
 		printer-networked.png 		\
 		printer-new.png 		\
 		printer.png 		\

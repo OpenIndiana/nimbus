@@ -4,6 +4,8 @@ iconsdir = $(themedir)/$(size)/$(context)
 icons_DATA = 				 		\
 		audio-card.png 		\
 		input-keyboard.png 		\
+		network-wired.png 		\
+		network-wireless.png 		\
 		printer-networked.png 		\
 		printer-new.png 		\
 		printer.png

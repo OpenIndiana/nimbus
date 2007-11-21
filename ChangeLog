@@ -1,5 +1,10 @@
 2007-11-21 Erwann Chenede - <erwann.chenede@sun.com>
 
+  * icons/..x../devices/network-wire.*.png : added NWAM icons
+  * icons/..x../devices/Makefile.amd : added icons
+
+2007-11-21 Erwann Chenede - <erwann.chenede@sun.com>
+
   * gtk-engine/nimbus_style.c : added proper cast
   * gtk-engine/nimbus_utils.c : remove clipping setting on cached 
     gc. This caused 6626999 as libwnck is accessing the theme style 

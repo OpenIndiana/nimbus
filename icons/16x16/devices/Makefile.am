@@ -12,6 +12,8 @@ icons_DATA = 				 		\
 		media-floppy.png 		\
 		media-zip.png 		\
 		memory.png 		\
+		network-wired.png 		\
+		network-wireless.png 		\
 		printer-new.png 		\
 		printer.png
 EXTRA_DIST = $(icons_DATA)
