@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include <strings.h>
+#include <string.h>
 #include "nimbus_utils.h"
 static void 
 nimbus_draw_horizontal_gradient (GdkWindow *window,

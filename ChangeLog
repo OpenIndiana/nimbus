@@ -1,3 +1,9 @@
+2007-12-20 Erwann Chenede - <erwann.chenede@sun.com>
+
+    patch from Diego "Flameeyes" Pettenò
+  * gtk-engine/nimbus_style.c: make string array const
+  * gtk-engine/nimbus_utils.c: fixed include typo
+
 2007-11-21 Erwann Chenede - <erwann.chenede@sun.com>
 
   * gtk-engine/gtk-2.0/gtkrc : assign tips style to all gtk-toolip*

@@ -8,14 +8,14 @@
 #include "nimbus_rc_style.h"
 #include "nimbus_utils.h"
 
-static char *state_names[5] = {
+static const char *const state_names[5] = {
     "Normal",
     "Active",
     "Prelight",
     "Selected",
     "Insensitive"};
 
-static char *shadow_names[5] = {
+static const char *const shadow_names[5] = {
   "GTK_SHADOW_NONE",
   "GTK_SHADOW_IN",
   "GTK_SHADOW_OUT",
@@ -204,7 +204,7 @@ sanitize_size (GdkWindow      *window,
 
   return set_bg;
 }
-static char *arrow_names[4] = {
+static const char *const arrow_names[4] = {
   "GTK_ARROW_UP",
   "GTK_ARROW_DOWN",
   "GTK_ARROW_LEFT",
