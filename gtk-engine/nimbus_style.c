@@ -1717,13 +1717,16 @@ draw_box (GtkStyle      *style,
     }
   else if (DETAIL ("menubar"))
     {
-      nimbus_draw_gradient (window, style, area, rc->menubar,
-			    x, y, width, height-1, -1, TRUE, 
-			    GTK_ORIENTATION_HORIZONTAL, NO_TAB);
+      if (!get_ancestor_of_type (widget, "PanelMenuBar"))
+	{
+	  nimbus_draw_gradient (window, style, area, rc->menubar,
+				x, y, width, height-1, -1, TRUE, 
+				GTK_ORIENTATION_HORIZONTAL, NO_TAB);
 
-      gdk_draw_line (window, nimbus_realize_color (style, rc->menubar_border, area), 
-		     x,y+height-1,x+width-1,y+height-1);
-      
+	  gdk_draw_line (window, nimbus_realize_color (style, rc->menubar_border, area), 
+			 x,y+height-1,x+width-1,y+height-1);
+	}
+
     }
   else
     {

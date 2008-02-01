@@ -1,3 +1,10 @@
+2008-02-01 Erwann Chenede - <erwann.chenede@sun.com>
+
+  * gtk-engine/nimbus_rc_style.c: fixed a leak (6658010)
+  * gtk-engine/nimbus_style.c: don't draw the gradient 
+    for the gnome-panel "applications" menubar applet.
+  * configure.in: bumped release
+
 2007-12-20 Erwann Chenede - <erwann.chenede@sun.com>
 
     patch from Diego "Flameeyes" Pettenò

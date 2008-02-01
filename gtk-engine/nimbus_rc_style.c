@@ -682,8 +682,10 @@ static void define_arrow_button_states (NimbusData *nimbus_rc, gboolean combo_en
   nimbus_gradient_add_segment (tmp_gradient, "#d8dbe1", "#dadde3",96, 100);
   tmp->gradients = g_slist_append (tmp->gradients, tmp_gradient);
     
-  nimbus_rc->arrow_button[GTK_STATE_INSENSITIVE] = tmp;
-  nimbus_rc->combo_entry_button[GTK_STATE_INSENSITIVE] = tmp;
+  if (combo_entry)
+    nimbus_rc->arrow_button[GTK_STATE_INSENSITIVE] = tmp;
+  else
+    nimbus_rc->combo_entry_button[GTK_STATE_INSENSITIVE] = tmp;
 }
 
 void nimbus_init_scrollbar (NimbusData* rc,
