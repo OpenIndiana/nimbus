@@ -1,3 +1,9 @@
+2008-03-10 Erwann Chenede - <erwann.chenede@sun.com>
+
+  * gtk-engine/nimbus_style.c : ensure the GC clip is reset 
+    before drawing the background. 6446041 and 522 @ defect.opensolaris.org
+  * configure.in : bumped release
+
 2008-02-01 Erwann Chenede - <erwann.chenede@sun.com>
 
   * gtk-engine/nimbus_rc_style.c: fixed a leak (6658010)

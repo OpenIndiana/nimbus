@@ -1697,6 +1697,8 @@ draw_box (GtkStyle      *style,
     {
       GdkGC *start, *mid_start, *mid_end, *end;
       sanitize_size (window, &width, &height);
+      gdk_gc_set_clip_rectangle (style->bg_gc[GTK_STATE_NORMAL], NULL);
+      gdk_draw_rectangle (window, style->bg_gc[GTK_STATE_NORMAL], TRUE, x,y,width-1,height-1);
       gdk_draw_rectangle (window, nimbus_realize_color (style, rc->menu->border, area), FALSE, x,y,width-1,height-1); 
       gdk_draw_line (window, nimbus_realize_color (style, rc->menu->shadow, area), x + width - 2,y+1,x + width - 2,height-2); 
       
