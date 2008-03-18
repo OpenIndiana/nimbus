@@ -740,6 +740,9 @@ draw_box_gap (GtkStyle       *style,
 
   if (area)
     gdk_gc_set_clip_rectangle (style->black_gc, area);
+
+  height--;
+  width--;
   
   switch (gap_side)
     {
@@ -767,7 +770,6 @@ draw_box_gap (GtkStyle       *style,
       break;
     case  GTK_POS_BOTTOM:
       /* box */
-      height--;
       gdk_draw_line (window, style->black_gc, x, y, x, y + height);
       gdk_draw_line (window, style->black_gc, x + width, y, x+width, y + height);
       gdk_draw_line (window, style->black_gc, x, y, x+width, y);
@@ -790,6 +792,7 @@ draw_box_gap (GtkStyle       *style,
     case GTK_POS_LEFT:
       /* box */
       x++;
+      width--;
       gdk_draw_line (window, style->black_gc, x, y, x+width, y);
       gdk_draw_line (window, style->black_gc, x, y+height, x+width, y+height);
       gdk_draw_line (window, style->black_gc, x + width, y, x+width, y + height);
@@ -811,7 +814,6 @@ draw_box_gap (GtkStyle       *style,
           break;
     case GTK_POS_RIGHT:
      /* box */
-      width--;
       gdk_draw_line (window, style->black_gc, x, y, x+width, y);
       gdk_draw_line (window, style->black_gc, x, y+height, x+width, y+height);
       gdk_draw_line (window, style->black_gc, x, y, x, y + height);

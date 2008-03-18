@@ -1,3 +1,9 @@
+2008-03-18 Erwann Chenede - <erwann.chenede@sun.com>
+
+    patch from Eugene Zagidullin
+  * gtk-engine/nimbus_style.c : draw properly the bottom and right 
+    borders of GtkNotebook.
+
 2008-03-10 Erwann Chenede - <erwann.chenede@sun.com>
 
   * gtk-engine/nimbus_style.c : ensure the GC clip is reset 
