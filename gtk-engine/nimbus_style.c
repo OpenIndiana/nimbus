@@ -1392,8 +1392,8 @@ draw_box (GtkStyle      *style,
 {
   static gboolean should_draw_defaultbutton = FALSE;
   NimbusData* rc = NIMBUS_RC_STYLE (style->rc_style)->data;
-  
-  /* printf ("draw box state %s %s\n", state_names [state_type], state_names [GTK_WIDGET_STATE(widget)]);  */
+
+  /* printf ("draw box state %s %s\n", state_names [state_type], state_names [GTK_WIDGET_STATE(widget)]); */
   if (DETAIL ("button") || DETAIL ("optionmenu"))
     {
       NimbusButton *button_type = rc->button[state_type];
@@ -1721,7 +1721,7 @@ draw_box (GtkStyle      *style,
     }
   else if (DETAIL ("menubar"))
     {
-      if (!get_ancestor_of_type (widget, "PanelMenuBar"))
+      if (!get_ancestor_of_type (widget, "PanelMenuBar") && !get_ancestor_of_type (widget,"WnckSelector"))
 	{
 	  nimbus_draw_gradient (window, style, area, rc->menubar,
 				x, y, width, height-1, -1, TRUE, 

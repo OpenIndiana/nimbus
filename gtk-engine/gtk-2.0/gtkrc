@@ -52,6 +52,8 @@ style "PanelFrame"
 }
 
 class "Panel*" style "PanelFrame"
+class "PanelMenuBar" style "default"
+class "WnckSelector" style "default"
 class "GtkMenu*" style "menu"
 class "GtkScale" style "scrollbar"
 class "GtkTreeView" style "entry"

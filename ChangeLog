@@ -1,3 +1,11 @@
+2008-03-25 Erwann Chenede - <erwann.chenede@sun.com>
+
+  * configure.in: bumped release
+  * gtk-engine/gtk-2.0/gtkrc : use default color scheme for panel 
+    menu anw wncklets
+  * gtk-engine/nimbus_style.c : don't draw gradient for wncklets.
+  * icons/32x32/places/start-here.png : added new openSolaris logo
+
 2008-03-18 Erwann Chenede - <erwann.chenede@sun.com>
 
     patch from Eugene Zagidullin
