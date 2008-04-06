@@ -1,0 +1,4 @@
+Before committing always run the theme against :
+gtk-engine/tests/twf 
+StarOffice (menu and preferences)
+Firefox and Thunderbird (menu and preferences)
