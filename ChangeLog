@@ -1,3 +1,9 @@
+2008-04-06 Erwann Chenede - <erwann.chenede@sun.com>
+
+  * configure.in: bumped release
+  * gtk-engine/nimbus_style.c: fix for 6680332. refine the 
+    checks for 6446041 as one of its side effect was 6680332 
+    
 2008-03-25 Erwann Chenede - <erwann.chenede@sun.com>
 
   * configure.in: bumped release

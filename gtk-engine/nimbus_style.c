@@ -7,6 +7,8 @@
 #include "nimbus_style.h"
 #include "nimbus_rc_style.h"
 #include "nimbus_utils.h"
+#include <X11/Xutil.h>
+#include <gdk/gdkx.h>
 
 static const char *const state_names[5] = {
     "Normal",
@@ -1699,8 +1701,23 @@ draw_box (GtkStyle      *style,
     {
       GdkGC *start, *mid_start, *mid_end, *end;
       sanitize_size (window, &width, &height);
-      gdk_gc_set_clip_rectangle (style->bg_gc[GTK_STATE_NORMAL], NULL);
-      gdk_draw_rectangle (window, style->bg_gc[GTK_STATE_NORMAL], TRUE, x,y,width-1,height-1);
+      if (gdk_drawable_get_depth (window) == 8) 
+	{
+	  XClassHint classHint;
+	  int        status;
+	  status = XGetClassHint (GDK_DISPLAY_XDISPLAY (gtk_widget_get_display (widget)), 
+				  GDK_WINDOW_XID ( gtk_widget_get_toplevel (widget)->window), &classHint);
+	  if (status)
+	    {
+	      if (strcmp (classHint.res_name, "gecko") == 0)
+		{
+		  XFree (classHint.res_name);
+		  XFree (classHint.res_class);
+		  gdk_gc_set_clip_rectangle (style->bg_gc[GTK_STATE_NORMAL], NULL);       
+		  gdk_draw_rectangle (window, style->bg_gc[GTK_STATE_NORMAL], TRUE, x,y,width-1,height-1); 
+		}
+	    }
+	} 
       gdk_draw_rectangle (window, nimbus_realize_color (style, rc->menu->border, area), FALSE, x,y,width-1,height-1); 
       gdk_draw_line (window, nimbus_realize_color (style, rc->menu->shadow, area), x + width - 2,y+1,x + width - 2,height-2); 
       
