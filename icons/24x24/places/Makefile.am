@@ -20,6 +20,7 @@ icons_DATA = 				 		\
 		user-home.png 		\
 		user-trash-full.png 		\
 		user-trash.png 		\
+		start-here.png		\
 		web.png
 EXTRA_DIST = $(icons_DATA)
 

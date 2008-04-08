@@ -7,6 +7,7 @@
 #include "nimbus_style.h"
 #include "nimbus_rc_style.h"
 #include "nimbus_utils.h"
+#include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <gdk/gdkx.h>
 

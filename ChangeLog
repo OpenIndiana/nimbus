@@ -1,3 +1,11 @@
+2008-04-08 Erwann Chenede - <erwann.chenede@sun.com>
+
+  * configure.in : bumped release
+  * gtk-engine/nimbus_style.c : fixed include
+  * icons/24x24/places/start-here.png : new logo size
+  * icons/24x24/places/Makefile.am : added file
+    fixes opensolaris bug 1030
+
 2008-04-06 Erwann Chenede - <erwann.chenede@sun.com>
 
   * gtk-engine/tests/twf.c 
