@@ -936,12 +936,16 @@ draw_handle (GtkStyle      *style,
   gboolean draw_outline = TRUE;
 
   /* printf ("in draw_handle detail %s\n", detail ? detail : "no detail"); */
+  
+  if ((height - 4) <= 0) /* if height is less that the image bit do nothing emacs case */
+	  return;
 
   if ((DETAIL ("handlebox") || DETAIL ("dockitem")) && (get_ancestor_of_type (widget, "PanelToplevel") == NULL))
     {
-      height--;
+      height--; 
       if (get_ancestor_of_type (widget, "GtkFixed") && get_ancestor_of_type (widget,"GtkHandleBox")) /* heuristic for soffice */
 	  height--;
+
 
       if (orientation == GTK_ORIENTATION_VERTICAL)
 	{

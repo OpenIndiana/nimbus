@@ -1,3 +1,9 @@
+2008-08-14 Erwann Chenede - <erwann.chenede@sun.com>
+
+  * gtk-engine/nimbus_style.c: don't draw the handle is 
+    the height requested is less that the image size (4 pixels).
+  * configure.in : bumped release
+
 2008-04-15 Erwann Chenede - <erwann.chenede@sun.com>
 
   * icons/24x24/places/start-here.png: new tweaked logo
