@@ -1,3 +1,7 @@
+2008-08-21 Erwann Chenede - <erwann.chenede@sun.com>
+
+  * README: added info on how to build
+
 2008-08-14 Erwann Chenede - <erwann.chenede@sun.com>
 
   * gtk-engine/nimbus_style.c: don't draw the handle is 

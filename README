@@ -2,3 +2,13 @@ Before committing always run the theme against :
 gtk-engine/tests/twf 
 StarOffice (menu and preferences)
 Firefox and Thunderbird (menu and preferences)
+
+To build on OpenSolaris follow the instructions on opensolaris :
+http://www.opensolaris.org/os/project/jds/contributing/building/
+
+To build on Ubuntu :
+apt-get the following :
+- libc6-dev 
+- gnome-devel
+- icon-naming-utils
+then ./autogen.sh ; make 
