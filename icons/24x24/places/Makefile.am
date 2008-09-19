@@ -16,11 +16,11 @@ icons_DATA = 				 		\
 		gnome-fs-ssh.png 		\
 		network-server.png 		\
 		network-workgroup.png 		\
+		start-here.png 		\
 		user-desktop.png 		\
 		user-home.png 		\
 		user-trash-full.png 		\
 		user-trash.png 		\
-		start-here.png		\
 		web.png
 EXTRA_DIST = $(icons_DATA)
 

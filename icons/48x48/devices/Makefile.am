@@ -21,6 +21,7 @@ icons_DATA = 				 		\
 		network-wireless.png 		\
 		printer-networked.png 		\
 		printer-new.png 		\
+		printer-remote.png 		\
 		printer.png 		\
 		scanner.png
 EXTRA_DIST = $(icons_DATA)

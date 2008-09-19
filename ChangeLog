@@ -1,5 +1,9 @@
 2008-09-19 Erwann Chenede - <erwann.chenede@sun.com>
 
+  * icons/* : added new printer and network status icons for nwam project
+
+2008-09-19 Erwann Chenede - <erwann.chenede@sun.com>
+
   * gtk-engine/gtk-2.0/gtkrc : 
   * gtk-engine/nimbus_rc_style.c : lighten up the default background 
     as requested by Xdesign

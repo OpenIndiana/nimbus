@@ -4,7 +4,13 @@ iconsdir = $(themedir)/$(size)/$(context)
 icons_DATA = 				 		\
 		dialog-error.png 		\
 		dialog-information.png 		\
-		dialog-warning.png
+		dialog-warning.png 		\
+		network-error.png 		\
+		network-idle.png 		\
+		network-offline.png 		\
+		network-receive.png 		\
+		network-transmit-receive.png 		\
+		network-transmit.png
 EXTRA_DIST = $(icons_DATA)
 
 install-data-local: install-iconsDATA

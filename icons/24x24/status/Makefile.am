@@ -11,7 +11,13 @@ icons_DATA = 				 		\
 		dialog-information.png 		\
 		dialog-password.png 		\
 		dialog-question.png 		\
-		dialog-warning.png
+		dialog-warning.png 		\
+		network-error.png 		\
+		network-idle.png 		\
+		network-offline.png 		\
+		network-receive.png 		\
+		network-transmit-receive.png 		\
+		network-transmit.png
 EXTRA_DIST = $(icons_DATA)
 
 install-data-local: install-iconsDATA
