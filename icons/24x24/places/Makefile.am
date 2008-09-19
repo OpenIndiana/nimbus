@@ -16,6 +16,13 @@ icons_DATA = 				 		\
 		gnome-fs-ssh.png 		\
 		network-server.png 		\
 		network-workgroup.png 		\
+		pm-window-toggle.png 		\
+		printer-group-favorites.png 		\
+		printer-group-new.png 		\
+		printer-group.png 		\
+		printer-new.png 		\
+		printer-search-group-new.png 		\
+		printer-search-group.png 		\
 		start-here.png 		\
 		user-desktop.png 		\
 		user-home.png 		\

@@ -6,7 +6,11 @@ icons_DATA = 				 		\
 		emblem-important.png 		\
 		emblem-noread.png 		\
 		emblem-nowrite.png 		\
-		emblem-symbolic-link.png
+		emblem-symbolic-link.png 		\
+		gnome-netstatus-wireless-idle.png 		\
+		gnome-netstatus-wireless-receive.png 		\
+		gnome-netstatus-wireless-transmit-receive.png 		\
+		gnome-netstatus-wireless-transmit.png
 EXTRA_DIST = $(icons_DATA)
 
 install-data-local: install-iconsDATA

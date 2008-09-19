@@ -19,8 +19,10 @@ icons_DATA = 				 		\
 		mouse-ball.png 		\
 		network-wired.png 		\
 		network-wireless.png 		\
+		printer-default.png 		\
 		printer-networked.png 		\
 		printer-new.png 		\
+		printer-remote-default.png 		\
 		printer-remote.png 		\
 		printer.png 		\
 		scanner.png

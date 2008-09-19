@@ -41,7 +41,7 @@ style "pane" = "default"
 style "menu" = "default"
 {
   bg[NORMAL]        = "#eff0f2"
-  bg[PRELIGHT]      = "#eff0f2"
+  bg[PRELIGHT]      = "#39698a"
   PanelMenu::stripe-enabled = FALSE
 }
 

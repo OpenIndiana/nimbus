@@ -37,7 +37,7 @@ install-data-local:
 		$(mkinstalldirs) $(DESTDIR)$(THEME_DIR)/$(THEME_NAME)/$(THEME_SUBDIR);	     
 
 		$(INSTALL_DATA) metacity-theme-1.xml $(DESTDIR)$(THEME_DIR)/$(THEME_NAME)/$(THEME_SUBDIR); 
-		$(INSTALL_DATA) metacity-theme-1.xml $(DESTDIR)$(THEME_DIR)/$(DARK_THEME_NAME)/$(THEME_SUBDIR); 
+		$(INSTALL_DATA) dark-metacity-theme-1.xml $(DESTDIR)$(THEME_DIR)/$(DARK_THEME_NAME)/$(THEME_SUBDIR)/metacity-theme-1.xml; 
 		 for i in $(THEME_IMAGES); do						     \
 		    	$(INSTALL_DATA)  $$i $(DESTDIR)$(THEME_DIR)/$(THEME_NAME)/$(THEME_SUBDIR) ;\
 			(cd $(DESTDIR)$(THEME_DIR)/$(DARK_THEME_NAME)/$(THEME_SUBDIR) && ln -fs ../../$(THEME_NAME)/$(THEME_SUBDIR)/$$i .) \

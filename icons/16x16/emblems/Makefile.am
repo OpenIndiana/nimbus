@@ -7,7 +7,10 @@ icons_DATA = 				 		\
 		emblem-noread.png 		\
 		emblem-nowrite.png 		\
 		emblem-symbolic-link.png 		\
-		emblem-system.png
+		emblem-system.png 		\
+		printer-error.png 		\
+		printer-paused.png 		\
+		printer-status-unkown.png
 EXTRA_DIST = $(icons_DATA)
 
 install-data-local: install-iconsDATA

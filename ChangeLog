@@ -1,5 +1,11 @@
 2008-09-19 Erwann Chenede - <erwann.chenede@sun.com>
 
+  * icons/* : more icons for printer and gnome-netstatus
+  * metacity/Makefile.am : copy correctly metacity-theme-1.xml
+  * gtk-engine/gtk-2.0/gtkrc : fix menu prelight color
+
+2008-09-19 Erwann Chenede - <erwann.chenede@sun.com>
+
   * icons/* : added new printer and network status icons for nwam project
 
 2008-09-19 Erwann Chenede - <erwann.chenede@sun.com>
