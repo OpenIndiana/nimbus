@@ -644,7 +644,7 @@ draw_shadow (GtkStyle        *style,
   else   
     {
       if (shadow_type != GTK_SHADOW_NONE && !DETAIL ("pager"))
-	gdk_draw_rectangle (window, nimbus_realize_color (style, rc->pane->outline, area),
+	gdk_draw_rectangle (window, nimbus_realize_color (style, NIMBUS_RC_STYLE (style->rc_style)->dark ? rc->dark_pane->outline : rc->pane->outline, area),
 			    FALSE, x, y, width-1, height-1);
 							
        /* parent_class->draw_shadow (style, window, state_type, shadow_type, area, widget, detail, x, y, width, height);  */
@@ -869,7 +869,7 @@ draw_extension (GtkStyle       *style,
 
   if (state_type == GTK_STATE_ACTIVE)
     {
-      button = rc->button[GTK_STATE_NORMAL];
+      button = NIMBUS_RC_STYLE (style->rc_style)->dark ? rc->dark_button[GTK_STATE_NORMAL] : rc->button[GTK_STATE_NORMAL];
       gc = style->black_gc;
       selected_offset--;
     }
@@ -931,7 +931,7 @@ draw_handle (GtkStyle      *style,
 	     GtkOrientation orientation)
 {
   NimbusData *rc = NIMBUS_RC_STYLE (style->rc_style)->data;
-  GdkPixbuf *pane;
+  GdkPixbuf *pane_pb;
   int c_x = 0, c_y = 0;
   gboolean draw_outline = TRUE;
 
@@ -1016,22 +1016,23 @@ draw_handle (GtkStyle      *style,
   else
     {
       /* pane and gnome panel case */
+      NimbusPane *pane =  NIMBUS_RC_STYLE (style->rc_style)->dark ? rc->dark_pane : rc->pane;
       
       if (get_ancestor_of_type (widget, "PanelToplevel"))
 	draw_outline = FALSE;
       
       if (orientation == GTK_ORIENTATION_HORIZONTAL)
 	{
-	  pane = rc->pane->pane_h;
+	  pane_pb = pane->pane_h;
 	  if (draw_outline)
 	    {
-	      gdk_draw_line (window, nimbus_realize_color (style, rc->pane->outline, area),
+	      gdk_draw_line (window, nimbus_realize_color (style, pane->outline, area),
 			     x+1, y, x+width-1, y);      
-	      gdk_draw_line (window, nimbus_realize_color (style, rc->pane->outline, area),
-			     x+1, y+height, x+width-1, y+height);      
-	      gdk_draw_line (window, nimbus_realize_color (style, rc->pane->innerline, area),
+	      gdk_draw_line (window, nimbus_realize_color (style, pane->outline, area),
+			     x+1, y+height, x+width-1, y+height);  
+	      gdk_draw_line (window, nimbus_realize_color (style, pane->innerline, area),
 			     x+1, y+1, x+width-1, y+1);      
-	      gdk_draw_line (window, nimbus_realize_color (style, rc->pane->innerline, area),
+	      gdk_draw_line (window, nimbus_realize_color (style, pane->innerline, area),
 			     x+1, y+height-1, x+width-1, y+height-1);      
 	    }
 	  
@@ -1039,31 +1040,34 @@ draw_handle (GtkStyle      *style,
 	}
       else
 	{
-	  pane = rc->pane->pane_v;
+	  pane_pb = pane->pane_v;
 	  if (draw_outline)
 	    {
-	      gdk_draw_line (window, nimbus_realize_color (style, rc->pane->outline, area),
+	      gdk_draw_line (window, nimbus_realize_color (style, pane->outline, area),
 			     x, y, x, y+height-1);      
-	      gdk_draw_line (window, nimbus_realize_color (style, rc->pane->outline, area),
-			     x+width-1, y, x+width-1, y+height-1);      
-	      gdk_draw_line (window, nimbus_realize_color (style, rc->pane->innerline, area),
+	      gdk_draw_line (window, nimbus_realize_color (style, pane->outline, area),
+			     x+width-1, y, x+width-1, y+height-1);  
+	      gdk_draw_line (window, nimbus_realize_color (style, pane->innerline, area),
 			     x+1, y, x+1, y+height-1);      
-	      gdk_draw_line (window, nimbus_realize_color (style, rc->pane->innerline, area),
+	      gdk_draw_line (window, nimbus_realize_color (style, pane->innerline, area),
 			     x+width-2, y, x+width-2, y+height-1);      
 	    }
 	}
       
-      c_x = (width - gdk_pixbuf_get_width (pane)) / 2;
-      c_y += (height - gdk_pixbuf_get_height (pane)) /2;
-      
-      gdk_draw_pixbuf (window,
-		       get_clipping_gc (window, area),
-		       pane,
-		       0,0,
-		       x + c_x, y + c_y,
-		       gdk_pixbuf_get_width (pane),
-		       gdk_pixbuf_get_height (pane),
-		       GDK_RGB_DITHER_NONE,0,0);
+      if (pane_pb)
+	{
+	  c_x = (width - gdk_pixbuf_get_width (pane_pb)) / 2;
+	  c_y += (height - gdk_pixbuf_get_height (pane_pb)) /2;
+
+	  gdk_draw_pixbuf (window,
+			   get_clipping_gc (window, area),
+			   pane_pb,
+			   0,0,
+			   x + c_x, y + c_y,
+			   gdk_pixbuf_get_width (pane_pb),
+			   gdk_pixbuf_get_height (pane_pb),
+			   GDK_RGB_DITHER_NONE,0,0);
+	}
       
     }
    /* parent_class->draw_handle (style, window, state_type, shadow_type, area, widget, detail, x, y, width, height, orientation);  */
@@ -1189,17 +1193,19 @@ draw_nimbus_box (GtkStyle      *style,
   
   if ((state_type != GTK_STATE_INSENSITIVE) && drop_shadow && draw_bottom)
     {
-      nimbus_init_button_drop_shadow (rc, state_type, width);
+      GdkPixbuf **drop_shadow = NIMBUS_RC_STYLE (style->rc_style)->dark ? rc->dark_drop_shadow : rc->drop_shadow;
+      nimbus_init_button_drop_shadow (NIMBUS_RC_STYLE (style->rc_style), rc, state_type, width);
 
-      if (check_sane_pixbuf_value (0, 0, width - (bottom_left_c_w + bottom_right_c_w),  gdk_pixbuf_get_height (rc->drop_shadow[state_type]), rc->drop_shadow[state_type]))
+      if (check_sane_pixbuf_value (0, 0, width - (bottom_left_c_w + bottom_right_c_w),  
+				   gdk_pixbuf_get_height (drop_shadow[state_type]),drop_shadow[state_type]))
 	gdk_draw_pixbuf (window,
 			 get_clipping_gc (window, area),
-			 rc->drop_shadow[state_type],
+			 drop_shadow[state_type],
 			 0,0,
 			 x + bottom_left_c_w, 
 			 y + height-1,
 			 width - (bottom_left_c_w + bottom_right_c_w),
-			 gdk_pixbuf_get_height (rc->drop_shadow[state_type]),
+			 gdk_pixbuf_get_height (drop_shadow[state_type]),
 			 GDK_RGB_DITHER_NONE,0,0);
     }
 }
@@ -1399,21 +1405,26 @@ draw_box (GtkStyle      *style,
 {
   static gboolean should_draw_defaultbutton = FALSE;
   NimbusData* rc = NIMBUS_RC_STYLE (style->rc_style)->data;
+  gboolean dark = NIMBUS_RC_STYLE (style->rc_style)->dark;
 
   /* printf ("draw box state %s %s\n", state_names [state_type], state_names [GTK_WIDGET_STATE(widget)]); */
   if (DETAIL ("button") || DETAIL ("optionmenu"))
     {
-      NimbusButton *button_type = rc->button[state_type];
+      NimbusButton *button_type = dark ? rc->dark_button[state_type] : rc->button[state_type];
 
       if (widget && widget->parent &&
 	  (GTK_IS_TREE_VIEW(widget->parent) ||
 	   GTK_IS_CLIST (widget->parent) || get_ancestor_of_type (widget, "MessageList")))
-	button_type = rc->header_button[state_type];
+	  button_type = rc->header_button[state_type];
       
       if (get_ancestor_of_type (widget, "GtkCombo") || 
 	  get_ancestor_of_type (widget, "GtkComboBoxEntry") ||
 	  get_ancestor_of_type (widget, "GnomeEntry"))
 	button_type = rc->combo_entry_button[state_type];
+
+      if (get_ancestor_of_type (widget, "GtkComboBox") ||
+	  get_ancestor_of_type (widget, "GtkOptionMenu"))
+	button_type = rc->button[state_type];
       
       if (should_draw_defaultbutton)
 	{
@@ -1695,16 +1706,20 @@ draw_box (GtkStyle      *style,
 	  orientation = gtk_toolbar_get_orientation (GTK_TOOLBAR (widget));
 
       if (orientation == GTK_ORIENTATION_HORIZONTAL)
-	  gdk_draw_line (window, nimbus_realize_color (style, rc->menubar_border, area), x,y+height-1,x+width-1,y+height-1); 
+	  gdk_draw_line (window, nimbus_realize_color (style, dark ? rc->dark_menubar_border : rc->menubar_border, area), 
+			 x,y+height-1,x+width-1,y+height-1); 
       else
 	  {
-	    gdk_draw_line (window, nimbus_realize_color (style, rc->menubar_border, area), x,y,x,y+height-1); 
-	    gdk_draw_line (window, nimbus_realize_color (style, rc->menubar_border, area), x+width-1,y,x+width-1,y+height-1); 
+	    gdk_draw_line (window, nimbus_realize_color (style, dark ? rc->dark_menubar_border :rc->menubar_border, area), 
+			   x,y,x,y+height-1); 
+	    gdk_draw_line (window, nimbus_realize_color (style, dark ? rc->dark_menubar_border :rc->menubar_border, area), 
+			   x+width-1,y,x+width-1,y+height-1); 
 	  }
     }
   else if (DETAIL ("menu"))
     {
       GdkGC *start, *mid_start, *mid_end, *end;
+      NimbusMenu *menu = dark ? rc->dark_menu : rc->menu;
       sanitize_size (window, &width, &height);
       if (gdk_drawable_get_depth (window) == 8) 
 	{
@@ -1723,33 +1738,37 @@ draw_box (GtkStyle      *style,
 		}
 	    }
 	} 
-      gdk_draw_rectangle (window, nimbus_realize_color (style, rc->menu->border, area), FALSE, x,y,width-1,height-1); 
-      gdk_draw_line (window, nimbus_realize_color (style, rc->menu->shadow, area), x + width - 2,y+1,x + width - 2,height-2); 
-      
-      start = nimbus_realize_color (style, rc->menu->start, area);
-      mid_start = nimbus_realize_color (style, rc->menu->mid_start, area);
-      mid_end = nimbus_realize_color (style, rc->menu->mid_end, area);
-      end = nimbus_realize_color (style, rc->menu->end, area);
-      gdk_draw_line (window, start, x+1,y+1,x + width - 2,y+1); 
-      gdk_draw_line (window, mid_start, x+1,y+2,x + width - 2,y+2); 
-      gdk_draw_line (window, mid_end, x+1,y+3,x + width - 2,y+3); 
-      gdk_draw_line (window, end, x+1,y+4,x + width - 2,y+4); 
-      
-      gdk_draw_line (window, start, x+1,y+height-2,x + width - 2,y+height-2); 
-      gdk_draw_line (window, mid_start, x+1,y+height-3,x + width - 2,y+height-3); 
-      gdk_draw_line (window, mid_end, x+1,y+height-4,x + width - 2,y+height-4); 
-      gdk_draw_line (window, end, x+1,y+height-5,x + width - 2,y+height-5); 
+      gdk_draw_rectangle (window, nimbus_realize_color (style, menu->border, area), FALSE, x,y,width-1,height-1); 
+
+      if (!dark)
+	{
+	  gdk_draw_line (window, nimbus_realize_color (style, menu->shadow, area), x + width - 2,y+1,x + width - 2,height-2); 
+
+	  start = nimbus_realize_color (style, menu->start, area);
+	  mid_start = nimbus_realize_color (style, menu->mid_start, area);
+	  mid_end = nimbus_realize_color (style, menu->mid_end, area);
+	  end = nimbus_realize_color (style, menu->end, area);
+	  gdk_draw_line (window, start, x+1,y+1,x + width - 2,y+1); 
+	  gdk_draw_line (window, mid_start, x+1,y+2,x + width - 2,y+2); 
+	  gdk_draw_line (window, mid_end, x+1,y+3,x + width - 2,y+3); 
+	  gdk_draw_line (window, end, x+1,y+4,x + width - 2,y+4); 
+
+	  gdk_draw_line (window, start, x+1,y+height-2,x + width - 2,y+height-2); 
+	  gdk_draw_line (window, mid_start, x+1,y+height-3,x + width - 2,y+height-3); 
+	  gdk_draw_line (window, mid_end, x+1,y+height-4,x + width - 2,y+height-4); 
+	  gdk_draw_line (window, end, x+1,y+height-5,x + width - 2,y+height-5); 
+	}
       
     }
   else if (DETAIL ("menubar"))
     {
       if (!get_ancestor_of_type (widget, "PanelMenuBar") && !get_ancestor_of_type (widget,"WnckSelector"))
 	{
-	  nimbus_draw_gradient (window, style, area, rc->menubar,
+	  nimbus_draw_gradient (window, style, area, dark ? rc->dark_menubar : rc->menubar,
 				x, y, width, height-1, -1, TRUE, 
 				GTK_ORIENTATION_HORIZONTAL, NO_TAB);
 
-	  gdk_draw_line (window, nimbus_realize_color (style, rc->menubar_border, area), 
+	  gdk_draw_line (window, nimbus_realize_color (style, dark ? rc->dark_menubar_border :rc->menubar_border, area), 
 			 x,y+height-1,x+width-1,y+height-1);
 	}
 
@@ -1936,6 +1955,7 @@ draw_slider (GtkStyle      *style,
 			 gdk_pixbuf_get_width (button),
 			 gdk_pixbuf_get_height (button),
 			 GDK_RGB_DITHER_NONE,0,0);     
+
     }
   else
     parent_class->draw_slider (style, window, state_type, shadow_type, area, widget, detail, x, y, width, height, orientation);
@@ -2042,7 +2062,7 @@ draw_hline (GtkStyle     *style,
 {
   NimbusData *rc = NIMBUS_RC_STYLE (style->rc_style)->data;
 
-  gdk_draw_line (window, nimbus_realize_color (style, rc->hline, area), x1,y,x2,y);
+  gdk_draw_line (window, nimbus_realize_color (style, NIMBUS_RC_STYLE (style->rc_style)->dark ? rc->dark_hline : rc->hline, area), x1,y,x2,y);
   
   verbose ("draw\t hline \t-%s-\n", detail ? detail : "no detail");
 }
@@ -2062,7 +2082,7 @@ draw_vline (GtkStyle     *style,
 {
   NimbusData *rc = NIMBUS_RC_STYLE (style->rc_style)->data;
   
-  gdk_draw_line (window, nimbus_realize_color (style, rc->hline, area), x,y1,x,y2);
+  gdk_draw_line (window, nimbus_realize_color (style, NIMBUS_RC_STYLE (style->rc_style)->dark ? rc->dark_vline : rc->vline, area), x,y1,x,y2);
 
   verbose ("draw\t vline \t-%s-\n", detail ? detail : "no detail");
 }
@@ -2168,7 +2188,18 @@ draw_layout (GtkStyle        *style,
 	gdk_draw_layout (window, gc, x, y, layout);
     }
   else
-    gdk_draw_layout (window, gc, x, y, layout);
+    {
+      if (NIMBUS_RC_STYLE (style->rc_style)->dark)
+	{
+	  GtkWidget *ans_widget = get_ancestor_of_type (widget, "GtkButton");
+	  if (ans_widget && GTK_WIDGET_HAS_DEFAULT (ans_widget))
+	    gdk_draw_layout (window, style->black_gc, x, y, layout);
+	  else
+	    gdk_draw_layout (window, gc, x, y, layout);
+	}
+      else
+	gdk_draw_layout (window, gc, x, y, layout);
+    }
 
   if (area)
     gdk_gc_set_clip_rectangle (gc, NULL);

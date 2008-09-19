@@ -1,0 +1,122 @@
+include "iconrc"
+
+style "dark-defaut"
+{
+
+  bg[NORMAL]        = "#2a3d69"
+  bg[PRELIGHT]      = "LightSkyBlue4" 
+  bg[SELECTED]	    = "#39698a" 
+  bg[INSENSITIVE]   = "#efebe5" 
+  bg[ACTIVE]        = "#233254" 
+
+
+  fg[NORMAL]        = "LightSkyBlue4"
+  fg[PRELIGHT]      = "black"
+  fg[ACTIVE]        = "#c8e1f8"
+  fg[INSENSITIVE]   = "#798295"
+
+  base[NORMAL]	    = "white"
+  text[NORMAL]	    = "black"
+  text[INSENSITIVE] = "#798295"
+  engine "nimbus" 
+  {
+    dark_theme 
+  }
+}
+
+style "dn-toolbar" = "dark-defaut" 
+{
+  fg[NORMAL]	    = "#c8e1f8"
+}
+style "dn-button-label" = "dark-defaut"
+{
+  fg[NORMAL]	    = "#c8e1f8"
+}
+style "dn-tasklist-label" = "dark-defaut"
+{
+  fg[NORMAL]	    = "LightSkyBlue4"
+}
+
+style "test"
+{
+  bg[NORMAL]        = "red"
+  bg[PRELIGHT]      = "red"
+  bg[SELECTED]	    = "red"
+  bg[INSENSITIVE]   = "red"
+  bg[ACTIVE]        = "red"
+
+
+  fg[NORMAL]        = "red"
+  fg[PRELIGHT]      = "red"
+  fg[ACTIVE]        = "red"
+  fg[INSENSITIVE]   = "red"
+
+  base[NORMAL]	    = "red"
+  text[NORMAL]	    = "red"
+  engine "nimbus" 
+  {
+    dark_theme 
+  }
+}
+
+
+style "scrollbar" = "dark-defaut"
+{
+  GtkRange::slider_width = 13
+  GtkRange::stepper_size = 17
+  GtkScrollbar::min_slider_length = 31
+  GtkScale::slider-length= 14
+}
+
+style "menuItemLabel" = "dark-defaut"
+{
+  fg[NORMAL]        = "white"
+  text[NORMAL]	    = "white"
+}
+
+style "PanelFrame"
+{
+  xthickness = 1
+  ythickness = 1
+}
+
+style "treeview-header" = "dark-defaut"
+{
+  fg[NORMAL]   = "black"
+  fg[ACTIVE]   = "#c8e1f8" 
+}
+
+style "dn-option-button" = "dark-defaut"
+{
+  fg[NORMAL]   = "black"
+  fg[PRELIGHT]   = "black" 
+}
+
+style "tips" 
+{
+  bg[NORMAL] = "#ffffcc"
+}
+
+class "GtkWidget"	    style "dark-defaut"
+class "WnckSelector"	    style "dark-defaut"
+class "WnckSelector"	    style "dark-defaut"
+class "GtkScale"	    style "scrollbar"
+class "GtkScrollbar"	    style "scrollbar"
+class "Panel*"		    style "PanelFrame"
+
+widget_class "*Button*Label"		    style "dn-button-label" 
+widget_class "*<GtkOptionMenu>*Label"	    style "dn-option-button" 
+widget_class "*<GtkToolbar>*Button*Label"   style "dn-toolbar" 
+widget_class "*Item*Label*"		    style "menuItemLabel"
+widget_class "*<GtkMenuItem>*"		    style "menuItemLabel"
+
+# Treeview header
+widget_class "*.<GtkTreeView>.*<GtkLabel>"	style "treeview-header"
+widget_class "*.<GtkTreeView>.*<GtkLabel>"	style "treeview-header"
+# notebook label
+widget_class "*.<GtkNotebook>.<GtkHBox>.<GtkLabel>"	style "treeview-header"
+
+
+widget "gtk-tooltip*" style "tips"
+widget "*tasklist-button*" style "dn-tasklist-label"
+widget "*clock-applet-button*" style "dn-tasklist-label"

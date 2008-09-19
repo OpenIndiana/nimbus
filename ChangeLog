@@ -1,3 +1,48 @@
+2008-09-19 Erwann Chenede - <erwann.chenede@sun.com>
+
+  Initial implementation of the Dark Nimbus theme
+
+  * configure.in : bumped to 0.1.0
+  * metacity/dark-metacity-theme-1.xml
+  * metacity/Makefile.am
+  * gtk-engine/gtk-2.0/dark-gtkrc
+  * gtk-engine/gtk-2.0/Makefile.am
+  * gtk-engine/tests/combo.c
+  * gtk-engine/tests/twf.c
+  * gtk-engine/tests/panes.c
+  * gtk-engine/tests/combobox.c
+  * gtk-engine/tests/click.c
+  * gtk-engine/tests/twf.glade
+  * gtk-engine/nimbus_rc_style.c
+  * gtk-engine/images/dark-button-corner-normal-top-left.png
+  * gtk-engine/images/dark-button-corner-active-top-right.png
+  * gtk-engine/images/dark-button-corner-prelight-bottom-right.png
+  * gtk-engine/images/dark-button-corner-disabled-bottom-left.png
+  * gtk-engine/images/dark-button-corner-active-top-left.png
+  * gtk-engine/images/dark-button-corner-normal-top-right.png
+  * gtk-engine/images/dark-button-corner-normal-bottom-right.png
+  * gtk-engine/images/dark-button-corner-disabled-top-right.png
+  * gtk-engine/images/dark-button-corner-active-bottom-right.png
+  * gtk-engine/images/dark-button-corner-disabled-top-left.png
+  * gtk-engine/images/dark-button-corner-normal-bottom-left.png
+  * gtk-engine/images/dark-button-corner-disabled-bottom-right.png
+  * gtk-engine/images/dark-button-corner-prelight-top-right.png
+  * gtk-engine/images/dark-button-corner-active-bottom-left.png
+  * gtk-engine/images/dark-button-corner-prelight-top-left.png
+  * gtk-engine/images/Makefile.am
+  * gtk-engine/images/dark-button-corner-prelight-bottom-left.png
+  * gtk-engine/nimbus_rc_style.h
+  * gtk-engine/nimbus_style.c
+  * dark-index.theme.in
+  * Makefile.am
+  * specs
+  * specs/dark
+  * specs/dark/Window_Frame-dark.png
+  * specs/dark/dark_button_spec.png
+  * specs/dark/issues.txt
+  * specs/dark/nimbusD-1.jpg
+
+
 2008-08-21 Erwann Chenede - <erwann.chenede@sun.com>
 
   * README: added info on how to build

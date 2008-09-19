@@ -107,7 +107,24 @@ IMAGES = \
 	check-menu-prelight-set.png			\
 	radio-menu-disable-set.png			\
 	radio-menu-normal-set.png			\
-	radio-menu-prelight-set.png
+	radio-menu-prelight-set.png			\
+	dark-button-corner-active-bottom-left.png	\
+	dark-button-corner-active-bottom-right.png	\
+	dark-button-corner-active-top-left.png		\
+	dark-button-corner-active-top-right.png		\
+	dark-button-corner-disabled-bottom-left.png	\
+	dark-button-corner-disabled-bottom-right.png	\
+	dark-button-corner-disabled-top-left.png	\
+	dark-button-corner-disabled-top-right.png	\
+	dark-button-corner-normal-bottom-left.png	\
+	dark-button-corner-normal-bottom-right.png	\
+	dark-button-corner-normal-top-left.png		\
+	dark-button-corner-normal-top-right.png		\
+	dark-button-corner-prelight-bottom-left.png	\
+	dark-button-corner-prelight-bottom-right.png	\
+	dark-button-corner-prelight-top-left.png	\
+	dark-button-corner-prelight-top-right.png
+	
 
 noinst_DATA = images.h
 CLEANFILES = $(noinst_DATA)

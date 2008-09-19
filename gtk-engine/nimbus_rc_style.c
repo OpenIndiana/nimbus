@@ -246,6 +246,111 @@ static void define_normal_button_states (NimbusData *nimbus_rc)
     
   nimbus_rc->button[GTK_STATE_INSENSITIVE] = tmp;
 }
+static void define_normal_dark_button_states (NimbusData *nimbus_rc)
+{
+  NimbusButton *tmp;
+  NimbusGradient *tmp_gradient;
+  GError **error = NULL;
+
+  /* button GTK_STATE_NORMAL */
+  tmp = g_new0 (NimbusButton, 1);
+  tmp->corner_top_left = gdk_pixbuf_new_from_inline (-1, dark_button_corner_normal_top_left, FALSE, error);
+  tmp->corner_top_right = gdk_pixbuf_new_from_inline (-1, dark_button_corner_normal_top_right, FALSE, error);
+  tmp->corner_bottom_left = gdk_pixbuf_new_from_inline (-1, dark_button_corner_normal_bottom_left, FALSE, error);
+  tmp->corner_bottom_right = gdk_pixbuf_new_from_inline (-1, dark_button_corner_normal_bottom_right, FALSE, error);
+ 
+  tmp_gradient = nimbus_gradient_new (0,0,1,0, 
+				      CORNER_TOP_LEFT | CORNER_BOTTOM_LEFT | CORNER_TOP_RIGHT | CORNER_BOTTOM_RIGHT,
+				      4, 4);
+  
+  nimbus_gradient_add_segment (tmp_gradient, "#111c38", "#111c38", 0, 100);
+  tmp->gradients = g_slist_append (tmp->gradients, tmp_gradient);
+
+  tmp_gradient =  nimbus_gradient_new (1,1,3,2, 
+				       CORNER_TOP_LEFT | CORNER_BOTTOM_LEFT | CORNER_TOP_RIGHT | CORNER_BOTTOM_RIGHT,
+				       0, 0);
+  
+  nimbus_gradient_add_segment (tmp_gradient, "#2e3e5d","#2c3c5a", 0, 6);
+  nimbus_gradient_add_segment (tmp_gradient, "#2c3c5a","#1e2b49", 6, 60);
+  nimbus_gradient_add_segment (tmp_gradient, "#1e2b49","#1e2b49", 60, 70);
+  nimbus_gradient_add_segment (tmp_gradient, "#1e2b49","#26375e", 70, 96);
+  nimbus_gradient_add_segment (tmp_gradient, "#26375e","#26375e",96, 100);
+  tmp->gradients = g_slist_append (tmp->gradients, tmp_gradient);
+
+  nimbus_rc->dark_button[GTK_STATE_NORMAL] = tmp;
+  
+  /* button GTK_STATE_PRELIGHT */
+  tmp = g_new0 (NimbusButton, 1);
+  tmp->corner_top_left = gdk_pixbuf_new_from_inline (-1, dark_button_corner_prelight_top_left, FALSE, error);
+  tmp->corner_top_right = gdk_pixbuf_new_from_inline (-1, dark_button_corner_prelight_top_right, FALSE, error);
+  tmp->corner_bottom_left = gdk_pixbuf_new_from_inline (-1, dark_button_corner_prelight_bottom_left, FALSE, error);
+  tmp->corner_bottom_right = gdk_pixbuf_new_from_inline (-1, dark_button_corner_prelight_bottom_right, FALSE, error);
+ 
+  tmp_gradient = nimbus_gradient_new (0,0,1,0,
+				      CORNER_TOP_LEFT | CORNER_BOTTOM_LEFT | CORNER_TOP_RIGHT | CORNER_BOTTOM_RIGHT,
+				      4, 4);
+  
+  nimbus_gradient_add_segment (tmp_gradient, "#111c38", "#111c38", 0, 100);
+  tmp->gradients = g_slist_append (tmp->gradients, tmp_gradient);
+
+  tmp_gradient =  nimbus_gradient_new (1,1,3,2, CORNER_TOP_LEFT | CORNER_BOTTOM_LEFT | CORNER_TOP_RIGHT | CORNER_BOTTOM_RIGHT,
+ 0, 0);
+  nimbus_gradient_add_segment (tmp_gradient, "#324466","#35486f", 0, 6);
+  nimbus_gradient_add_segment (tmp_gradient, "#35486f","#233154", 6, 60);
+  nimbus_gradient_add_segment (tmp_gradient, "#233154", "#233154", 60, 70);
+  nimbus_gradient_add_segment (tmp_gradient, "#233154", "#2b3e6b", 70, 96);
+  nimbus_gradient_add_segment (tmp_gradient, "#2b3e6b", "#2c3f6d",96, 100);
+  tmp->gradients = g_slist_append (tmp->gradients, tmp_gradient);
+    
+  nimbus_rc->dark_button[GTK_STATE_PRELIGHT] = tmp;
+  
+  /* button GTK_STATE_ACTIVE */
+  tmp = g_new0 (NimbusButton, 1);
+  tmp->corner_top_left = gdk_pixbuf_new_from_inline (-1, dark_button_corner_active_top_left, FALSE, error);
+  tmp->corner_top_right = gdk_pixbuf_new_from_inline (-1, dark_button_corner_active_top_right, FALSE, error);
+  tmp->corner_bottom_left = gdk_pixbuf_new_from_inline (-1, dark_button_corner_active_bottom_left, FALSE, error);
+  tmp->corner_bottom_right = gdk_pixbuf_new_from_inline (-1, dark_button_corner_active_bottom_right, FALSE, error);
+ 
+  tmp_gradient = nimbus_gradient_new (0,0,1,0, CORNER_TOP_LEFT | CORNER_BOTTOM_LEFT | CORNER_TOP_RIGHT | CORNER_BOTTOM_RIGHT,
+4, 4);
+  nimbus_gradient_add_segment (tmp_gradient, "#111c38", "#111c38", 0, 100);
+  tmp->gradients = g_slist_append (tmp->gradients, tmp_gradient);
+
+  tmp_gradient =  nimbus_gradient_new (1,1,3,2, CORNER_TOP_LEFT | CORNER_BOTTOM_LEFT | CORNER_TOP_RIGHT | CORNER_BOTTOM_RIGHT,
+ 0, 0);
+  nimbus_gradient_add_segment (tmp_gradient, "#4a5e83","#3a4e74", 0, 6);
+  nimbus_gradient_add_segment (tmp_gradient, "#3a4e74","#364a71", 6, 60);
+  nimbus_gradient_add_segment (tmp_gradient, "#364a71", "#364a71", 60, 70);
+  nimbus_gradient_add_segment (tmp_gradient, "#364a71", "#3b517c", 70, 96);
+  nimbus_gradient_add_segment (tmp_gradient, "#3b517c", "#466093",96, 100);
+  tmp->gradients = g_slist_append (tmp->gradients, tmp_gradient);
+  
+  nimbus_rc->dark_button[GTK_STATE_ACTIVE] = tmp;
+  nimbus_rc->dark_button[GTK_STATE_SELECTED] = tmp;
+
+  /* button GTK_STATE_INSENSITIVE */
+  tmp = g_new0 (NimbusButton, 1);
+  tmp->corner_top_left = gdk_pixbuf_new_from_inline (-1, dark_button_corner_disabled_top_left, FALSE, error);
+  tmp->corner_top_right = gdk_pixbuf_new_from_inline (-1, dark_button_corner_disabled_top_right, FALSE, error);
+  tmp->corner_bottom_left = gdk_pixbuf_new_from_inline (-1, dark_button_corner_disabled_bottom_left, FALSE, error);
+  tmp->corner_bottom_right = gdk_pixbuf_new_from_inline (-1, dark_button_corner_disabled_bottom_right, FALSE, error);
+  
+  tmp_gradient = nimbus_gradient_new (0,0,1,0, CORNER_TOP_LEFT | CORNER_BOTTOM_LEFT | CORNER_TOP_RIGHT | CORNER_BOTTOM_RIGHT,
+4, 4);
+  nimbus_gradient_add_segment (tmp_gradient, "#111c38", "#111c38", 0, 100);
+  tmp->gradients = g_slist_append (tmp->gradients, tmp_gradient);
+
+  tmp_gradient =  nimbus_gradient_new (1,1,3,2, CORNER_TOP_LEFT | CORNER_BOTTOM_LEFT | CORNER_TOP_RIGHT | CORNER_BOTTOM_RIGHT,
+ 0, 0);
+  nimbus_gradient_add_segment (tmp_gradient, "#192542","#182441", 0, 6);
+  nimbus_gradient_add_segment (tmp_gradient, "#182441","#16223e", 6, 60);
+  nimbus_gradient_add_segment (tmp_gradient, "#16223e","#16223e", 60, 70);
+  nimbus_gradient_add_segment (tmp_gradient, "#16223e","#192747", 70, 96);
+  nimbus_gradient_add_segment (tmp_gradient, "#192747","#192748",96, 100);
+  tmp->gradients = g_slist_append (tmp->gradients, tmp_gradient);
+    
+  nimbus_rc->dark_button[GTK_STATE_INSENSITIVE] = tmp;
+}
 
 static void define_header_button_states (NimbusData *nimbus_rc)
 {
@@ -897,29 +1002,34 @@ void nimbus_init_scale (NimbusData* rc,
     }
 }
 
-void nimbus_init_button_drop_shadow (NimbusData* rc,
+void nimbus_init_button_drop_shadow (NimbusRcStyle *nimbus_rc,
+				     NimbusData* rc,
 				     GtkStateType state, 
 				     int size)
 {
-  if (rc->drop_shadow[state] && gdk_pixbuf_get_width (rc->drop_shadow[state]) >= size)
+  GdkPixbuf** drop_shadow = nimbus_rc->dark ? rc->dark_drop_shadow : rc->drop_shadow;
+
+  if (drop_shadow[state] && gdk_pixbuf_get_width (drop_shadow[state]) >= size)
     return;
 
-  if (rc->drop_shadow[state])
-    gdk_pixbuf_unref (rc->drop_shadow[state]);
+  if (drop_shadow[state])
+    gdk_pixbuf_unref (drop_shadow[state]);
 
-  rc->drop_shadow[state] =  gdk_pixbuf_new (GDK_COLORSPACE_RGB, TRUE, 8, size + 10, 1);
+  drop_shadow[state] =  gdk_pixbuf_new (GDK_COLORSPACE_RGB, TRUE, 8, size + 10, 1);
 
   /* button shadow */
 
-  if (state == GTK_STATE_ACTIVE) /* white, opacity 60% */
-    gdk_pixbuf_fill (rc->drop_shadow[state], 0xffffff99);
+  if (state == GTK_STATE_ACTIVE && ! nimbus_rc->dark) /* white, opacity 60% */
+    gdk_pixbuf_fill (drop_shadow[state], 0xffffff99);
   else
     { /* black, opacity 20% */
-      gdk_pixbuf_fill (rc->drop_shadow[state], 0x00000033);
-      rc->drop_shadow[GTK_STATE_NORMAL] = rc->drop_shadow[state];
-      rc->drop_shadow[GTK_STATE_PRELIGHT] = rc->drop_shadow[state];
-      rc->drop_shadow[GTK_STATE_SELECTED] = rc->drop_shadow[state];
-      rc->drop_shadow[GTK_STATE_INSENSITIVE] = rc->drop_shadow[state];
+      gdk_pixbuf_fill (drop_shadow[state], 0x00000033);
+      drop_shadow[GTK_STATE_NORMAL] = drop_shadow[state];
+      drop_shadow[GTK_STATE_PRELIGHT] = drop_shadow[state];
+      drop_shadow[GTK_STATE_SELECTED] = drop_shadow[state];
+      drop_shadow[GTK_STATE_INSENSITIVE] = drop_shadow[state];
+      if (nimbus_rc->dark)
+	drop_shadow[GTK_STATE_ACTIVE] = drop_shadow[state];
     }
 }
 
@@ -1000,12 +1110,14 @@ static void nimbus_data_rc_style_init (NimbusRcStyle* nimbus_rc)
 
   if (rc)
     {
+      nimbus_rc->dark = FALSE;
       nimbus_rc->data = rc;
       return;
     }
   rc = g_new0 (NimbusData, 1);
   
   define_normal_button_states (rc);
+  define_normal_dark_button_states (rc);
   define_default_button_states (rc);
   define_header_button_states (rc);
   define_arrow_button_states (rc, TRUE);
@@ -1199,6 +1311,10 @@ static void nimbus_data_rc_style_init (NimbusRcStyle* nimbus_rc)
   rc->pane->outline = nimbus_color_cache_get ("#9297a1");
   rc->pane->innerline = nimbus_color_cache_get ("#f4f4f6");
 
+  rc->dark_pane = g_new0 (NimbusPane, 1);
+  /* no images */
+  rc->dark_pane->outline = nimbus_color_cache_get ("#0f172e");
+  rc->dark_pane->innerline = nimbus_color_cache_get ("#111c38");
   /* scale horizontal */
 
   rc->scale_h[GTK_STATE_NORMAL] = g_new0 (NimbusScale, 1);
@@ -1270,6 +1386,8 @@ static void nimbus_data_rc_style_init (NimbusRcStyle* nimbus_rc)
 
   /* menubar toolbar border */
   rc->menubar_border = nimbus_color_cache_get ("#9ea3ad");
+  /* rc->dark_menubar_border = nimbus_color_cache_get ("#0b1223"); */
+  rc->dark_menubar_border = nimbus_color_cache_get ("#24324d");
 
   /* menubar gradient */
 
@@ -1280,6 +1398,9 @@ static void nimbus_data_rc_style_init (NimbusRcStyle* nimbus_rc)
   nimbus_gradient_add_segment (rc->menubar, "#dedfe4", "#d6d9df", 40, 75);
   nimbus_gradient_add_segment (rc->menubar, "#d6d9df", "#d6d9df", 75, 100);
 
+  rc->dark_menubar = nimbus_gradient_new (0,0,1,0, CORNER_NO_CORNER, 0, 0);
+
+  nimbus_gradient_add_segment (rc->dark_menubar, "#233154","#2c3f6d", 0, 100);
   /*menu border and shadow */
 
   rc->menu = g_new0 (NimbusMenu, 1);
@@ -1290,10 +1411,23 @@ static void nimbus_data_rc_style_init (NimbusRcStyle* nimbus_rc)
   rc->menu->mid_end= nimbus_color_cache_get ("#f6f7f9");
   rc->menu->end = nimbus_color_cache_get ("#f1f2f5");
 
+  rc->dark_menu = g_new0 (NimbusMenu, 1);
+  rc->dark_menu->border = nimbus_color_cache_get ("black");
+  rc->dark_menu->shadow = nimbus_color_cache_get ("#24324d");
+  rc->dark_menu->start = nimbus_color_cache_get ("#111c38");
+  rc->dark_menu->mid_start = nimbus_color_cache_get ("#111c38");
+  rc->dark_menu->mid_end= nimbus_color_cache_get ("#111c38");
+  rc->dark_menu->end = nimbus_color_cache_get ("#111c38");
+
   /* horizontal line */
   rc->hline = nimbus_color_cache_get ("#c7c7c7");
   /* vertical line */
   rc->vline = nimbus_color_cache_get ("#46494f");
+
+  /* horizontal line */
+  rc->dark_hline = nimbus_color_cache_get ("#24324d");
+  /* vertical line */
+  rc->dark_vline = nimbus_color_cache_get ("#24324d");
 
   nimbus_rc->data = rc;
 }
@@ -1318,6 +1452,21 @@ nimbus_rc_style_class_init (NimbusRcStyleClass *klass)
   rc_style_class->create_style = nimbus_rc_style_create_style;
   rc_style_class->merge = nimbus_rc_style_merge;
 }
+
+enum 
+{
+  TOKEN_DARK_THEME = G_TOKEN_LAST + 1,
+};
+
+static struct
+  {
+    gchar              *name;
+    guint               token;
+  }
+theme_symbols[] =
+{
+  { "dark_theme",	TOKEN_DARK_THEME},
+};
 
 static guint
 nimbus_rc_style_parse (GtkRcStyle *rc_style,
@@ -1347,7 +1496,7 @@ nimbus_rc_style_parse (GtkRcStyle *rc_style,
    * same scanner.
    */
 
-/*  if (!g_scanner_lookup_symbol(scanner, theme_symbols[0].name))
+  if (!g_scanner_lookup_symbol(scanner, theme_symbols[0].name))
     {
       g_scanner_freeze_symbol_table(scanner);
       for (i = 0; i < G_N_ELEMENTS (theme_symbols); i++)
@@ -1356,12 +1505,21 @@ nimbus_rc_style_parse (GtkRcStyle *rc_style,
 				   GINT_TO_POINTER(theme_symbols[i].token));
       g_scanner_thaw_symbol_table(scanner);
     }
-*/
   /* We're ready to go, now parse the top level */
 
   token = g_scanner_peek_next_token(scanner);
   while (token != G_TOKEN_RIGHT_CURLY)
     {
+      if (token == TOKEN_DARK_THEME)
+	{
+	  /* get token */
+	  token = g_scanner_get_next_token (scanner);
+	  if (token == TOKEN_DARK_THEME)
+	    {
+	      nimbus_style->dark = TRUE;
+	      token = G_TOKEN_NONE;
+	    }
+	}
       if (token != G_TOKEN_NONE)
 	return token;
 
@@ -1379,6 +1537,12 @@ static void
 nimbus_rc_style_merge (GtkRcStyle *dest,
 			   GtkRcStyle *src)
 {
+  if (NIMBUS_IS_RC_STYLE (src))
+    {
+      NimbusRcStyle *Ndest = NIMBUS_RC_STYLE (dest);
+      NimbusRcStyle *Nsrc = NIMBUS_RC_STYLE (src);
+      Ndest->dark = Nsrc->dark;
+    }
   parent_class->merge (dest, src);
 }
 

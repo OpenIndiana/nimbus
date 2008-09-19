@@ -1,6 +1,24 @@
 #include <gtk/gtk.h>
 #include <gdk/gdkevents.h>
 
+void clicked ()
+{
+  static gboolean dark = TRUE;
+
+  if (dark)
+    gtk_settings_set_string_property (gtk_settings_get_default (),
+                                      "gtk-theme-name", "nimbus", "blah");
+  else
+    gtk_settings_set_string_property (gtk_settings_get_default (),
+                                      "gtk-theme-name", "dark-nimbus", "blah");
+
+    
+  dark = !dark;
+
+  printf ("in clicked\n");
+}
+
+
 
 void main (int argc, char **argv)
 {
@@ -15,7 +33,7 @@ void main (int argc, char **argv)
   gtk_init (&argc, &argv);
 
   gtk_settings_set_string_property (gtk_settings_get_default (),
-				    "gtk-theme-name", "nimbus", "gdm");
+				    "gtk-theme-name", "dark-nimbus", "gdm");
 
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
@@ -43,6 +61,12 @@ void main (int argc, char **argv)
       
       button = gtk_button_new_with_label ("Hi there");
       gtk_container_add (GTK_CONTAINER(frame), button);
+
+        g_signal_connect (G_OBJECT (button),
+                    "clicked",
+                    G_CALLBACK (clicked),
+                    NULL);
+
 
       frame = gtk_frame_new (NULL);
       gtk_frame_set_shadow_type (GTK_FRAME(frame), GTK_SHADOW_NONE);

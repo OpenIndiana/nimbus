@@ -12,7 +12,7 @@ void main (int argc, char **argv)
   gtk_init (&argc, &argv);
 
   gtk_settings_set_string_property (gtk_settings_get_default (),
-				    "gtk-theme-name", "nimbus", "gdm");
+				    "gtk-theme-name", "dark-nimbus", "gdm");
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   
@@ -31,7 +31,7 @@ void main (int argc, char **argv)
   combo = gtk_combo_new ();
   gtk_combo_set_popdown_strings (GTK_COMBO (combo), items);
 
-  gtk_widget_set_sensitive (combo, FALSE);
+  /* gtk_widget_set_sensitive (combo, FALSE); */
 
   hbox = gtk_hbox_new (FALSE, 10);
   vbox = gtk_vbox_new (FALSE, 10);

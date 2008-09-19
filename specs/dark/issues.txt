@@ -1,0 +1,39 @@
+DONE
+  - white rectangle in menu
+  - toolbar border
+  - text color is white
+  - finish install of dark nimbus
+  - fix nimbus_init_button_drop_shadow properly
+  - splitter border
+  - gtkComboBox text should be white
+  - ComboBox button should be always light colored 
+  - separator 
+  - menu border
+  - default button text should be black 
+  - text for treeview header is white, it should be black 
+  - line around pane in nautilus
+  - textfield in combo entry and combo should be black
+
+TODO gtk-engine  :
+  
+  Design problem :
+  - spinner unfocused wrong color
+
+  StarOffice :
+    - All custom text label (button in toolbar, text in doc, active tab are
+      of the same color ) see http://gsl.openoffice.org/source/browse/gsl/vcl/unx/gtk/gdi/salnativewidgets-gtk.cxx?rev=1.47.32.4&view=markup
+  
+  Firefox :
+
+  GNOME :
+
+Changed reference for dark alternative
+- button -> dark_button
+- nimbus_init_button_drop_shadow
+- menubar_border 
+- menubar
+- menu
+- hline
+- vline
+- drop_shadow
+- pane

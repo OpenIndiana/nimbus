@@ -143,11 +143,13 @@ struct _NimbusHandlebar
 struct _NimbusData
 {
   NimbusButton*		button[5]; 
+  NimbusButton*		dark_button[5]; 
   NimbusButton*		button_default[5]; 
   NimbusButton*		header_button[5]; 
   NimbusButton*		arrow_button[5]; 
   NimbusButton*		combo_entry_button[5]; 
   GdkPixbuf*		drop_shadow[5];
+  GdkPixbuf*		dark_drop_shadow[5];
   GdkPixbuf*		combo_arrow[5];
   NimbusTextfield*	textfield_color[5];
   NimbusSpinSeparator*	spin_color[5];
@@ -164,19 +166,26 @@ struct _NimbusData
   NimbusScrollbar*	scroll_h[5];
   NimbusScrollbar*	scroll_v[5];
   NimbusPane*		pane;
+  NimbusPane*		dark_pane;
   NimbusScale*		scale_h[5];
   NimbusScale*		scale_v[5];
   NimbusProgress*	progress;
   NimbusTab*		tab[5];
   GdkColor*		menubar_border;
+  GdkColor*		dark_menubar_border;
   NimbusGradient*	menubar;
+  NimbusGradient*	dark_menubar;
   NimbusMenu*		menu;
+  NimbusMenu*		dark_menu;
   GdkColor*		hline;
+  GdkColor*		dark_hline;
   GdkColor*		vline;
+  GdkColor*		dark_vline;
   NimbusHandlebar*	handlebar[2];
 };
 
-void nimbus_init_button_drop_shadow (NimbusData* rc, 
+void nimbus_init_button_drop_shadow (NimbusRcStyle* nimbus_rc,
+				     NimbusData* rc, 
 				     GtkStateType state, 
 				     int size);
 
@@ -203,6 +212,8 @@ struct _NimbusRcStyle
   GtkRcStyle parent_instance; /* must be first */
 
   NimbusData  *data;
+  gboolean     dark;
+
 };
 
 
