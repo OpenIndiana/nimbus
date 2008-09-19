@@ -2,7 +2,7 @@ include "iconrc"
 
 style "default"
 {
-  bg[NORMAL]        = "#d6d9df"
+  bg[NORMAL]        = "#e8e9ed"
   bg[PRELIGHT]      = "#e9ecf2" 
   bg[SELECTED]	    = "#39698a" 
   bg[INSENSITIVE]   = "#efebe5" 
@@ -40,8 +40,8 @@ style "pane" = "default"
 
 style "menu" = "default"
 {
-  bg[NORMAL]        = "#edeff2"
-  bg[PRELIGHT]      = "#39698a"
+  bg[NORMAL]        = "#eff0f2"
+  bg[PRELIGHT]      = "#eff0f2"
   PanelMenu::stripe-enabled = FALSE
 }
 

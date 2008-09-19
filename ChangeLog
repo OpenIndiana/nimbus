@@ -1,5 +1,11 @@
 2008-09-19 Erwann Chenede - <erwann.chenede@sun.com>
 
+  * gtk-engine/gtk-2.0/gtkrc : 
+  * gtk-engine/nimbus_rc_style.c : lighten up the default background 
+    as requested by Xdesign
+
+2008-09-19 Erwann Chenede - <erwann.chenede@sun.com>
+
   Initial implementation of the Dark Nimbus theme
 
   * configure.in : bumped to 0.1.0

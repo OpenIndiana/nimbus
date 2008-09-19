@@ -161,9 +161,9 @@ static void define_normal_button_states (NimbusData *nimbus_rc)
 				       0, 0);
   
   nimbus_gradient_add_segment (tmp_gradient, "#fbfbfc","#f1f2f4", 0, 6);
-  nimbus_gradient_add_segment (tmp_gradient, "#f1f2f4","#d6d9df", 6, 60);
-  nimbus_gradient_add_segment (tmp_gradient, "#d6d9df", "#d6d9df", 60, 70);
-  nimbus_gradient_add_segment (tmp_gradient, "#d6d9df", "#f4f7fd", 70, 96);
+  nimbus_gradient_add_segment (tmp_gradient, "#f1f2f4","#e8e9ed", 6, 60);
+  nimbus_gradient_add_segment (tmp_gradient, "#e8e9ed", "#e8e9ed", 60, 70);
+  nimbus_gradient_add_segment (tmp_gradient, "#e8e9ed", "#f4f7fd", 70, 96);
   nimbus_gradient_add_segment (tmp_gradient, "#f4f7fd", "#ffffff",96, 100);
   tmp->gradients = g_slist_append (tmp->gradients, tmp_gradient);
 
@@ -238,9 +238,9 @@ static void define_normal_button_states (NimbusData *nimbus_rc)
   tmp_gradient =  nimbus_gradient_new (1,1,3,2, CORNER_TOP_LEFT | CORNER_BOTTOM_LEFT | CORNER_TOP_RIGHT | CORNER_BOTTOM_RIGHT,
  0, 0);
   nimbus_gradient_add_segment (tmp_gradient, "#e3e5e9","#dfe2e6", 0, 6);
-  nimbus_gradient_add_segment (tmp_gradient, "#dfe2e6","#d6d9df", 6, 60);
-  nimbus_gradient_add_segment (tmp_gradient, "#d6d9df", "#d6d9df", 60, 70);
-  nimbus_gradient_add_segment (tmp_gradient, "#d6d9df", "#d8dbe1", 70, 96);
+  nimbus_gradient_add_segment (tmp_gradient, "#dfe2e6","#e8e9ed", 6, 60);
+  nimbus_gradient_add_segment (tmp_gradient, "#e8e9ed", "#e8e9ed", 60, 70);
+  nimbus_gradient_add_segment (tmp_gradient, "#e8e9ed", "#d8dbe1", 70, 96);
   nimbus_gradient_add_segment (tmp_gradient, "#d8dbe1", "#dadde3",96, 100);
   tmp->gradients = g_slist_append (tmp->gradients, tmp_gradient);
     
@@ -375,9 +375,9 @@ static void define_header_button_states (NimbusData *nimbus_rc)
 				       0, 0);
   
   nimbus_gradient_add_segment (tmp_gradient, "#fbfbfc","#f1f2f4", 0, 6);
-  nimbus_gradient_add_segment (tmp_gradient, "#f1f2f4","#d6d9df", 6, 60);
-  nimbus_gradient_add_segment (tmp_gradient, "#d6d9df", "#d6d9df", 60, 70);
-  nimbus_gradient_add_segment (tmp_gradient, "#d6d9df", "#f4f7fd", 70, 96);
+  nimbus_gradient_add_segment (tmp_gradient, "#f1f2f4","#e8e9ed", 6, 60);
+  nimbus_gradient_add_segment (tmp_gradient, "#e8e9ed", "#e8e9ed", 60, 70);
+  nimbus_gradient_add_segment (tmp_gradient, "#e8e9ed", "#f4f7fd", 70, 96);
   nimbus_gradient_add_segment (tmp_gradient, "#f4f7fd", "#ffffff",96, 100);
   tmp->gradients = g_slist_append (tmp->gradients, tmp_gradient);
 
@@ -440,9 +440,9 @@ static void define_header_button_states (NimbusData *nimbus_rc)
   tmp_gradient =  nimbus_gradient_new (1,1,3,0, CORNER_NO_CORNER, 0, 0);
 
   nimbus_gradient_add_segment (tmp_gradient, "#e3e5e9","#dfe2e6", 0, 6);
-  nimbus_gradient_add_segment (tmp_gradient, "#dfe2e6","#d6d9df", 6, 60);
-  nimbus_gradient_add_segment (tmp_gradient, "#d6d9df", "#d6d9df", 60, 70);
-  nimbus_gradient_add_segment (tmp_gradient, "#d6d9df", "#d8dbe1", 70, 96);
+  nimbus_gradient_add_segment (tmp_gradient, "#dfe2e6","#e8e9ed", 6, 60);
+  nimbus_gradient_add_segment (tmp_gradient, "#e8e9ed", "#e8e9ed", 60, 70);
+  nimbus_gradient_add_segment (tmp_gradient, "#e8e9ed", "#d8dbe1", 70, 96);
   nimbus_gradient_add_segment (tmp_gradient, "#d8dbe1", "#dadde3",96, 100);
   tmp->gradients = g_slist_append (tmp->gradients, tmp_gradient);
     
@@ -781,9 +781,9 @@ static void define_arrow_button_states (NimbusData *nimbus_rc, gboolean combo_en
 
   tmp_gradient =  nimbus_gradient_new (1,1,3,2, CORNER_TOP_RIGHT | CORNER_BOTTOM_RIGHT, 0, 0);
   nimbus_gradient_add_segment (tmp_gradient, "#e3e5e9","#dfe2e6", 0, 6);
-  nimbus_gradient_add_segment (tmp_gradient, "#dfe2e6","#d6d9df", 6, 60);
-  nimbus_gradient_add_segment (tmp_gradient, "#d6d9df", "#d6d9df", 60, 70);
-  nimbus_gradient_add_segment (tmp_gradient, "#d6d9df", "#d8dbe1", 70, 96);
+  nimbus_gradient_add_segment (tmp_gradient, "#dfe2e6","#e8e9ed", 6, 60);
+  nimbus_gradient_add_segment (tmp_gradient, "#e8e9ed", "#e8e9ed", 60, 70);
+  nimbus_gradient_add_segment (tmp_gradient, "#e8e9ed", "#d8dbe1", 70, 96);
   nimbus_gradient_add_segment (tmp_gradient, "#d8dbe1", "#dadde3",96, 100);
   tmp->gradients = g_slist_append (tmp->gradients, tmp_gradient);
     
@@ -1395,8 +1395,8 @@ static void nimbus_data_rc_style_init (NimbusRcStyle* nimbus_rc)
   nimbus_gradient_add_segment (rc->menubar, "#f9fafb", "#f4f4f6", 0, 8);
   nimbus_gradient_add_segment (rc->menubar, "#f4f4f6", "#e8e9ed", 8, 16);
   nimbus_gradient_add_segment (rc->menubar, "#e8e9ed", "#dedfe4", 16, 40);
-  nimbus_gradient_add_segment (rc->menubar, "#dedfe4", "#d6d9df", 40, 75);
-  nimbus_gradient_add_segment (rc->menubar, "#d6d9df", "#d6d9df", 75, 100);
+  nimbus_gradient_add_segment (rc->menubar, "#dedfe4", "#e8e9ed", 40, 75);
+  nimbus_gradient_add_segment (rc->menubar, "#e8e9ed", "#e8e9ed", 75, 100);
 
   rc->dark_menubar = nimbus_gradient_new (0,0,1,0, CORNER_NO_CORNER, 0, 0);
 
