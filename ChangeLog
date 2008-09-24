@@ -1,3 +1,8 @@
+2008-09-24 Erwann Chenede - <erwann.chenede@sun.com>
+  
+  * gtk-engine/gtk-2.0/Makefile.am:
+  * Makefile.am: don't install dark-* files.
+
 2008-09-19 Erwann Chenede - <erwann.chenede@sun.com>
 
   * icons/* : more icons for printer and gnome-netstatus

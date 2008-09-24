@@ -1,7 +1,6 @@
 themedir = $(datadir)/themes/$(PACKAGE)/gtk-2.0
 darkthemedir = $(datadir)/themes/dark-$(PACKAGE)/gtk-2.0
 theme_DATA =	gtkrc		\
-		dark-gtkrc	\
 		iconrc		\
 		dialog_authentication.png  \
 		dialog_info.png  \
@@ -102,6 +101,7 @@ theme_DATA =	gtkrc		\
 		zoom-out.png  
 
 EXTRA_DIST = $(theme_DATA)    \
+	     dark-gtkrc	    \
 	     iconrc.in	      
 
 

@@ -6,8 +6,7 @@ SUBDIRS=gtk-engine metacity icons po
 
 themedir = $(datadir)/themes/$(PACKAGE)/
 darkthemedir = $(datadir)/themes/dark-$(PACKAGE)/
-theme_in_files = index.theme.in \
-		 dark-index.theme.in
+theme_in_files = index.theme.in 
 
 theme_DATA = $(theme_in_files:.theme.in=.theme)
 
@@ -15,6 +14,7 @@ EXTRA_DIST= \
 	autogen.sh					\
 	index.theme					\
 	dark-index.theme				\
+	dark-index.theme.in				\
 	ChangeLog					\
 	$(theme_in_files)				
 
