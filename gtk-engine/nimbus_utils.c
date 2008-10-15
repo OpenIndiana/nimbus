@@ -1,6 +1,9 @@
 #include <stdio.h>
 #include <string.h>
 #include "nimbus_utils.h"
+
+static int x_derivation, y_derivation;
+
 static void 
 nimbus_draw_horizontal_gradient (GdkWindow *window,
 				 GtkStyle  *style,
@@ -264,6 +267,9 @@ nimbus_draw_gradient (GdkWindow*	window,
  GSList *tmp = gradient->segments;
  NimbusButtonCorner corners = gradient->corners;
 
+ x_derivation = x;
+ y_derivation = y;
+
  if (tab_position != NO_TAB)
    {
      if (tab_position == TAB_POS_LEFT)
@@ -368,16 +374,16 @@ nimbus_draw_horizontal_gradient (GdkWindow *window,
 	  /* spin button upper part case where a gradient can be drawn partially from the start*/
 	  if (draw_partial_from_start)
 	    {
-	      if (y+i >= partial_height) 
-		return;
+	      if (y-y_derivation+i >= partial_height) 
+	        return;
 	      gdk_draw_line (window, gc, x + offset_x, y+i, x + width - offset_w, y+i);
 	    }
 	  else
 	    {
 	      /* spin button lower part case where a gradient can be drawn partially from the bottom*/
-	      if (y+i >= partial_height)
+	      if (y-y_derivation+i >= partial_height)
 		{
-		  gdk_draw_line (window, gc, x + offset_x, y+i, x + width - offset_w, y+i);
+ 	  	  gdk_draw_line (window, gc, x + offset_x, y+i, x + width - offset_w, y+i);
 		}
 	    }
 	}

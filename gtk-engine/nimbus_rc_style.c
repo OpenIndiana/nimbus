@@ -585,7 +585,7 @@ void nimbus_init_progress (NimbusData* rc,
     }
 }
 
-static void define_progressbar (NimbusData *rc, int scr_w, int scr_h)
+static void define_progressbar (NimbusData *rc)
 {
   NimbusButton *tmp;
   NimbusGradient *tmp_gradient;
@@ -1105,8 +1105,6 @@ static void nimbus_data_rc_style_init (NimbusRcStyle* nimbus_rc)
   GdkPixbuf *tmp_pb, *tmp_pb_bis;
   GError **error = NULL;
   static NimbusData *rc = NULL;
-  int screen_w = gdk_screen_get_width (gdk_display_get_default_screen (gdk_display_get_default ()));
-  int screen_h = gdk_screen_get_height (gdk_display_get_default_screen (gdk_display_get_default ()));
 
   if (rc)
     {
@@ -1122,7 +1120,7 @@ static void nimbus_data_rc_style_init (NimbusRcStyle* nimbus_rc)
   define_header_button_states (rc);
   define_arrow_button_states (rc, TRUE);
   define_arrow_button_states (rc, FALSE);
-  define_progressbar (rc, screen_w, screen_h);
+  define_progressbar (rc);
 
   rc->combo_arrow[GTK_STATE_NORMAL] =  gdk_pixbuf_new_from_inline (-1, combo_caret_normal, FALSE, error);
   rc->combo_arrow[GTK_STATE_PRELIGHT] =  gdk_pixbuf_new_from_inline (-1, combo_caret_prelight, FALSE, error);
@@ -1422,7 +1420,7 @@ static void nimbus_data_rc_style_init (NimbusRcStyle* nimbus_rc)
   /* horizontal line */
   rc->hline = nimbus_color_cache_get ("#c7c7c7");
   /* vertical line */
-  rc->vline = nimbus_color_cache_get ("#46494f");
+  rc->vline = nimbus_color_cache_get ("#c7c7c7");
 
   /* horizontal line */
   rc->dark_hline = nimbus_color_cache_get ("#24324d");
