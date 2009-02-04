@@ -1406,6 +1406,7 @@ draw_box (GtkStyle      *style,
   static gboolean should_draw_defaultbutton = FALSE;
   NimbusData* rc = NIMBUS_RC_STYLE (style->rc_style)->data;
   gboolean dark = NIMBUS_RC_STYLE (style->rc_style)->dark;
+  gboolean light = NIMBUS_RC_STYLE (style->rc_style)->light;
 
   /* printf ("draw box state %s %s\n", state_names [state_type], state_names [GTK_WIDGET_STATE(widget)]); */
   if (DETAIL ("button") || DETAIL ("optionmenu"))
@@ -1706,8 +1707,13 @@ draw_box (GtkStyle      *style,
 	  orientation = gtk_toolbar_get_orientation (GTK_TOOLBAR (widget));
 
       if (orientation == GTK_ORIENTATION_HORIZONTAL)
-	  gdk_draw_line (window, nimbus_realize_color (style, dark ? rc->dark_menubar_border : rc->menubar_border, area), 
-			 x,y+height-1,x+width-1,y+height-1); 
+	{
+	  if (light)
+	    gdk_draw_line (window, nimbus_realize_color (style, rc->light_menubar_border_top, area), x,y+height-1,x+width-1,y+height-1); 
+	  else
+	    gdk_draw_line (window, nimbus_realize_color (style, dark ? rc->dark_menubar_border : rc->menubar_border, area), 
+			   x,y+height-1,x+width-1,y+height-1); 
+	}
       else
 	  {
 	    gdk_draw_line (window, nimbus_realize_color (style, dark ? rc->dark_menubar_border :rc->menubar_border, area), 
@@ -1764,14 +1770,24 @@ draw_box (GtkStyle      *style,
     {
       if (!get_ancestor_of_type (widget, "PanelMenuBar") && !get_ancestor_of_type (widget,"WnckSelector"))
 	{
-	  nimbus_draw_gradient (window, style, area, dark ? rc->dark_menubar : rc->menubar,
-				x, y, width, height-1, -1, TRUE, 
+	  if (light)
+	    {
+	      nimbus_draw_gradient (window, style, area, rc->light_menubar, x, y, width, height-1, -1, TRUE, 
 				GTK_ORIENTATION_HORIZONTAL, NO_TAB);
-
-	  gdk_draw_line (window, nimbus_realize_color (style, dark ? rc->dark_menubar_border :rc->menubar_border, area), 
-			 x,y+height-1,x+width-1,y+height-1);
+	      gdk_draw_line (window, nimbus_realize_color (style, rc->light_menubar_border_top, area), 
+			     x,y+height-2,x+width-1,y+height-2);
+	      gdk_draw_line (window, nimbus_realize_color (style, rc->light_menubar_border_bottom, area), 
+			     x,y+height-1,x+width-1,y+height-1);
+	    }
+	  else
+	    {
+	      nimbus_draw_gradient (window, style, area, dark ? rc->dark_menubar : rc->menubar,
+				    x, y, width, height-1, -1, TRUE, 
+				    GTK_ORIENTATION_HORIZONTAL, NO_TAB);
+	      gdk_draw_line (window, nimbus_realize_color (style, dark ? rc->dark_menubar_border :rc->menubar_border, area), 
+			     x,y+height-1,x+width-1,y+height-1);
+	    }
 	}
-
     }
   else
     {
@@ -2062,7 +2078,10 @@ draw_hline (GtkStyle     *style,
 {
   NimbusData *rc = NIMBUS_RC_STYLE (style->rc_style)->data;
 
-  gdk_draw_line (window, nimbus_realize_color (style, NIMBUS_RC_STYLE (style->rc_style)->dark ? rc->dark_hline : rc->hline, area), x1,y,x2,y);
+  if (NIMBUS_RC_STYLE (style->rc_style)->light)
+    gdk_draw_line (window, nimbus_realize_color (style, rc->light_hline, area), x1,y,x2,y);
+  else
+    gdk_draw_line (window, nimbus_realize_color (style, NIMBUS_RC_STYLE (style->rc_style)->dark ? rc->dark_hline : rc->hline, area), x1,y,x2,y);
   
   verbose ("draw\t hline \t-%s-\n", detail ? detail : "no detail");
 }
@@ -2082,7 +2101,10 @@ draw_vline (GtkStyle     *style,
 {
   NimbusData *rc = NIMBUS_RC_STYLE (style->rc_style)->data;
   
-  gdk_draw_line (window, nimbus_realize_color (style, NIMBUS_RC_STYLE (style->rc_style)->dark ? rc->dark_vline : rc->vline, area), x,y1,x,y2);
+  if (NIMBUS_RC_STYLE (style->rc_style)->light)
+    gdk_draw_line (window, nimbus_realize_color (style, rc->light_vline, area), x,y1,x,y2);
+  else
+    gdk_draw_line (window, nimbus_realize_color (style, NIMBUS_RC_STYLE (style->rc_style)->dark ? rc->dark_vline : rc->vline, area), x,y1,x,y2);
 
   verbose ("draw\t vline \t-%s-\n", detail ? detail : "no detail");
 }

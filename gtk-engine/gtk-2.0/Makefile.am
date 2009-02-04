@@ -1,5 +1,6 @@
 themedir = $(datadir)/themes/$(PACKAGE)/gtk-2.0
 darkthemedir = $(datadir)/themes/dark-$(PACKAGE)/gtk-2.0
+lightthemedir = $(datadir)/themes/light-$(PACKAGE)/gtk-2.0
 theme_DATA =	gtkrc		\
 		iconrc		\
 		dialog_authentication.png  \
@@ -101,6 +102,7 @@ theme_DATA =	gtkrc		\
 		zoom-out.png  
 
 EXTRA_DIST = $(theme_DATA)    \
+	     light-gtkrc    \
 	     dark-gtkrc	    \
 	     iconrc.in	      
 
@@ -113,3 +115,9 @@ install-data-local:
 	done
 	(cd $(DESTDIR)$(darkthemedir) && rm -f $(DESTDIR)$(darkthemedir)/gtkrc);
 	$(INSTALL_DATA) dark-gtkrc $(DESTDIR)$(darkthemedir)/gtkrc;
+	$(mkinstalldirs) $(DESTDIR)$(lightthemedir);
+	for i in $(theme_DATA); do   \
+	  (cd $(DESTDIR)$(lightthemedir) && ln -fs ../../$(PACKAGE)/gtk-2.0/$$i .)  \
+	done
+	(cd $(DESTDIR)$(lightthemedir) && rm -f $(DESTDIR)$(lightthemedir)/gtkrc);
+	$(INSTALL_DATA) light-gtkrc $(DESTDIR)$(lightthemedir)/gtkrc;	

@@ -5,6 +5,7 @@ THEME_SUBDIR=metacity-1
 THEME_NAME=$(PACKAGE)
 
 DARK_THEME_NAME=dark-$(PACKAGE)
+LIGHT_THEME_NAME=light-$(PACKAGE)
 
 THEME_IMAGES =  button-close-icon.png \
 		button-close-icon-prelight.png \
@@ -29,20 +30,24 @@ THEME_IMAGES =  button-close-icon.png \
 
 EXTRA_DIST =$(THEME_IMAGES)     \
 	    metacity-theme-1.xml  \
+	    light-metacity-theme-1.xml \
 	    dark-metacity-theme-1.xml  
 		
 install-data-local:
 	$(mkinstalldirs) $(DESTDIR)$(THEME_DIR);					     
 		$(mkinstalldirs) $(DESTDIR)$(THEME_DIR)/$(DARK_THEME_NAME)/$(THEME_SUBDIR);	     
+		$(mkinstalldirs) $(DESTDIR)$(THEME_DIR)/$(LIGHT_THEME_NAME)/$(THEME_SUBDIR);	     
 		$(mkinstalldirs) $(DESTDIR)$(THEME_DIR)/$(THEME_NAME)/$(THEME_SUBDIR);	     
 
 		$(INSTALL_DATA) metacity-theme-1.xml $(DESTDIR)$(THEME_DIR)/$(THEME_NAME)/$(THEME_SUBDIR); 
 		$(INSTALL_DATA) dark-metacity-theme-1.xml $(DESTDIR)$(THEME_DIR)/$(DARK_THEME_NAME)/$(THEME_SUBDIR)/metacity-theme-1.xml; 
+		$(INSTALL_DATA) light-metacity-theme-1.xml $(DESTDIR)$(THEME_DIR)/$(LIGHT_THEME_NAME)/$(THEME_SUBDIR)/metacity-theme-1.xml; 
 		 for i in $(THEME_IMAGES); do						     \
 		    	$(INSTALL_DATA)  $$i $(DESTDIR)$(THEME_DIR)/$(THEME_NAME)/$(THEME_SUBDIR) ;\
-			(cd $(DESTDIR)$(THEME_DIR)/$(DARK_THEME_NAME)/$(THEME_SUBDIR) && ln -fs ../../$(THEME_NAME)/$(THEME_SUBDIR)/$$i .) \
+			(cd $(DESTDIR)$(THEME_DIR)/$(DARK_THEME_NAME)/$(THEME_SUBDIR) && ln -fs ../../$(THEME_NAME)/$(THEME_SUBDIR)/$$i .) ;\
+			(cd $(DESTDIR)$(THEME_DIR)/$(LIGHT_THEME_NAME)/$(THEME_SUBDIR) && ln -fs ../../$(THEME_NAME)/$(THEME_SUBDIR)/$$i .) \
 		 done
 uninstall-local:
 	rm -Rf $(DESTDIR)$(THEME_DIR)/$(THEME_NAME)/$(THEME_SUBDIR)
 	rm -Rf $(DESTDIR)$(THEME_DIR)/$(DARK_THEME_NAME)/$(THEME_SUBDIR)
-        
+	rm -Rf $(DESTDIR)$(THEME_DIR)/$(LIGHT_THEME_NAME)/$(THEME_SUBDIR)

@@ -1109,6 +1109,7 @@ static void nimbus_data_rc_style_init (NimbusRcStyle* nimbus_rc)
   if (rc)
     {
       nimbus_rc->dark = FALSE;
+      nimbus_rc->light = FALSE;
       nimbus_rc->data = rc;
       return;
     }
@@ -1384,11 +1385,13 @@ static void nimbus_data_rc_style_init (NimbusRcStyle* nimbus_rc)
 
   /* menubar toolbar border */
   rc->menubar_border = nimbus_color_cache_get ("#9ea3ad");
-  /* rc->dark_menubar_border = nimbus_color_cache_get ("#0b1223"); */
-  rc->dark_menubar_border = nimbus_color_cache_get ("#24324d");
+
+  rc->light_menubar_border_top = nimbus_color_cache_get ("#b9bdc6");
+  rc->light_menubar_border_bottom = nimbus_color_cache_get ("#f4f4f6");
+
+  rc->dark_menubar_border = nimbus_color_cache_get ("#f4f4f6");
 
   /* menubar gradient */
-
   rc->menubar = nimbus_gradient_new (0,0,1,0, CORNER_NO_CORNER, 0, 0);
   nimbus_gradient_add_segment (rc->menubar, "#f9fafb", "#f4f4f6", 0, 8);
   nimbus_gradient_add_segment (rc->menubar, "#f4f4f6", "#e8e9ed", 8, 16);
@@ -1396,9 +1399,12 @@ static void nimbus_data_rc_style_init (NimbusRcStyle* nimbus_rc)
   nimbus_gradient_add_segment (rc->menubar, "#dedfe4", "#e8e9ed", 40, 75);
   nimbus_gradient_add_segment (rc->menubar, "#e8e9ed", "#e8e9ed", 75, 100);
 
-  rc->dark_menubar = nimbus_gradient_new (0,0,1,0, CORNER_NO_CORNER, 0, 0);
+  rc->light_menubar = nimbus_gradient_new (0,0,1,0, CORNER_NO_CORNER, 0, 0);
+  nimbus_gradient_add_segment (rc->light_menubar, "#e1e2e6", "#d0d3d8", 0, 100);
 
+  rc->dark_menubar = nimbus_gradient_new (0,0,1,0, CORNER_NO_CORNER, 0, 0);
   nimbus_gradient_add_segment (rc->dark_menubar, "#233154","#2c3f6d", 0, 100);
+
   /*menu border and shadow */
 
   rc->menu = g_new0 (NimbusMenu, 1);
@@ -1419,12 +1425,11 @@ static void nimbus_data_rc_style_init (NimbusRcStyle* nimbus_rc)
 
   /* horizontal line */
   rc->hline = nimbus_color_cache_get ("#c7c7c7");
-  /* vertical line */
-  rc->vline = nimbus_color_cache_get ("#c7c7c7");
-
-  /* horizontal line */
+  rc->light_hline = nimbus_color_cache_get ("#cecfd4");
   rc->dark_hline = nimbus_color_cache_get ("#24324d");
-  /* vertical line */
+   /* vertical line */
+  rc->vline = nimbus_color_cache_get ("#c7c7c7");
+  rc->light_vline = nimbus_color_cache_get ("#cecfd4");
   rc->dark_vline = nimbus_color_cache_get ("#24324d");
 
   nimbus_rc->data = rc;
@@ -1453,7 +1458,8 @@ nimbus_rc_style_class_init (NimbusRcStyleClass *klass)
 
 enum 
 {
-  TOKEN_DARK_THEME = G_TOKEN_LAST + 1,
+  TOKEN_LIGHT_THEME = G_TOKEN_LAST + 1,
+  TOKEN_DARK_THEME,
 };
 
 static struct
@@ -1464,6 +1470,7 @@ static struct
 theme_symbols[] =
 {
   { "dark_theme",	TOKEN_DARK_THEME},
+  { "light_theme",	TOKEN_LIGHT_THEME},
 };
 
 static guint
@@ -1515,6 +1522,18 @@ nimbus_rc_style_parse (GtkRcStyle *rc_style,
 	  if (token == TOKEN_DARK_THEME)
 	    {
 	      nimbus_style->dark = TRUE;
+	      nimbus_style->light = FALSE;
+	      token = G_TOKEN_NONE;
+	    }
+	}
+      if (token == TOKEN_LIGHT_THEME)
+	{
+	  /* get token */
+	  token = g_scanner_get_next_token (scanner);
+	  if (token == TOKEN_LIGHT_THEME)
+	    {
+	      nimbus_style->dark = FALSE;
+	      nimbus_style->light = TRUE;
 	      token = G_TOKEN_NONE;
 	    }
 	}
@@ -1540,6 +1559,7 @@ nimbus_rc_style_merge (GtkRcStyle *dest,
       NimbusRcStyle *Ndest = NIMBUS_RC_STYLE (dest);
       NimbusRcStyle *Nsrc = NIMBUS_RC_STYLE (src);
       Ndest->dark = Nsrc->dark;
+      Ndest->light = Nsrc->light;
     }
   parent_class->merge (dest, src);
 }

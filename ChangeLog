@@ -1,3 +1,21 @@
+2009-02-04 Erwann Chenede - <erwann.chenede@sun.com>
+
+  initial implementation of light-nimbus theme.
+
+  * metacity/light-metacity-theme-1.xml : new theme variation 
+  * metacity/Makefile.am
+  * light-index.theme.in
+  * configure.in : bumped to 0.1.2
+  * gtk-engine/gtk-2.0/light-gtkrc
+  * gtk-engine/gtk-2.0/Makefile.am
+  * gtk-engine/nimbus_rc_style.c : added light_theme token and new colors
+  * gtk-engine/nimbus_rc_style.h
+  * gtk-engine/nimbus_style.c : added light theme switch
+  * Makefile.am
+  * specs/light/WindowFrame.jpg : designer images and specs
+  * specs/light/WindowFrame-Spec2.jpg :
+  * specs/light/WindowFrame-Spec1b.jpg
+
 2008-10-15 Erwann Chenede - <erwann.chenede@sun.com>
 
   * gtk-engine/nimbus_rc_style.c: removed reference to gdk_display_get_default 
