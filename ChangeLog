@@ -1,3 +1,11 @@
+2009-03-11 Erwann Chenede - <erwann.chenede@sun.com>
+
+  fix for 1621
+  * icons/48x48/places/start-here.png: 48x48 version of the OpenSolaris
+    logo
+  * icons/48x48/places/Makefile.am : added new icon
+  * configure.in : bump version
+
 2009-02-04 Erwann Chenede - <erwann.chenede@sun.com>
 
   initial implementation of light-nimbus theme.
