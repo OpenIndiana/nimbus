@@ -64,6 +64,7 @@ theme_DATA =	gtkrc		\
 		media-next.png  \
 		media-pause.png  \
 		media-play.png  \
+		media-play-rtl.png  \
 		media-prev.png  \
 		media-record.png  \
 		media-rewind.png  \
