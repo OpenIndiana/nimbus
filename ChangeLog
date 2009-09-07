@@ -1,3 +1,9 @@
+2009-09-07 Erwann Chenede - <erwann.chenede@sun.com>
+
+  * configure.in
+  * gtk-engine/nimbus_style.c : make nimbus compile cleanly under mingw
+    patch by Alexander Shaduri
+
 2009-08-28 Erwann Chenede - <erwann.chenede@sun.com>
 
   * icons/* : added new nwam icons (doo 10942)

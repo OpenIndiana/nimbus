@@ -7,9 +7,12 @@
 #include "nimbus_style.h"
 #include "nimbus_rc_style.h"
 #include "nimbus_utils.h"
+
+#ifndef _WIN32
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <gdk/gdkx.h>
+#endif
 
 static const char *const state_names[5] = {
     "Normal",
@@ -1727,6 +1730,8 @@ draw_box (GtkStyle      *style,
       GdkGC *start, *mid_start, *mid_end, *end;
       NimbusMenu *menu = dark ? rc->dark_menu : rc->menu;
       sanitize_size (window, &width, &height);
+
+#ifndef _WIN32
       if (gdk_drawable_get_depth (window) == 8) 
 	{
 	  XClassHint classHint;
@@ -1743,7 +1748,9 @@ draw_box (GtkStyle      *style,
 		  gdk_draw_rectangle (window, style->bg_gc[GTK_STATE_NORMAL], TRUE, x,y,width-1,height-1); 
 		}
 	    }
-	} 
+	}
+#endif
+
       gdk_draw_rectangle (window, nimbus_realize_color (style, menu->border, area), FALSE, x,y,width-1,height-1); 
 
       if (!dark)
