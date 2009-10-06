@@ -121,7 +121,7 @@ style "notebook" = "default" {
 	ythickness = 5
 }
 
-widget_class "*<GtkNotebook>" style "notebook"
+widget_class "*<GeditNotebook>" style "notebook"
 
 widget "gtk-tooltip*" style "tips"
 widget "*tasklist-button*" style "dn-tasklist-label"

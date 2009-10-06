@@ -67,7 +67,7 @@ style "notebook" = "default" {
 	ythickness = 5
 }
 
-widget_class "*<GtkNotebook>" style "notebook"
+widget_class "*<GeditNotebook>" style "notebook"
 
 style "tips" 
 {
