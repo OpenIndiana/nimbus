@@ -116,6 +116,12 @@ widget_class "*.<GtkTreeView>.*<GtkLabel>"	style "treeview-header"
 # notebook label
 widget_class "*.<GtkNotebook>.<GtkHBox>.<GtkLabel>"	style "treeview-header"
 
+style "notebook" = "default" {
+	xthickness = 1
+	ythickness = 5
+}
+
+widget_class "*<GtkNotebook>" style "notebook"
 
 widget "gtk-tooltip*" style "tips"
 widget "*tasklist-button*" style "dn-tasklist-label"

@@ -1,3 +1,7 @@
+2009-10-06 Erwann Chenede - <erwann.chenede@sun.com>
+
+  * gtk-engine/gtk-2.0/*gtkrc : fix 6684201 
+
 2009-09-07 Erwann Chenede - <erwann.chenede@sun.com>
 
   * configure.in

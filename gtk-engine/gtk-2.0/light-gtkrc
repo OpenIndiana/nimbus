@@ -64,6 +64,13 @@ class "GtkEntry" style "entry"
 class "GtkScrollbar" style "scrollbar"
 class "GtkPaned" style "pane"
 
+style "notebook" = "default" {
+	xthickness = 1
+	ythickness = 5
+}
+
+widget_class "*<GtkNotebook>" style "notebook"
+
 style "tips" 
 {
   bg[NORMAL] = "#ffffcc"
