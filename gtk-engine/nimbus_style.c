@@ -1373,15 +1373,16 @@ draw_box (GtkStyle      *style,
 	  gint           width,
 	  gint           height)
 {
-  static gboolean should_draw_defaultbutton = FALSE;
+  static gboolean skip_for_defaultbutton = FALSE;
   NimbusData* rc = NIMBUS_RC_STYLE (style->rc_style)->data;
   gboolean dark = NIMBUS_RC_STYLE (style->rc_style)->dark;
   gboolean light = NIMBUS_RC_STYLE (style->rc_style)->light;
 
   /* printf ("draw box state %s %s\n", state_names [state_type], state_names [GTK_WIDGET_STATE(widget)]); */
-  if (DETAIL ("button") || DETAIL ("optionmenu"))
+  if (DETAIL ("button") || DETAIL ("optionmenu") || DETAIL ("buttondefault"))
     {
       NimbusButton *button_type = dark ? rc->dark_button[state_type] : rc->button[state_type];
+      gboolean defaultbutton = FALSE;
 
       if (widget && widget->parent &&
 	  (GTK_IS_TREE_VIEW(widget->parent) ||
@@ -1397,22 +1398,23 @@ draw_box (GtkStyle      *style,
 	  get_ancestor_of_type (widget, "GtkOptionMenu"))
 	button_type = rc->button[state_type];
       
-      if (should_draw_defaultbutton)
+      if (DETAIL ("buttondefault"))
 	{
-	  x -= 1;  y -= 1; width += 2; height += 2;
 	  button_type = rc->button_default[state_type];
+	  defaultbutton = TRUE;
+	  skip_for_defaultbutton = TRUE;
 	}
-      
+
+      if (!defaultbutton && skip_for_defaultbutton)
+	{
+	  skip_for_defaultbutton = FALSE;
+	  return;
+	}
+
       draw_nimbus_box (style, window, state_type, shadow_type, area,
 		       widget, detail, button_type, TRUE,
 		       x, y, width, height, NIMBUS_SPIN_NONE,			     
 		       GTK_ORIENTATION_HORIZONTAL);
-      should_draw_defaultbutton = FALSE;
-    }
-  else if (DETAIL ("buttondefault")) /* needed as buttondefault is just an addon in gtkbutton.c */
-    {
-      should_draw_defaultbutton = TRUE;
-      return;
     }
   else if ((detail) && (!strncmp("spinbutton", detail, strlen ("spinbutton"))))
     {

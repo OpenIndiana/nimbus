@@ -1,5 +1,9 @@
 2009-10-07 Erwann Chenede - <erwann.chenede@sun.com>
 
+  * gtk-engine/nimbus_style.c: fix for 6744700 (firefox default button)
+
+2009-10-07 Erwann Chenede - <erwann.chenede@sun.com>
+
   * gtk-engine/nimbus_style.c: fix for 6880869 (firefox scroll)
 
 2009-10-06 Erwann Chenede - <erwann.chenede@sun.com>
