@@ -303,38 +303,6 @@ draw_arrow (GtkStyle      *style,
       offset_height = 0; 
       offset_width = 0;   
       
-      if (adj->lower == adj->value)
-	{ /* slider and start button merged  */
-	  if (arrow_type == GTK_ARROW_UP)
-	    {
-	      tmp_pb = rc->scroll_v[scroll_slider_state]->slider_start;
-	      offset_x += 1;
-	      offset_y += 17;
-	      offset_width = -2;
-	    }
-	  if (arrow_type == GTK_ARROW_LEFT)
-	    {
-	      tmp_pb = rc->scroll_h[scroll_slider_state]->slider_start;
-	      offset_y += 1;
-	      offset_x += 17;
-	      offset_height = -2;
-	    }
-	}
-      if (adj->value + adj->page_size == adj->upper)
-	{ /* slider and end button merged */
-	  if (arrow_type == GTK_ARROW_DOWN)
-	    {
-	      tmp_pb = rc->scroll_v[scroll_slider_state]->slider_end;
-	      offset_x += 1;
-	      offset_width = -2;
-	    }
-	  if (arrow_type == GTK_ARROW_RIGHT)
-	    {
-	      tmp_pb = rc->scroll_h[scroll_slider_state]->slider_end;
-	      offset_y +=1;
-	      offset_height -=2;
-	    }
-	}
       if (tmp_pb && !firefox_hack && 
 	  check_sane_pixbuf_value ((arrow_type == GTK_ARROW_DOWN || arrow_type == GTK_ARROW_UP) ? 1 : 0,
 				   (arrow_type == GTK_ARROW_LEFT || arrow_type == GTK_ARROW_RIGHT) ? 1 : 0,
@@ -443,7 +411,6 @@ draw_arrow (GtkStyle      *style,
     }
 
   verbose ("draw\t arrow in \t-%s-\n", detail ? detail : "no detail");
-
 }
 
 /**************************************************************************/

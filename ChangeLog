@@ -1,6 +1,10 @@
+2009-10-07 Erwann Chenede - <erwann.chenede@sun.com>
+
+  * gtk-engine/nimbus_style.c: fix for 6880869 (firefox scroll)
+
 2009-10-06 Erwann Chenede - <erwann.chenede@sun.com>
 
-  * gtk-engine/gtk-2.0/*gtkrc : fix 6684201 
+  * gtk-engine/gtk-2.0/*gtkrc : fix 6684201 (gedit tab)
 
 2009-09-07 Erwann Chenede - <erwann.chenede@sun.com>
 
