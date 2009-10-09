@@ -1,3 +1,7 @@
+2009-10-09 Erwann Chenede - <erwann.chenede@sun.com>
+
+  * configure.in: new release 0.1.4
+
 2009-10-07 Erwann Chenede - <erwann.chenede@sun.com>
 
   * gtk-engine/nimbus_style.c: fix for 6744700 (firefox default button)
