@@ -1,5 +1,10 @@
 2010-07-22 Erwann Chenede - <erwann.chenede@sun.com>
 
+  * icons/* : fix for 14455: renamed administration-network-configuration to 
+    preferences-system-network
+
+2010-07-22 Erwann Chenede - <erwann.chenede@sun.com>
+
   * gtk-engine/nimbus_style.c: fix for 15409 (Bartosz Kwitniewski)
 
 2009-10-09 Erwann Chenede - <erwann.chenede@sun.com>

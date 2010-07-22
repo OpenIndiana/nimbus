@@ -4,7 +4,6 @@ iconsdir = $(themedir)/$(size)/$(context)
 icons_DATA = 				 		\
 		accessories-archive-manager.png 		\
 		accessories-character-map.png 		\
-		administration-network-configuration.png 		\
 		administration-printers.png 		\
 		administration-time-and-date.png 		\
 		administration-users-and-groups.png 		\
@@ -19,6 +18,7 @@ icons_DATA = 				 		\
 		preferences-desktop-remote-desktop.png 		\
 		preferences-desktop-screen-resolution.png 		\
 		preferences-settings-sound.png 		\
+		preferences-system-network.png 		\
 		preferences-system.png 		\
 		realplayer.png 		\
 		searchtool.png 		\

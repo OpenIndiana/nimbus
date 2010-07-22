@@ -2,17 +2,17 @@ size = 32x32
 context = emblems
 iconsdir = $(themedir)/$(size)/$(context)
 icons_DATA = 				 		\
-		emblem-favorite.png	\
-		emblem-important.png	\
-		emblem-noread.png	\
-		emblem-nowrite.png	\
-		emblem-symbolic-link.png	\
-		gnome-netstatus-wireless-idle.png	\
-		gnome-netstatus-wireless-receive.png	\
-		gnome-netstatus-wireless-transmit-receive.png	\
-		gnome-netstatus-wireless-transmit.png	\
-		nwam-connected.png	\
-		nwam-error.png	\
+		emblem-favorite.png 		\
+		emblem-important.png 		\
+		emblem-noread.png 		\
+		emblem-nowrite.png 		\
+		emblem-symbolic-link.png 		\
+		gnome-netstatus-wireless-idle.png 		\
+		gnome-netstatus-wireless-receive.png 		\
+		gnome-netstatus-wireless-transmit-receive.png 		\
+		gnome-netstatus-wireless-transmit.png 		\
+		nwam-connected.png 		\
+		nwam-error.png 		\
 		nwam-warning.png
 EXTRA_DIST = $(icons_DATA)
 

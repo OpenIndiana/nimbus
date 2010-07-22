@@ -3,7 +3,6 @@ context = apps
 iconsdir = $(themedir)/$(size)/$(context)
 icons_DATA = 				 		\
 		administration-login-screen-setup.png 		\
-		administration-network-configuration.png 		\
 		administration-printers.png 		\
 		administration-users-and-groups.png 		\
 		administration.png 		\
@@ -23,6 +22,7 @@ icons_DATA = 				 		\
 		preferences-desktop-wallpaper.png 		\
 		preferences-desktop-window-behavior.png 		\
 		preferences-settings-sound.png 		\
+		preferences-system-network.png 		\
 		preferences-system.png 		\
 		realplayer.png 		\
 		sound-totem-movie-player.png 		\

@@ -1,5 +1,5 @@
 #!/usr/bin/perl
-
+# usage : in icons dir :  ./utils/create-makefiles.pl ./utils/dir.list.icon-name-mapping
 
 ($filename) = @ARGV;
 

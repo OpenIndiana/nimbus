@@ -9,7 +9,6 @@ icons_DATA = 				 		\
 		accessories-pda-sync.png 		\
 		accessories-text-editor.png 		\
 		administration-login-screen-setup.png 		\
-		administration-network-configuration.png 		\
 		administration-power-management.png 		\
 		administration-printers.png 		\
 		administration-software-update.png 		\
@@ -44,6 +43,7 @@ icons_DATA = 				 		\
 		preferences-desktop-window-behavior.png 		\
 		preferences-palmosdevices.png 		\
 		preferences-settings-sound.png 		\
+		preferences-system-network.png 		\
 		preferences-system.png 		\
 		programs.png 		\
 		realplayer.png 		\

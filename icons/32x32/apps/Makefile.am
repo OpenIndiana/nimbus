@@ -6,7 +6,6 @@ icons_DATA = 				 		\
 		accessories-dictionary.png 		\
 		accessories-text-editor.png 		\
 		administration-login-screen-setup.png 		\
-		administration-network-configuration.png 		\
 		administration-printers.png 		\
 		administration-users-and-groups.png 		\
 		administration.png 		\
@@ -28,6 +27,7 @@ icons_DATA = 				 		\
 		preferences-desktop-wallpaper.png 		\
 		preferences-desktop-window-behavior.png 		\
 		preferences-settings-sound.png 		\
+		preferences-system-network.png 		\
 		programs.png 		\
 		realplayer.png 		\
 		sound-java-multimedia-player.png 		\

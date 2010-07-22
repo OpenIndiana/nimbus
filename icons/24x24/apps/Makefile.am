@@ -5,7 +5,6 @@ icons_DATA = 				 		\
 		accessories-dictionary.png 		\
 		accessories-text-editor.png 		\
 		administration-login-screen-setup.png 		\
-		administration-network-configuration.png 		\
 		administration-power-management.png 		\
 		administration-printers.png 		\
 		administration-time-and-date.png 		\
@@ -32,6 +31,7 @@ icons_DATA = 				 		\
 		preferences-desktop-wallpaper.png 		\
 		preferences-palmosdevices.png 		\
 		preferences-settings-sound.png 		\
+		preferences-system-network.png 		\
 		preferences-system.png 		\
 		programs.png 		\
 		searchtool.png 		\
