@@ -1,5 +1,9 @@
 2010-07-22 Erwann Chenede - <erwann.chenede@sun.com>
 
+  * icons/*: added system-software-install.png fix for 14167
+
+2010-07-22 Erwann Chenede - <erwann.chenede@sun.com>
+
   * icons/index.theme.in : fix for 7968 (Calum Benson)
 
 2010-07-22 Erwann Chenede - <erwann.chenede@sun.com>

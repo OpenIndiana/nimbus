@@ -44,6 +44,7 @@ icons_DATA = 				 		\
 		system-print-queue-monitor.png 		\
 		system-reboot.png 		\
 		system-shutdown.png 		\
+		system-software-install.png 		\
 		thunderbird.png 		\
 		utilities-terminal.png 		\
 		xsane.png

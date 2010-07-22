@@ -63,6 +63,7 @@ icons_DATA = 				 		\
 		system-print-queue-monitor.png 		\
 		system-reboot.png 		\
 		system-shutdown.png 		\
+		system-software-install.png 		\
 		thunderbird.png 		\
 		universal-access-dasher.png 		\
 		universal-access-gok.png 		\

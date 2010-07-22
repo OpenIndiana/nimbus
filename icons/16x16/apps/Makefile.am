@@ -23,6 +23,7 @@ icons_DATA = 				 		\
 		realplayer.png 		\
 		searchtool.png 		\
 		system-print-queue-monitor.png 		\
+		system-software-install.png 		\
 		thunderbird.png
 EXTRA_DIST = $(icons_DATA)
 
