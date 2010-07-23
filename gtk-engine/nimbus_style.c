@@ -1908,15 +1908,10 @@ draw_slider (GtkStyle      *style,
 	  if (area)
 	    area->width++; /* grow clip area for the slider shadow */
 
-	      printf ("slider_start h %d slider_end h %d height %d\n", 
-		      gdk_pixbuf_get_height (sb->slider_start), 
-		      gdk_pixbuf_get_height (sb->slider_end),
-		      height);
 	  if (height < gdk_pixbuf_get_height (sb->slider_start) + gdk_pixbuf_get_height (sb->slider_end) - 1)
 	    {
 	      height = gdk_pixbuf_get_height (sb->slider_start) + gdk_pixbuf_get_height (sb->slider_end);
 	      CLIP = FALSE;
-	      printf ("!!!! slider height smaller than images\n");
 	    }
 
 	  gdk_draw_pixbuf (window,			 
@@ -1965,7 +1960,7 @@ draw_slider (GtkStyle      *style,
   else
     parent_class->draw_slider (style, window, state_type, shadow_type, area, widget, detail, x, y, width, height, orientation);
 
-  printf ("draw\t slider \t-%s-\n", detail ? detail : "no detail");
+  verbose ("draw\t slider \t-%s-\n", detail ? detail : "no detail");
 
 }
 
