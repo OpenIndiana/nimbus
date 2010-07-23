@@ -1,3 +1,7 @@
+2010-07-23 Erwann Chenede - <erwann.chenede@sun.com>
+
+  * gtk-engine/nimbus_style.c: fix for 13704
+
 2010-07-22 Erwann Chenede - <erwann.chenede@sun.com>
 
   * icons/*: added system-software-install.png fix for 14167
