@@ -1379,6 +1379,12 @@ draw_box (GtkStyle      *style,
   gboolean light = NIMBUS_RC_STYLE (style->rc_style)->light;
 
   /* printf ("draw box state %s %s\n", state_names [state_type], state_names [GTK_WIDGET_STATE(widget)]); */
+  if ( width > 65535 || height > 65535)
+    {
+      g_warning ("Nimbus Native Windows wider or taller than 65535 pixels are not supported");
+      parent_class->draw_box (style, window, state_type, shadow_type, area, widget, detail, x, y, width, height);
+      return;
+    }
   if (DETAIL ("button") || DETAIL ("optionmenu") || DETAIL ("buttondefault"))
     {
       NimbusButton *button_type = dark ? rc->dark_button[state_type] : rc->button[state_type];
