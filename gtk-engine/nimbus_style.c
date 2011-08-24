@@ -1387,9 +1387,9 @@ draw_box (GtkStyle      *style,
   gboolean light = NIMBUS_RC_STYLE (style->rc_style)->light;
 
   /* printf ("draw box state %s %s\n", state_names [state_type], state_names [GTK_WIDGET_STATE(widget)]); */
-  if ( width > 65535 || height > 65535)
+  if ( width > 20000 || height > 20000)
     {
-      g_warning ("Nimbus Native Windows wider or taller than 65535 pixels are not supported");
+      /* silently reverting to parent theme implementation to avoid resource starvation */
       parent_class->draw_box (style, window, state_type, shadow_type, area, widget, detail, x, y, width, height);
       return;
     }

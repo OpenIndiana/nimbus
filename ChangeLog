@@ -1,3 +1,8 @@
+2011-08-19 Erwann Chenede - <erwann.chenede@oracle.com>
+
+  * gtk-engine/nimbus_style.c: reduce max window size to avoid 
+    resource starvation. Fix for 7076646
+
 2011-06-24 Erwann Chenede - <erwann.chenede@oracle.com>
 
   * gtk-engine/nimbus_style.c: fix for 17274 (TD not respecting theming pb)
