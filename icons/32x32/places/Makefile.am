@@ -5,7 +5,16 @@ icons_DATA = 				 		\
 		bookmark-missing.png 		\
 		bookmark.png 		\
 		file.png 		\
+		folder-documents.png 		\
+		folder-download.png 		\
 		folder-drag-accept.png 		\
+		folder-music.png 		\
+		folder-pictures.png 		\
+		folder-publicshare.png 		\
+		folder-remote.png 		\
+		folder-saved-search.png 	\
+		folder-templates.png	 	\
+		folder-videos.png	 	\
 		folder.png 		\
 		gnome-fs-ftp.png 		\
 		gnome-fs-nfs.png 		\
