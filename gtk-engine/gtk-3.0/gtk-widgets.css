@@ -3,8 +3,15 @@
 
 /* default */
 * {
+    -GtkRange-slider-width: 13;
+    -GtkRange-stepper-size: 17;
+    -GtkRange-stepper-spacing: 0;
+    -GtkRange-trough-border: 3;
+    -GtkRange-trough-under-steppers: 1;
+    -GtkScrollbar-activate-slider: 1;
     -GtkScrollbar-has-backward-stepper: true;
     -GtkScrollbar-has-forward-stepper: true;
+    -GtkScrollbar-slider-width: 13;
     -GtkScrolledwindow-scrollbar-spacing: 0;
     -GtkScrolledwindow-scrollbars-within-bevel: 1;
     -textview-error-underline-color: @error_color;
