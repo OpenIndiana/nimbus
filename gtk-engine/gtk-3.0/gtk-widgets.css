@@ -3378,10 +3378,10 @@ decoration:backdrop {
     box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.23);
 }
 
-.csd.popup decoration {
+/*.csd.popup decoration {
     border-radius: 0;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(0, 0, 0, 0.13);
-}
+}*/
 
 /*tooltip.csd decoration {
     border-radius: 0;
