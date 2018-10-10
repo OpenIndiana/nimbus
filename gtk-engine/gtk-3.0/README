@@ -1,0 +1,12 @@
+# This code is copied from Solaris-11 B00merang theme.
+https://github.com/B00merang-Project/Solaris-11
+
+Imported as of commit 
+
+commit b8f82dde4131da04a9879158fbea99dd35f277c4
+Author: Christian Medel <cmedelahumada@gmail.com>
+Date:   Wed Oct 10 20:04:01 2018 -0400
+
+    Dual-license code with GPL v3 and LGPL v2
+    
+    Relicense to GPL v3 and LGPL v2 for Openindiana project

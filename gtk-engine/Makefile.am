@@ -1,4 +1,4 @@
-SUBDIRS = gtk-2.0 images 
+SUBDIRS = gtk-2.0 gtk-3.0 images 
 
 INCLUDES = $(GTK2_CFLAGS)
 
