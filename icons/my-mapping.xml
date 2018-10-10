@@ -319,6 +319,7 @@
 	    <link>emptytrash</link>
 	    <link>trashcan_empty</link>
 	    <link>gnome-stock-trash</link>
+	    <link>user-trash-symbolic</link>
 	</icon>
 	<icon name="user-trash-full">
 	    <link>gnome-fs-trash-full</link>
@@ -327,6 +328,7 @@
 	    <link>trashcan_full</link>
 	    <link>gnome-stock-trash-full</link>
 	    <link>stock_trash_full</link>
+	    <link>user-trash-full-symbolic</link>
 	</icon>
 	<icon name="executable">
 	    <link>gnome-fs-executable</link>
