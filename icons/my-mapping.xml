@@ -3,6 +3,60 @@
 
 <mapping>
     <context dir="actions">
+	<icon name="edit-copy">
+	  <link>edit-copy-symbolic</link>
+	</icon>
+	<icon name="edit-cut">
+	  <link>edit-cut-symbolic</link>
+	</icon>
+	<icon name="edit-delete">
+	  <link>edit-delete-symbolic</link>
+	</icon>
+	<icon name="edit-find-replace">
+	  <link>edit-find-replace-symbolic</link>
+	</icon>
+	<icon name="edit-find">
+	  <link>edit-find-symbolic</link>
+        </icon>
+	<icon name="edit-font">
+	  <link>edit-font-symbolic</link>
+        </icon>
+	<icon name="edit-paste">
+	  <link>edit-paste-symbolic</link>
+        </icon>
+	<icon name="edit-redo">
+	  <link>edit-redo-symbolic</link>
+        </icon>
+	<icon name="edit-revert">
+	  <link>edit-revert-symbolic</link>
+        </icon>
+	<icon name="edit-undelete">
+	  <link>edit-undelete-symbolic</link>
+        </icon>
+	<icon name="edit-undo">
+	  <link>edit-undo-symbolic</link>
+        </icon>
+	<icon name="edit">
+	  <link>edit-symbolic</link>
+        </icon>
+	<icon name="editdelete">
+	  <link>editdelete-symbolic</link>
+        </icon>
+	<icon name="editpaste">
+	  <link>editpaste-symbolic</link>
+        </icon>
+	<icon name="go-down">
+	  <link>go-down-symbolic</link>
+        </icon>
+	<icon name="go-next">
+	  <link>go-next-symbolic</link>
+        </icon>
+	<icon name="go-previous">
+	  <link>go-previous-symbolic</link>
+        </icon>
+	<icon name="go-up">
+	  <link>go-up-symbolic</link>
+        </icon>
 	<icon name="execute">
 	  <link>gnome-run</link>
 	</icon>
@@ -179,7 +233,9 @@
 	    <link>gnome-dev-cdrom</link>
 	    <link>gnome-dev-dvd</link>
 	</icon>
-     
+	<icon name="drive-harddisk">
+	    <link>drive-harddisk-symbolic</link>
+	</icon>
      </context>
      <context dir="mimetypes">
 	<icon name="stock_generic-mimetype">
@@ -226,6 +282,15 @@
 	</icon>
       </context>
       <context dir="places">
+      	<icon name="folder">
+	    <link>folder-symbolic</link>
+	</icon>
+	<icon name="network-server">
+	     <link>network-server-symbolic</link>
+	</icon>
+	<icon name="network-workgroup">
+	     <link>network-workgroup-symbolic</link>
+	</icon>
       	<icon name="nfs">
 	    <link>gnome-fs-nfs</link>
 	</icon>
@@ -243,6 +308,12 @@
 	<icon name="web">
 	    <link>stock_proxy</link>
 	</icon>
+	<icon name="user-desktop">
+	    <link>user-desktop-symbolic</link>
+	</icon>
+	<icon name="user-home">
+	    <link>user-home-symbolic</link>
+	</icon>
 	<icon name="user-trash">
 	    <link>gnome-fs-trash-empty</link>
 	    <link>emptytrash</link>
@@ -252,6 +323,7 @@
 	<icon name="user-trash-full">
 	    <link>gnome-fs-trash-full</link>
 	    <link>edittrash</link>
+	    <link>edittrash-symbolic</link>
 	    <link>trashcan_full</link>
 	    <link>gnome-stock-trash-full</link>
 	    <link>stock_trash_full</link>
