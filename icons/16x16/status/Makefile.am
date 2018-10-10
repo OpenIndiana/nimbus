@@ -10,7 +10,8 @@ icons_DATA = 				 		\
 		dialog-close.png 		\
 		dialog-error.png 		\
 		dialog-information.png 		\
-		dialog-warning.png
+		dialog-warning.png		\
+		image-missing.png
 EXTRA_DIST = $(icons_DATA)
 
 install-data-local: install-iconsDATA

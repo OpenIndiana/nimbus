@@ -11,6 +11,7 @@ icons_DATA = 				 		\
 		gnome-netstatus-75-100.png 		\
 		gnome-netstatus-wireless-error.png 		\
 		gnome-netstatus-wireless-offline.png 		\
+		image-missing.png 		\
 		network-error.png 		\
 		network-idle.png 		\
 		network-offline.png 		\
