@@ -1273,7 +1273,7 @@ notebook {
     border-style: solid;
     border-color: shade(@theme_base_color, 0.7);
     border-radius: 0;
-    background-color: @theme_base_color;
+    background-color: @theme_bg_color;
     background-image: none;
     background-clip: border-box;
 }
