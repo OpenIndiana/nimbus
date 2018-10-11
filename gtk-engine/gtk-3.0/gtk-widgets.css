@@ -2809,6 +2809,14 @@ filechooser button image:last-child {
     color: alpha(currentColor, 0.7);
 }
 
+/****************
+ * print dialog *
+ ****************/
+
+printdialog > box.view.vertical.dialog-vbox  {
+    background-color: @theme_bg_color;
+}
+
 /*********************
  * app notifications *
  *********************/
