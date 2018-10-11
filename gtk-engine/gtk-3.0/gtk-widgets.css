@@ -2817,6 +2817,12 @@ printdialog > box.view.vertical.dialog-vbox  {
     background-color: @theme_bg_color;
 }
 
+printdialog paper {
+    background-color: #ffffff;
+    border-width: 0.4px;
+    border-style: solid;
+}
+
 /*********************
  * app notifications *
  *********************/
