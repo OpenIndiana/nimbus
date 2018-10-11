@@ -4,6 +4,7 @@ apps_DATA =	budgie.css \
 		desktop.css \
 		synaptic.css \
 		libreoffice.css \
+		mate.css \
 		gnome-flashback.css \
 		gnome-terminal.css
 
