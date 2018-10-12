@@ -1,3 +1,36 @@
 #PanelWidget {
    color: @theme_fg_color;
 }
+
+.mate-panel-menu-bar #PanelApplet button:active,
+.mate-panel-menu-bar #PanelApplet button:checked,
+.mate-panel-menu-bar #PanelApplet button.flat:checked,
+.mate-panel-menu-bar #PanelApplet button.toggle:checked,
+.mate-panel-menu-bar #PanelApplet button.flat.toggle:checked {
+    border-radius: 5px;
+    border-width: 0.9px;
+    border-style: solid;
+    background-color: #a4abb8;
+    border-top-color: #62778a;
+    border-left-color: #43586b;
+    border-right-color: #43586b;
+    border-bottom-color: #22374a; 
+    box-shadow: inset 0 -3px 4px 0 alpha(gray, 0.5),
+                inset 0 1px 0 0 alpha(gray, 0.6),
+                inset 0 8px 4px 0 alpha(gray, 0.45);
+}
+
+.mate-panel-menu-bar #PanelApplet button:hover,
+.mate-panel-menu-bar #PanelApplet button.flat:hover,
+.mate-panel-menu-bar #PanelApplet button.toggle:hover,
+.mate-panel-menu-bar #PanelApplet button.flat.toggle:hover {
+    border-radius: 5px;
+    border-top-color: shade(@theme_bg_color, 0.75);
+    border-left-color: shade(@theme_bg_color, 0.65);
+    border-right-color: shade(@theme_bg_color, 0.65);
+    border-bottom-color: shade(@theme_bg_color, 0.4);
+    background-color: @theme_bg_color;
+    box-shadow: inset 0 -9px 4px 0 alpha(white, 0.8),
+                inset 0 1px 0 0 alpha(white, 0.7),
+                inset 0 8px 4px 0 alpha(white, 0.4);
+}
