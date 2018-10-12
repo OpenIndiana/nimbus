@@ -3322,7 +3322,7 @@ decoration {
     border-radius: 2px 2px 0 0;
     border-width: 0px;
     box-shadow: 0 0 0 2px rgba(0,0,0,0.3), 0 0 0 1px rgba(0, 0, 0, 0.65);
-    margin: 10px;
+    margin: 0;
 }
 
 decoration:backdrop {
