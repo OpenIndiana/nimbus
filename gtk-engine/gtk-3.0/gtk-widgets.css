@@ -348,14 +348,16 @@ treeview header button:active {
     border-width: 0 1px 1px 0;
     border-radius: 0;
     box-shadow: none;
+    margin: 0;
+    border-color: @theme_fg_color;
+    border-style: solid;
+    background-color: shade(@theme_base_color, 0.97);
+    background-image: none;
 }
 
-treeview header button,
-treeview header button:active,
 treeview header button:focus,
 treeview header button:active:focus {
-    border-color: shade(@theme_base_color, 0.9);
-    border-bottom-color: shade(@theme_base_color, 0.9);
+    border-color: @theme_fg_color;
     background-color: shade(@theme_base_color, 0.97);
     background-image: none;
     box-shadow: none;
@@ -365,15 +367,10 @@ treeview header button:hover,
 treeview header button:active:hover,
 treeview header button:hover:focus,
 treeview header button:active:hover:focus {
-    border-color: shade(@theme_base_color, 0.9);
-    border-bottom-color: shade(@theme_base_color, 0.9);
+    border-color: @theme_fg_color;
     background-color: shade(@theme_base_color, 0.99);
     background-image: none;
     box-shadow: none;
-}
-
-treeview header:last-child button {
-    border-width: 0 0 1px 0;
 }
 
 /****************
