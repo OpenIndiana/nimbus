@@ -2218,7 +2218,7 @@ spinbutton.vertical button.down {
 spinner {
     background: none;
     opacity: 0;
-    -gtk-icon-source: -gtk-icontheme("process-working-symbolic");
+    -gtk-icon-source: -gtk-icontheme("process-working");
 }
 
 spinner:checked {
