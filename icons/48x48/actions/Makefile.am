@@ -6,6 +6,11 @@ icons_DATA = 				 		\
 		edit.png 		\
 		go-home.png 		\
 		network.png 		\
+		pan-down-symbolic.png  \
+		pan-end-symbolic-rtl.png       \
+		pan-end-symbolic.png   \
+		pan-start-symbolic.png \
+		pan-up-symbolic.png    \
 		preferences.png
 EXTRA_DIST = $(icons_DATA)
 

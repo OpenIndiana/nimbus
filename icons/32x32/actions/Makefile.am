@@ -5,6 +5,12 @@ icons_DATA = 				 		\
 		document-new.png 		\
 		document-open.png 		\
 		document-print.png
+		pan-down-symbolic.png  \
+		pan-end-symbolic-rtl.png       \
+		pan-end-symbolic.png   \
+		pan-start-symbolic.png \
+		pan-up-symbolic.png
+
 EXTRA_DIST = $(icons_DATA)
 
 install-data-local: install-iconsDATA
