@@ -623,6 +623,13 @@ statusbar frame > border {
 /*******************
  * scrolled window *
  *******************/
+scrolledwindow {
+    border-width: 1px;
+    border-style: solid;
+    border-color: shade(@theme_bg_color, 0.7);
+    border-radius: 0;
+}
+
 scrolledwindow frame {
     border-width: 1px;
     border-style: solid;
