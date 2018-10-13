@@ -1,14 +1,7 @@
-Before committing always run the theme against :
-gtk-engine/tests/twf 
-StarOffice (menu and preferences)
-Firefox and Thunderbird (menu and preferences)
+This is a repository for default OpenIndiana theme.
 
-To build on OpenSolaris follow the instructions on opensolaris :
-http://www.opensolaris.org/os/project/jds/contributing/building/
+After modifying theme, be sure to check how /usr/demo/jds/bin/gtk-demo, /usr/demo/jds/bin/gtk3-demo
+and general Mate desktop appearance.
 
-To build on Ubuntu :
-apt-get the following :
-- libc6-dev 
-- gnome-devel
-- icon-naming-utils
-then ./autogen.sh ; make 
+For building, use https://github.com/OpenIndiana/oi-userland/tree/oi/hipster/components/desktop/nimbus/
+component.
