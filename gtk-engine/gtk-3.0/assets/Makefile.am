@@ -18,12 +18,14 @@ assets_DATA =	checkbox-unchecked-hover.png \
 	checkbox-checked.png \
 	radio-selected-insensitive.png \
 	radio-mixed-hover.png \
+	radio-mixed-symbolic.png \
 	radio-unselected-active.png \
 	checkbox-checked-hover.png \
 	radio-mixed-active.png \
 	checkbox-mixed.png \
 	scrollbar-slider-horiz.png \
 	checkbox-checked-active.png \
-	checkbox-mixed-active.png
+	checkbox-mixed-active.png \
+	checkbox-mixed-symbolic.png
 
 EXTRA_DIST = $(assets_DATA)
