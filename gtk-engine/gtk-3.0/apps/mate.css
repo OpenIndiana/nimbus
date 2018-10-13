@@ -1,5 +1,9 @@
 #PanelWidget {
-   color: @theme_fg_color;
+    color: @theme_fg_color;
+}
+
+.mate-panel-menu-bar menubar {
+    box-shadow: none;
 }
 
 .mate-panel-menu-bar #PanelApplet button:active,
