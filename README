@@ -1,6 +1,6 @@
 This is a repository for default OpenIndiana theme.
 
-After modifying theme, be sure to check how /usr/demo/jds/bin/gtk-demo, /usr/demo/jds/bin/gtk3-demo
+After modifying theme, be sure to check how /usr/demo/jds/bin/gtk-demo, /usr/demo/jds/bin/gtk3-demo look
 and general Mate desktop appearance.
 
 For building, use https://github.com/OpenIndiana/oi-userland/tree/oi/hipster/components/desktop/nimbus/
