@@ -1309,7 +1309,7 @@ notebook > stack:not(:only-child) {
 
 notebook tab {
     padding: 4px 6px;
-    border: 1px solid shade(@theme_bg_color, 0.7);
+    border: 1px solid shade(@theme_bg_color, 0.9);
     border-bottom-style: none;
     background-color: @theme_bg_color;
     color: @theme_fg_color;
