@@ -349,7 +349,7 @@ treeview header button:active {
     border-radius: 0;
     box-shadow: none;
     margin: 0;
-    border-color: @theme_fg_color;
+    border-color: shade(@theme_bg_color, 0.9);
     border-style: solid;
     background-color: shade(@theme_base_color, 0.97);
     background-image: none;
@@ -357,7 +357,7 @@ treeview header button:active {
 
 treeview header button:focus,
 treeview header button:active:focus {
-    border-color: @theme_fg_color;
+    border-color: shade(@theme_bg_color, 0.7);
     background-color: shade(@theme_base_color, 0.97);
     background-image: none;
     box-shadow: none;
@@ -367,7 +367,7 @@ treeview header button:hover,
 treeview header button:active:hover,
 treeview header button:hover:focus,
 treeview header button:active:hover:focus {
-    border-color: @theme_fg_color;
+    border-color: shade(@theme_bg_color, 0.7);
     background-color: shade(@theme_base_color, 0.99);
     background-image: none;
     box-shadow: none;
