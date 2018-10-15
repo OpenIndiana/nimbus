@@ -6,6 +6,10 @@
     box-shadow: none;
 }
 
+.mate-panel-menu-bar PanelFrame PanelWidget button {
+    margin: 0px;
+}
+
 .mate-panel-menu-bar #PanelApplet button:active,
 .mate-panel-menu-bar #PanelApplet button:checked,
 .mate-panel-menu-bar #PanelApplet button.flat:checked,
