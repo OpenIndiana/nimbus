@@ -9,6 +9,7 @@ icons_DATA = 				 		\
 		advanced-directory.png 		\
 		gaim.png 		\
 		graphics-image-viewer.png 		\
+		ibus-setup.png	\
 		internet-firefox.png 		\
 		logo-icon-transparent.png 		\
 		office-envince.png 		\
