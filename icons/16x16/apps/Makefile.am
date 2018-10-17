@@ -12,6 +12,7 @@ icons_DATA = 				 		\
 		internet-firefox.png 		\
 		logo-icon-transparent.png 		\
 		panel-force-quit.png 		\
+		preferences-desktop-default-applications.png \
 		preferences-desktop-display.png 		\
 		preferences-desktop-font.png 		\
 		preferences-desktop-keyboard-accessibility.png 		\

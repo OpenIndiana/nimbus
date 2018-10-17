@@ -18,6 +18,7 @@ icons_DATA = 				 		\
 		internet-firefox.png 		\
 		logo-icon-transparent.png 		\
 		office-envince.png 		\
+		preferences-desktop-default-applications.png	\
 		preferences-desktop-font.png 		\
 		preferences-desktop-keyboard-accessibility.png 		\
 		preferences-desktop-keyboard.png 		\
