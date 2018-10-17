@@ -14,6 +14,7 @@ icons_DATA = 				 		\
 		favorites.png 		\
 		graphics-image-viewer.png 		\
 		help-browser.png 		\
+		ibus-setup.png	\
 		internet-firefox.png 		\
 		logo-icon-transparent.png 		\
 		office-envince.png 		\
