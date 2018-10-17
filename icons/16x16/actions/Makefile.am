@@ -51,8 +51,6 @@ icons_DATA = 				 		\
 		help-contents.png 		\
 		index.png 		\
 		info.png 		\
-		list-add.png 		\
-		list-remove.png 		\
 		network.png 		\
 		pan-down-symbolic.png	\
 		pan-end-symbolic-rtl.png	\
