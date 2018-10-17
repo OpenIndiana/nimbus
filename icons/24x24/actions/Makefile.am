@@ -54,8 +54,6 @@ icons_DATA = 				 		\
 		help-contents.png 		\
 		index.png 		\
 		info.png 		\
-		list-add.png 		\
-		list-remove.png 		\
 		media-eject.png 		\
 		media-playback-pause.png 		\
 		media-playback-play.png 		\
