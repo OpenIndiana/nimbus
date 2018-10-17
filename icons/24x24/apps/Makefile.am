@@ -19,6 +19,7 @@ icons_DATA = 				 		\
 		logo-icon-transparent.png 		\
 		office-envince.png 		\
 		panel-force-quit.png 		\
+		preferences-desktop-default-applications.png \
 		preferences-desktop-display.png 		\
 		preferences-desktop-font.png 		\
 		preferences-desktop-menu-editor.png 		\
