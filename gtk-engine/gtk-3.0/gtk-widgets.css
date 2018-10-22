@@ -1558,6 +1558,11 @@ progressbar.horizontal progress {
     min-height: 21px;
 }
 
+treeview.view.progressbar,
+treeview.view.progressbar:hover,
+row progressbar progress,
+row:hover progressbar progress,
+row:selected progressbar progress,
 progressbar progress {
     border: 1px solid #89310d;
     border-radius: 0;
@@ -1574,6 +1579,10 @@ progressbar progress {
     border-left-width: 0;
 }
 
+treeview.view progressbar.vertical progress,
+row progressbar.vertical progress,
+row:hover progressbar.vertical progress,
+row:selected progressbar.vertical progress,
 progressbar.vertical progress {
     border: 1px solid #89310d;
     background-image: linear-gradient(to right,
@@ -1587,6 +1596,11 @@ progressbar.vertical progress {
     border-bottom-width: 0;
 }
 
+treeview.view.trough,
+treeview.view.trough:hover,
+treeview.view.trough:selected, 
+row:selected progressbar trough,
+row:selected:focus progressbar trough,
 progressbar trough {
     border: 1px solid shade(@theme_bg_color, 0.8);
     border-radius: 0;
@@ -1601,6 +1615,11 @@ progressbar trough {
                 inset 0 1px white;
 }
 
+treeview.view progressbar.vertical trough.
+treeview.view progressbar.vertical trough:hover.
+treeview.view progressbar.vertical trough:selected.
+row:selected progressbar.vertical trough,
+row:selected:focus progressbar.vertical trough,
 progressbar.vertical trough {
     background-image: linear-gradient(to right,
                                       #eff0f2,
