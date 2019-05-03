@@ -137,6 +137,7 @@ icons/72x72/Makefile
 icons/20x20/status/Makefile
 icons/20x20/Makefile
 icons/12x12/actions/Makefile
+icons/12x12/apps/Makefile
 icons/12x12/emblems/Makefile
 icons/12x12/places/Makefile
 icons/12x12/Makefile

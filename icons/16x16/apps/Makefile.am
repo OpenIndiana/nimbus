@@ -8,6 +8,7 @@ icons_DATA = 				 		\
 		administration-time-and-date.png 		\
 		administration-users-and-groups.png 		\
 		favorites.png 		\
+		help-browser.png	\
 		ibus-setup.png	\
 		internet-firefox.png 		\
 		logo-icon-transparent.png 		\
