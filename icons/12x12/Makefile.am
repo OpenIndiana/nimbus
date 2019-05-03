@@ -1,1 +1,1 @@
-SUBDIRS=actions emblems places
+SUBDIRS=actions apps emblems places
