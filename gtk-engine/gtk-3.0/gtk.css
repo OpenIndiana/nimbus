@@ -42,6 +42,7 @@
 @define-color borders shade(@theme_bg_color, 0.95);
 
 /* misc colors used by gtk+ */
+@define-color text_view_bg @theme_base_color; /* VTE terminal background */
 @define-color info_fg_color rgb (58, 135, 173);
 @define-color info_bg_color rgb (217, 237, 247);
 @define-color warning_fg_color rgb (192, 152, 83);
